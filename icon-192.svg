@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" rx="36" fill="#1a3a6b"/>
+  <!-- outer ring -->
+  <circle cx="96" cy="96" r="78" fill="none" stroke="#3b82d1" stroke-width="4"/>
+  <!-- inner ring -->
+  <circle cx="96" cy="96" r="60" fill="#1e5aa8"/>
+  <!-- OM symbol -->
+  <text x="96" y="116" text-anchor="middle" font-family="serif" font-size="64" fill="#d6eaf8" font-weight="bold">ॐ</text>
+  <!-- school initial letters -->
+  <text x="96" y="158" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#93c5fd" letter-spacing="1">कालिका</text>
+</svg>

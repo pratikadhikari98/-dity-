@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#1a3a6b"/>
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#3b82d1" stroke-width="10"/>
+  <circle cx="256" cy="256" r="165" fill="#1e5aa8"/>
+  <text x="256" y="308" text-anchor="middle" font-family="serif" font-size="170" fill="#d6eaf8" font-weight="bold">ॐ</text>
+  <text x="256" y="420" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#93c5fd" letter-spacing="2">कालिका</text>
+</svg>

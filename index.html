@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>कालिका मानवज्ञान माध्यमिक विद्यालय</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5c2f26">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" id="themeStylesheet">
+<script>
+(function(){
+  try {
+    var saved = localStorage.getItem('adityaTheme');
+    var map = { blue: 'styles-blue.css', green: 'styles-green.css', teal: 'styles-teal.css', indigo: 'styles-indigo.css', black: 'styles-black.css', terracotta: 'styles.css' };
+    if (saved && map[saved]) {
+      document.write('<link rel="stylesheet" href="' + map[saved] + '" id="themeStylesheetOverride">');
+    }
+  } catch(e) {}
+})();
+</script>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="siteHeader">
+  <div class="logo-area">
+    <img src="photos/aditya-logo.png" alt="ADITYA" class="aditya-logo-img" id="adityaLogoImg">
+    <script>
+      (function(){
+        try {
+          var saved = localStorage.getItem('adityaTheme');
+          var logoMap = { blue: 'photos/aditya-logo-blue.png', green: 'photos/aditya-logo-green.png', teal: 'photos/aditya-logo-teal.png', indigo: 'photos/aditya-logo-indigo.png', black: 'photos/aditya-logo-black.png' };
+          if (saved && logoMap[saved]) {
+            document.getElementById('adityaLogoImg').src = logoMap[saved];
+          }
+        } catch(e) {}
+      })();
+    </script>
+  </div>
+  <div class="header-menu">
+    <button class="menu-dots-btn" id="menuDotsBtn" onclick="toggleHeaderMenu()" aria-label="मेनु" aria-haspopup="true" aria-expanded="false">☰</button>
+    <div class="header-dropdown" id="headerDropdown">
+      <div class="theme-picker">
+        <div class="theme-picker-label">थिम रोज्नुहोस्</div>
+        <div class="theme-swatches">
+          <button class="theme-swatch" data-theme="terracotta" style="background:#935447;" onclick="setAdityaTheme('terracotta')" aria-label="Terracotta theme"></button>
+        </div>
+      </div>
+      <div class="auth-box" id="authBox">
+        <button class="auth-btn" id="loginBtn" onclick="loginWithGoogle()">🔑 लगइन</button>
+      </div>
+    </div>
+  </div>
+</header>
+<div id="headerSpacer"></div>
+
+<div id="desktopTopWrap">
+<div id="desktopTopInner">
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-text">
+    <h2 class="hero-shloka">केयूरा न विभूषयन्ति पुरुषं हारा न चन्द्रोज्ज्वलाः<br>न स्नानं न विलेपनं न कुसुमं नालङ्कृता मूर्धजाः।<br>वाण्येका समलङ्करोति पुरुषं या संस्कृता धार्यते<br>क्षीयन्ते खलु भूषणानि सततं वाग्भूषणं भूषणम्॥</h2>
+    <div class="section-label" style="text-align:left;">श्लोकार्थ</div>
+    <p>बाजुबन्द ले, चन्द्रमा जस्तो चम्किलो हारले, स्नानले, लेपनले, फूलले वा सजिएको कपालले पनि मानिसलाई साँच्चै अलंकृत गर्दैन। संस्कारयुक्त वाणी (सुसंस्कृत बोली) एउटैले मात्र मानिसलाई सजाउँछ। किनभने अरू सबै गहना समयसँगै क्षीण हुन्छन्, तर वाणीरूपी गहना नै सदा टिक्ने साँचो अलंकार हो।</p>
+    <div class="hero-btns">
+      <a href="#admission" class="btn-primary">भर्ना फारम भर्नुहोस्</a>
+      <div class="auth-box auth-box-hero" id="authBoxHero">
+        <button class="auth-btn" onclick="loginWithGoogle()">🔑 लगइन</button>
+      </div>
+      <a href="#" onclick="openLekh();return false;" class="btn-outline">थप जान्नुहोस्</a>
+    </div>
+  </div>
+
+  <!-- SPINNING WHEEL -->
+  <div class="wheel-container">
+    <div class="wheel-svg-wrap" id="wheelWrap">
+      <svg viewBox="-5 -5 330 330" xmlns="http://www.w3.org/2000/svg" id="wheelSvg">
+        <!-- Rotating group -->
+        <g id="wheelGroup" transform="rotate(0,160,160)">
+
+          <!-- EXPLODED SEGMENTS — uniform thin stroke, small parallel gap -->
+
+          <!-- Segment 1: सत्संग तथा भजन -->
+          <path fill="#ffffff" stroke="none" d="M 162.91,27.38 A 128,128 0 0,1 251.72,64.16 L 197.59,118.83 A 52,52 0 0,0 162.53,104.30 Z"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 162.91,27.38 A 128,128 0 0,1 251.72,64.16"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 197.59,118.83 A 52,52 0 0,0 162.53,104.30"/>
+          <line x1="251.72" y1="64.16" x2="197.59" y2="118.83" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <line x1="162.53" y1="104.30" x2="162.91" y2="27.38" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <text transform="translate(196.2,72.7) rotate(22.5)" text-anchor="middle" font-size="10.5" fill="#5c2f26" font-family="Khand, Noto Sans Devanagari, sans-serif" font-weight="bold">
+            <tspan x="0" dy="-6">सत्संग तथा</tspan>
+            <tspan x="0" dy="15">भजन</tspan>
+          </text>
+
+          <!-- Segment 2: वैदिक अध्ययन -->
+          <path fill="#ffffff" stroke="none" d="M 255.84,68.28 A 128,128 0 0,1 292.62,157.09 L 215.70,157.47 A 52,52 0 0,0 201.17,122.41 Z"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 255.84,68.28 A 128,128 0 0,1 292.62,157.09"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 215.70,157.47 A 52,52 0 0,0 201.17,122.41"/>
+          <line x1="292.62" y1="157.09" x2="215.70" y2="157.47" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <line x1="201.17" y1="122.41" x2="255.84" y2="68.28" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <text transform="translate(247.3,123.8) rotate(67.5)" text-anchor="middle" font-size="10.5" fill="#5c2f26" font-family="Khand, Noto Sans Devanagari, sans-serif" font-weight="bold">
+            <tspan x="0" dy="-6">वैदिक</tspan>
+            <tspan x="0" dy="15">अध्ययन</tspan>
+          </text>
+
+          <!-- Segment 3: पर्व तथा उत्सव -->
+          <path fill="#ffffff" stroke="none" d="M 292.62,162.91 A 128,128 0 0,1 255.84,251.72 L 201.17,197.59 A 52,52 0 0,0 215.70,162.53 Z"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 292.62,162.91 A 128,128 0 0,1 255.84,251.72"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 201.17,197.59 A 52,52 0 0,0 215.70,162.53"/>
+          <line x1="255.84" y1="251.72" x2="201.17" y2="197.59" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <line x1="215.70" y1="162.53" x2="292.62" y2="162.91" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <text transform="translate(247.3,196.2) rotate(112.5)" text-anchor="middle" font-size="10.5" fill="#5c2f26" font-family="Khand, Noto Sans Devanagari, sans-serif" font-weight="bold">
+            <tspan x="0" dy="-6">पर्व तथा</tspan>
+            <tspan x="0" dy="15">उत्सव</tspan>
+          </text>
+
+          <!-- Segment 4: योग तथा ध्यान -->
+          <path fill="#ffffff" stroke="none" d="M 251.72,255.84 A 128,128 0 0,1 162.91,292.62 L 162.53,215.70 A 52,52 0 0,0 197.59,201.17 Z"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 251.72,255.84 A 128,128 0 0,1 162.91,292.62"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 162.53,215.70 A 52,52 0 0,0 197.59,201.17"/>
+          <line x1="162.91" y1="292.62" x2="162.53" y2="215.70" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <line x1="197.59" y1="201.17" x2="251.72" y2="255.84" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <text transform="translate(196.2,247.3) rotate(157.5)" text-anchor="middle" font-size="10.5" fill="#5c2f26" font-family="Khand, Noto Sans Devanagari, sans-serif" font-weight="bold">
+            <tspan x="0" dy="-6">योग तथा</tspan>
+            <tspan x="0" dy="15">ध्यान</tspan>
+          </text>
+
+          <!-- Segment 5: धार्मिक लेख-रचना -->
+          <path fill="#ffffff" stroke="none" d="M 157.09,292.62 A 128,128 0 0,1 68.28,255.84 L 122.41,201.17 A 52,52 0 0,0 157.47,215.70 Z"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 157.09,292.62 A 128,128 0 0,1 68.28,255.84"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 122.41,201.17 A 52,52 0 0,0 157.47,215.70"/>
+          <line x1="68.28" y1="255.84" x2="122.41" y2="201.17" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <line x1="157.47" y1="215.70" x2="157.09" y2="292.62" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <text transform="translate(123.8,247.3) rotate(202.5)" text-anchor="middle" font-size="10.5" fill="#5c2f26" font-family="Khand, Noto Sans Devanagari, sans-serif" font-weight="bold">
+            <tspan x="0" dy="-6">धार्मिक</tspan>
+            <tspan x="0" dy="15">लेख-रचना</tspan>
+          </text>
+
+          <!-- Segment 6: सेवा कार्यक्रम -->
+          <path fill="#ffffff" stroke="none" d="M 64.16,251.72 A 128,128 0 0,1 27.38,162.91 L 104.30,162.53 A 52,52 0 0,0 118.83,197.59 Z"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 64.16,251.72 A 128,128 0 0,1 27.38,162.91"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 104.30,162.53 A 52,52 0 0,0 118.83,197.59"/>
+          <line x1="27.38" y1="162.91" x2="104.30" y2="162.53" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <line x1="118.83" y1="197.59" x2="64.16" y2="251.72" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <text transform="translate(72.7,196.2) rotate(247.5)" text-anchor="middle" font-size="10.5" fill="#5c2f26" font-family="Khand, Noto Sans Devanagari, sans-serif" font-weight="bold">
+            <tspan x="0" dy="-6">सेवा</tspan>
+            <tspan x="0" dy="15">कार्यक्रम</tspan>
+          </text>
+
+          <!-- Segment 7: युवा सहभागिता -->
+          <path fill="#ffffff" stroke="none" d="M 27.38,157.09 A 128,128 0 0,1 64.16,68.28 L 118.83,122.41 A 52,52 0 0,0 104.30,157.47 Z"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 27.38,157.09 A 128,128 0 0,1 64.16,68.28"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 118.83,122.41 A 52,52 0 0,0 104.30,157.47"/>
+          <line x1="64.16" y1="68.28" x2="118.83" y2="122.41" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <line x1="104.30" y1="157.47" x2="27.38" y2="157.09" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <text transform="translate(72.7,123.8) rotate(292.5)" text-anchor="middle" font-size="10.5" fill="#5c2f26" font-family="Khand, Noto Sans Devanagari, sans-serif" font-weight="bold">
+            <tspan x="0" dy="-6">युवा</tspan>
+            <tspan x="0" dy="15">सहभागिता</tspan>
+          </text>
+
+          <!-- Segment 8: ग्रन्थ संरक्षण -->
+          <path fill="#ffffff" stroke="none" d="M 68.28,64.16 A 128,128 0 0,1 157.09,27.38 L 157.47,104.30 A 52,52 0 0,0 122.41,118.83 Z"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 68.28,64.16 A 128,128 0 0,1 157.09,27.38"/>
+          <path fill="none" stroke="#935447" stroke-width="0.6" stroke-linecap="round" d="M 157.47,104.30 A 52,52 0 0,0 122.41,118.83"/>
+          <line x1="157.09" y1="27.38" x2="157.47" y2="104.30" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <line x1="122.41" y1="118.83" x2="68.28" y2="64.16" stroke="#935447" stroke-width="0.6" stroke-linecap="round"/>
+          <text transform="translate(123.8,72.7) rotate(337.5)" text-anchor="middle" font-size="10.5" fill="#5c2f26" font-family="Khand, Noto Sans Devanagari, sans-serif" font-weight="bold">
+            <tspan x="0" dy="-6">ग्रन्थ</tspan>
+            <tspan x="0" dy="15">संरक्षण</tspan>
+          </text>
+
+        </g><!-- end wheelGroup -->
+
+        <!-- STATIC CENTER — analogue clock -->
+        <defs>
+          <radialGradient id="clockFace" cx="40%" cy="35%" r="70%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#f5e6de"/>
+          </radialGradient>
+          <radialGradient id="clockCenterDot" cx="50%" cy="30%" r="80%">
+            <stop offset="0%" stop-color="#935447"/>
+            <stop offset="100%" stop-color="#5c2f26"/>
+          </radialGradient>
+        </defs>
+        <!-- Face -->
+        <circle cx="160" cy="160" r="52" fill="url(#clockFace)" stroke="#935447" stroke-width="2.5"/>
+        <circle cx="160" cy="160" r="48" fill="none" stroke="#ecd4c9" stroke-width="1"/>
+        <!-- Tick marks + numbers -->
+        <g id="clockTicks"></g>
+        <!-- OM -->
+        <text x="160" y="140" text-anchor="middle" font-size="7" fill="#5c2f26" opacity="0.18" font-family="serif">ॐ</text>
+        <!-- Hands -->
+        <line id="wHourHand"   x1="160" y1="160" x2="160" y2="128" stroke="#5c2f26" stroke-width="3.5" stroke-linecap="round"/>
+        <line id="wMinuteHand" x1="160" y1="160" x2="160" y2="117" stroke="#935447" stroke-width="2.5" stroke-linecap="round"/>
+        <line id="wSecondHand" x1="160" y1="168" x2="160" y2="113" stroke="#b91c1c" stroke-width="1.4" stroke-linecap="round"/>
+        <!-- Center dot -->
+        <circle cx="160" cy="160" r="4" fill="url(#clockCenterDot)"/>
+        <circle cx="160" cy="160" r="2" fill="#b87765"/>
+        <circle cx="160" cy="160" r="0.8" fill="white"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+
+<!-- माथिल्लो भाग (header+hero+stats) लाई मोबाइलमा पनि desktop layout जस्तै देखाउने स्केलिङ — glitch/flash नहोस् भनेर सुरुमै (rest of page अगाडि) चलाइन्छ -->
+<script>
+function scaleDesktopTop() {
+  const header = document.getElementById('siteHeader');
+  const spacer = document.getElementById('headerSpacer');
+  const wrap = document.getElementById('desktopTopWrap');
+  const inner = document.getElementById('desktopTopInner');
+  if (!header || !wrap || !inner) return;
+  if (window.innerWidth < 1080) {
+    const scale = window.innerWidth / 1080;
+    header.style.transform = 'scale(' + scale + ')';
+    if (spacer) spacer.style.height = (header.offsetHeight * scale) + 'px';
+    inner.style.transform = 'scale(' + scale + ')';
+    inner.style.transformOrigin = 'top left';
+    wrap.style.height = (inner.offsetHeight * scale) + 'px';
+  } else {
+    header.style.transform = '';
+    if (spacer) spacer.style.height = '';
+    inner.style.transform = '';
+    wrap.style.height = '';
+  }
+  header.classList.add('top-ready');
+  wrap.classList.add('top-ready');
+}
+scaleDesktopTop();
+window.addEventListener('load', scaleDesktopTop);
+window.addEventListener('resize', scaleDesktopTop);
+window.addEventListener('orientationchange', scaleDesktopTop);
+</script>
+
+<!-- PURPOSE / ABOUT -->
+<section class="why-section" id="purpose">
+  <div class="about-inner">
+    <div class="about-photo">
+      <img src="photos/about-krishna.png" alt="ADITYA">
+    </div>
+    <div class="about-textcard">
+      <p class="about-text">
+        ADITYA (Association of Dharmic Inspiring Truthful Youth for Adhyatma) युवावर्गलाई सनातन धर्मको जागरण अभियानसँग जोड्न र वैदिक वाङ्मयको संरक्षण गर्ने उद्देश्यले स्थापना गरिएको संस्था हो। आजको पुस्तालाई आफ्नो सांस्कृतिक तथा आध्यात्मिक जरासँग परिचित गराउँदै, वेद, शास्त्र र सनातन परम्पराका मूल्यमान्यताहरूलाई सत्य र सरल तरिकाले युवा पुस्तासम्म पुर्‍याउनु नै हाम्रो मुख्य लक्ष्य हो।
+      </p>
+    </div>
+  </div>
+</section>
+<!-- SHOWCASE + YOUTUBE + SOCIAL -->
+<section class="showcase-section" id="showcase">
+  <div class="showcase-top">
+    <div class="showcase-text">
+      <p>सनातन संस्कृति, अध्यात्म र युवा पुस्ताबीचको पुल बन्ने हाम्रो प्रयास सधैं जारी रहनेछ।</p>
+    </div>
+    <div class="showcase-photo">
+      <img src="photos/about-couple.png" alt="ADITYA">
+    </div>
+  </div>
+
+  <div class="yt-heading">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M46.5 12.8c-.55-2.05-2.15-3.67-4.2-4.22C38.7 7.5 24 7.5 24 7.5s-14.7 0-18.3 1.08c-2.05.55-3.65 2.17-4.2 4.22C0.5 16.4.5 24 .5 24s0 7.6 1 11.2c.55 2.05 2.15 3.6 4.2 4.15C9.3 40.5 24 40.5 24 40.5s14.7 0 18.3-1.15c2.05-.55 3.65-2.1 4.2-4.15 1-3.6 1-11.2 1-11.2s0-7.6-1-11.2z" fill="#FF0000"/><path d="M19.5 31.5v-15L31.8 24z" fill="#fff"/></svg>
+    <span>YouTube</span>
+  </div>
+  <div class="yt-row">
+    <a class="yt-card" href="https://youtu.be/tR3_oEVN0DA?si=QGP041dQ_64hAhHE" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/tR3_oEVN0DA/hqdefault.jpg" alt="YouTube video" loading="lazy">
+      <p>हाम्रो कार्यक्रमको झलक</p>
+    </a>
+    <a class="yt-card" href="https://youtu.be/tR3_oEVN0DA?si=QGP041dQ_64hAhHE" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/tR3_oEVN0DA/hqdefault.jpg" alt="YouTube video" loading="lazy">
+      <p>हाम्रो कार्यक्रमको झलक</p>
+    </a>
+  </div>
+
+  <div class="social-row">
+    <span class="social-icon disabled" title="चाँडै आउँदैछ">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M46.5 12.8c-.55-2.05-2.15-3.67-4.2-4.22C38.7 7.5 24 7.5 24 7.5s-14.7 0-18.3 1.08c-2.05.55-3.65 2.17-4.2 4.22C0.5 16.4.5 24 .5 24s0 7.6 1 11.2c.55 2.05 2.15 3.6 4.2 4.15C9.3 40.5 24 40.5 24 40.5s14.7 0 18.3-1.15c2.05-.55 3.65-2.1 4.2-4.15 1-3.6 1-11.2 1-11.2s0-7.6-1-11.2z" fill="#FF0000"/><path d="M19.5 31.5v-15L31.8 24z" fill="#fff"/></svg>
+    </span>
+    <a class="social-icon" href="https://www.facebook.com/share/1Dkz17TPeV/" target="_blank" rel="noopener" aria-label="Facebook">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#1877F2"/><path d="M27 24.5h4l.6-4.5h-4.6v-2.9c0-1.3.35-2.2 2.25-2.2H32V11c-.6-.08-2.4-.25-4.4-.25-4.35 0-7.3 2.65-7.3 7.5V20h-4.9v4.5h4.9V38h5.7V24.5z" fill="#fff"/></svg>
+    </a>
+    <span class="social-icon disabled" title="चाँडै आउँदैछ">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="igGrad" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#FED373"/><stop offset="25%" stop-color="#F15245"/><stop offset="60%" stop-color="#D92E7F"/><stop offset="100%" stop-color="#9B36B7"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="14" fill="url(#igGrad)"/><rect x="13" y="13" width="22" height="22" rx="7" fill="none" stroke="#fff" stroke-width="2.6"/><circle cx="24" cy="24" r="6.2" fill="none" stroke="#fff" stroke-width="2.6"/><circle cx="32.5" cy="15.5" r="1.6" fill="#fff"/></svg>
+    </span>
+    <span class="social-icon disabled" title="चाँडै आउँदैछ">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" fill="#FBBF24"/><path d="M2 6l10 7 10-7" fill="none" stroke="#fff" stroke-width="1.5"/></svg>
+    </span>
+    <a class="social-icon" href="tel:9769312708" aria-label="Phone">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#5B8DEF"/><path d="M8 7c0 6 3 9 9 9l1-2-3-1-1 1c-2-1-3-2-4-4l1-1-1-3-2 1z" fill="#fff"/></svg>
+    </a>
+    <a class="social-icon" href="https://www.google.com/maps/search/?api=1&query=Butwal+Nayamil+Nepal" target="_blank" rel="noopener" aria-label="Location">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF4444"/><path d="M12 5a5 5 0 00-5 5c0 4 5 9 5 9s5-5 5-9a5 5 0 00-5-5z" fill="#fff"/><circle cx="12" cy="10" r="2" fill="#EF4444"/></svg>
+    </a>
+    <a class="social-icon" href="https://pratikadhikari98.com.np/" target="_blank" rel="noopener" aria-label="प्रतीक साहित्य सङ्ग्रह">
+      <img src="photos/sahitya-icon.png" alt="प्रतीक साहित्य सङ्ग्रह" style="width:100%;height:100%;object-fit:cover;">
+    </a>
+  </div>
+</section>
+
+<!-- NEWS / BLACKBOARD SECTION -->
+<section class="news-section" id="notices">
+  <div class="news-inner">
+
+    <!-- Blackboard with slides inside -->
+    <div class="bb-outer">
+      <div class="bb-wrap" id="bbWrap">
+        <img src="photos/blackboard.png" alt="कालोपाटी" class="bb-bg">
+        <!-- text viewport = chalk-writing area only -->
+        <div class="bb-viewport">
+          <div class="bb-track" id="bbTrack">
+            <div class="bb-loading-msg" id="bbLoading">सूचना लोड हुँदैछ...</div>
+          </div>
+        </div>
+        <!-- chalk dots inside the board (below writing area) -->
+        <div class="bb-dots" id="bbDots"></div>
+      </div>
+    </div>
+
+    <!-- कालोपाटीमा हाल देखिरहेको सूचनाको लाइक/कमेन्ट/सेयर -->
+    <div class="notice-social" id="noticeSocial">
+      <div class="post-actions">
+        <button class="post-action-btn like-btn" id="noticeLikeBtn" onclick="toggleNoticeLike(this)" aria-label="लाइक"><span class="like-icon"><svg viewBox="0 0 24 24" width="21" height="21"><path d="M12 20.7s-7.1-4.55-9.85-8.66C.5 9.62.98 6.1 3.6 4.28c2.2-1.53 5.05-1.13 6.8.96l1.6 1.9 1.6-1.9c1.75-2.09 4.6-2.49 6.8-.96 2.62 1.82 3.1 5.34 1.45 7.76C19.1 16.15 12 20.7 12 20.7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg></span><span class="like-count">0</span></button>
+        <button class="post-action-btn" id="noticeCommentBtn" onclick="toggleNoticeComments(this)" aria-label="कमेन्ट"><span class="comment-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4.4 3.3A.6.6 0 0 1 3.6 20V17H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg></span></button>
+        <button class="post-action-btn" onclick="shareNotice(this)" aria-label="सेयर"><span class="share-icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="6" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><line x1="8.2" y1="10.8" x2="15.8" y2="7.2" stroke="currentColor" stroke-width="1.7"/><line x1="8.2" y1="13.2" x2="15.8" y2="16.8" stroke="currentColor" stroke-width="1.7"/></svg></span></button>
+      </div>
+      <div class="comment-box" id="noticeCommentBox">
+        <div class="comment-list" id="noticeCommentList"></div>
+        <div class="comment-input-row" id="noticeCommentInputRow" style="display:none;">
+          <input type="text" id="noticeCommentInput" placeholder="कमेन्ट लेख्नुहोस्...">
+          <button onclick="submitNoticeComment()">पठाउनुहोस्</button>
+        </div>
+        <p id="noticeLoginHint" style="display:none;font-size:0.8rem;color:var(--text-light);margin-top:8px;">कमेन्ट गर्न लगइन गर्नुहोस्।</p>
+      </div>
+    </div>
+
+    <!-- शिक्षकका लागि मात्र: कालोपाटीमा सूचना लेख्ने फारम -->
+    <div class="post-form" id="noticeForm" style="display:none;">
+      <div class="post-form-head" id="noticeFormHead" onclick="toggleNoticeFormBody()">
+        <span class="post-form-icon">📝</span>
+        <div>
+          <div class="post-form-title">नयाँ सूचना लेख्नुहोस्</div>
+          <div class="post-form-sub">कालोपाटीमा देखिने सूचना यहाँबाट तयार गर्नुहोस्</div>
+        </div>
+        <button type="button" class="post-form-toggle" id="noticeFormToggleBtn" aria-label="फारम खोल्नुहोस्">➕</button>
+      </div>
+
+      <div class="post-form-body" id="noticeFormBody" style="display:none;">
+
+      <div class="field-group">
+        <label class="field-label" for="noticeTemplateSelect">टेम्प्लेट</label>
+        <div class="select-wrap">
+          <select id="noticeTemplateSelect" onchange="applyNoticeTemplate()">
+            <option value="">— टेम्प्लेट छान्नुहोस् —</option>
+            <option value="notice">📢 सामान्य सूचना</option>
+            <option value="holiday">🏖️ बिदाको सूचना</option>
+            <option value="result">🏆 नतिजा</option>
+            <option value="sports">⚽ खेलकुद</option>
+            <option value="meeting">👨‍👩‍👧 अभिभावक–शिक्षक बैठक</option>
+            <option value="exam">📝 परीक्षा सूचना</option>
+            <option value="special">📋 विशेष सूचना</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="noticeFontSelect">फन्ट</label>
+        <div class="select-wrap">
+          <select id="noticeFontSelect">
+            <option value="akshar">Akshar (डिफल्ट)</option>
+            <option value="khand">Khand</option>
+            <option value="noto-serif">Noto Serif</option>
+            <option value="siddhanta">Siddhanta</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="noticeDateInput">मिति</label>
+        <input type="text" id="noticeDateInput" placeholder="जस्तै: असार १५, २०८२">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="noticeTitleInput">शीर्षक</label>
+        <input type="text" id="noticeTitleInput" placeholder="सूचनाको शीर्षक लेख्नुहोस्">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="noticeBodyInput">विवरण</label>
+        <textarea id="noticeBodyInput" rows="3" placeholder="सूचनाको विवरण लेख्नुहोस्... (छुट्टाछुट्टै लाइनका लागि Enter थिच्नुहोस्)"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="noticeFooterInput">फुटर</label>
+        <input type="text" id="noticeFooterInput" placeholder="जस्तै: विद्यालय प्रशासन">
+      </div>
+
+      <label class="notice-table-toggle" for="noticeTableToggle">
+        <span class="toggle-switch">
+          <input type="checkbox" id="noticeTableToggle" onchange="toggleNoticeTableFields()">
+          <span class="toggle-slider"></span>
+        </span>
+        <span>यो सूचना तालिका हो? <em>(जस्तै: परीक्षा तालिका)</em></span>
+      </label>
+
+      <div id="noticeTableFields" style="display:none;">
+        <div class="table-builder-label">स्तम्भ (Columns) — पहिलो सामान्यतया "मिति" राख्नुहोस्:</div>
+        <div id="tableColumnsRow" class="table-columns-row"></div>
+        <button type="button" class="table-add-btn" onclick="addTableColumn()">+ स्तम्भ थप्नुहोस्</button>
+
+        <div class="table-builder-label" style="margin-top:14px;">Row हरू (हरेक कक्षा/विषयको लागि छुट्टै box):</div>
+        <div id="tableRowsContainer" class="table-rows-container"></div>
+        <button type="button" class="table-add-btn" onclick="addTableRow()">+ Row थप्नुहोस्</button>
+      </div>
+
+      <div class="notice-form-actions">
+        <button id="noticeSubmitBtn" onclick="submitNotice()"><span>✏️</span>कालोपाटीमा लेख्नुहोस्</button>
+        <button id="noticeCancelBtn" onclick="cancelNoticeEdit()" style="display:none;">रद्द गर्नुहोस्</button>
+      </div>
+
+      </div><!-- /.post-form-body -->
+    </div>
+
+    <!-- शिक्षकका लागि मात्र: पहिले लेखिएका सूचनाहरूको सूची (edit/delete) -->
+    <div class="notice-manage-list" id="noticeManageList"></div>
+
+  </div>
+</section>
+
+<!-- COMMUNITY / POSTS SECTION -->
+<section class="community-section" id="community">
+  <div class="community-inner">
+    <div class="community-head">
+      <div>
+        <div class="section-label">समुदाय</div>
+        <div class="section-title">शिक्षक-अभिभावक पोस्टहरू</div>
+        <p class="section-sub">शिक्षकहरूले पोस्ट राख्नुहुन्छ, अभिभावकहरूले लाइक, कमेन्ट र सेयर गर्न सक्नुहुन्छ।</p>
+      </div>
+    </div>
+
+    <div class="post-form" id="teacherPostForm" style="display:none;">
+      <div class="post-form-head" id="teacherPostFormHead" onclick="togglePostFormBody()">
+        <span class="post-form-icon">📝</span>
+        <div>
+          <div class="post-form-title">नयाँ पोस्ट लेख्नुहोस्</div>
+          <div class="post-form-sub">अभिभावकहरूलाई देखिने पोस्ट यहाँबाट तयार गर्नुहोस्</div>
+        </div>
+        <button type="button" class="post-form-toggle" id="teacherPostFormToggleBtn" aria-label="फारम खोल्नुहोस्">➕</button>
+      </div>
+
+      <div class="post-form-body" id="teacherPostFormBody" style="display:none;">
+        <input type="text" id="postTitleInput" placeholder="शीर्षक लेख्नुहोस्">
+        <textarea id="postBodyInput" rows="3" placeholder="के भइरहेको छ लेख्नुहोस्..."></textarea>
+        <input type="text" id="postMediaUrlInput" placeholder="फोटो/भिडियोको link (वैकल्पिक) - जस्तै Google Photos, YouTube link">
+        <p class="media-hint">फोटो वा भिडियो थप्न चाहनुभयो भने त्यसको link यहाँ पेस्ट गर्नुहोस्। link नभए यो खाली छोड्नुहोस्।</p>
+        <button id="submitPostBtn" onclick="submitPost()">पोस्ट गर्नुहोस्</button>
+      </div>
+    </div>
+
+    <div class="login-hint" id="loginHint">पोस्ट हेर्न, लाइक/कमेन्ट/सेयर गर्न कृपया Google खाताले लगइन गर्नुहोस्।</div>
+
+    <div id="postsFeed">
+      <div class="posts-loading">पोस्टहरू लोड हुँदैछन्...</div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY / LEKH MODAL -->
+<div class="lekh-backdrop" id="lekhBackdrop" onclick="closeLekh()"></div>
+<div class="lekh-modal" id="lekhModal">
+  <button class="lekh-close" onclick="closeLekh()">✕</button>
+  <div class="lekh-content" id="lekhContent"><div class="gallery-loading">लोड हुँदैछ…</div></div>
+</div>
+
+<!-- GRAVITY BOXES SECTION -->
+<section id="gravity-boxes-section" style="background:transparent;padding:0;margin:0;width:100%;overflow:hidden;">
+  <div id="gravity-grid" style="width:100%;height:260px;display:grid;"></div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="admission">
+  <h2>आजै भर्ना गर्नुहोस् — सीटहरू सीमित छन्!</h2>
+  <p>तपाईँको नानीबाबुको उज्ज्वल भविष्यको शुरुवात कालिका मानवज्ञानबाट गर्नुहोस्।</p>
+  <a href="tel:071437072" class="btn-white">📞 ०७१-४३७०७२ मा फोन गर्नुहोस्</a>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>कालिका मानवज्ञान माध्यमिक विद्यालय</h4>
+      <p>गुणस्तरीय शिक्षा प्रदान गरी बच्चाहरूको सर्वाङ्गीण विकासमा समर्पित।</p>
+    </div>
+    <div class="footer-col">
+      <h4>द्रुत लिङ्कहरू</h4>
+      <a href="#home">गृहपृष्ठ</a>
+      <a href="about.html">विशेषताहरू</a>
+      <a href="#notices">सूचना पाटी</a>
+      <a href="#admission">भर्ना</a>
+    </div>
+    <div class="footer-col">
+      <h4>सम्पर्क</h4>
+      <p>📞 071-437072</p>
+      <p>📍 Butwal-10, Kalikanagar, Rupendehi</p>
+      <a href="http://www.kalikaschoolbtl.edu.np">🌐 www.kalikaschoolbtl.edu.np</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© २०८२ कालिका मानवज्ञान माध्यमिक विद्यालय। सर्वाधिकार सुरक्षित।</span>
+    <span>Butwal-10, Kalikanagar</span>
+  </div>
+</footer>
+
+<!-- BOTTOM APP BAR -->
+<div class="bottom-app-bar">
+  <div class="bottom-app-bar-inner">
+    <a href="#home" class="app-icon-btn" title="गृहपृष्ठ"><span>🏠</span></a>
+    <a href="#community" class="app-icon-btn" title="समुदाय"><span>👥</span></a>
+    <a href="about.html" class="app-icon-btn" title="बारेमा"><span>ℹ️</span></a>
+    <a href="about.html#gallery" class="app-icon-btn" title="ग्यालरी"><span>🖼️</span></a>
+    <a href="#contact" class="app-icon-btn" title="सम्पर्क"><span>☎️</span></a>
+  </div>
+</div>
+
+
+<script>
+// ── WHEEL CENTER ANALOGUE CLOCK ──
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const CX = 160, CY = 160, R = 48; // clock radius (inner ring)
+  const tg = document.getElementById('clockTicks');
+
+  // Draw tick marks & Nepali numerals
+  const nums = ['१२','१','२','३','४','५','६','७','८','९','१०','११'];
+  for (let i = 0; i < 60; i++) {
+    const rad = i * 6 * Math.PI / 180;
+    const isHour = i % 5 === 0, isQ = i % 15 === 0;
+    const r1 = R, r2 = isQ ? R - 8 : isHour ? R - 6 : R - 3;
+    const sw = isQ ? 2 : isHour ? 1.4 : 0.7;
+    const op = isQ ? '0.7' : isHour ? '0.5' : '0.2';
+    const line = document.createElementNS(NS, 'line');
+    line.setAttribute('x1', CX + r1 * Math.sin(rad));
+    line.setAttribute('y1', CY - r1 * Math.cos(rad));
+    line.setAttribute('x2', CX + r2 * Math.sin(rad));
+    line.setAttribute('y2', CY - r2 * Math.cos(rad));
+    line.setAttribute('stroke', '#5c2f26');
+    line.setAttribute('stroke-width', sw);
+    line.setAttribute('opacity', op);
+    line.setAttribute('stroke-linecap', 'round');
+    tg.appendChild(line);
+  }
+  for (let i = 0; i < 12; i++) {
+    const rad = i * 30 * Math.PI / 180;
+    const isQ = i % 3 === 0;
+    const nr = isQ ? R - 14 : R - 13;
+    const txt = document.createElementNS(NS, 'text');
+    txt.setAttribute('x', CX + nr * Math.sin(rad));
+    txt.setAttribute('y', CY - nr * Math.cos(rad));
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('dominant-baseline', 'central');
+    txt.setAttribute('font-size', isQ ? '7' : '6');
+    txt.setAttribute('font-weight', isQ ? '700' : '600');
+    txt.setAttribute('fill', '#5c2f26');
+    txt.setAttribute('opacity', isQ ? '0.75' : '0.5');
+    txt.setAttribute('font-family', 'Noto Sans Devanagari, sans-serif');
+    txt.textContent = nums[i];
+    tg.appendChild(txt);
+  }
+
+  function rot(id, deg) {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('transform', `rotate(${deg},${CX},${CY})`);
+  }
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const now = new Date();
+    const h24 = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    const h12 = h24 % 12 || 12;
+    const ampm = h24 < 12 ? 'AM' : 'PM';
+    rot('wHourHand',   (h24 % 12) * 30 + m * 0.5);
+    rot('wMinuteHand', m * 6  + s * 0.1);
+    rot('wSecondHand', s * 6);
+    const el = document.getElementById('wheelDigitalTime');
+    const NP = n => String(n).replace(/[0-9]/g, d => '०१२३४५६७८९'[+d]);
+    const ampmNP = h24 < 12 ? 'बिहान' : h24 < 17 ? 'दिउँसो' : 'बेलुकी';
+    if (el) el.textContent = NP(pad(h12)) + ':' + NP(pad(m)) + ':' + NP(pad(s)) + ' ' + ampmNP;
+  }
+
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+
+<script>
+(function () {
+  const wrap  = document.getElementById('wheelWrap');
+  const group = document.getElementById('wheelGroup');
+  const CX = 160, CY = 160;
+  const VB_SIZE = 320; // viewBox logical size (before the -5 offset)
+
+  const AUTO_SPEED = 1.20;   // deg/frame — छिटो spin
+  const FRICTION   = 0.97;
+  const MIN_VEL    = 0.05;
+
+  let angle    = 0;
+  let velocity = AUTO_SPEED; // start with auto-spin speed
+  let dragging = false;
+  let prevMouseAngle = 0;
+  let lastTime = 0;
+  let rafId    = null;
+
+  /* Convert client coords → angle (deg) from wheel center */
+  function clientToAngle(e) {
+    const rect = wrap.getBoundingClientRect();
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e.touches ? e.touches[0].clientY : e.clientY;
+    // Map to viewBox coords (viewBox is "-5 -5 330 330", so offset by 5)
+    const svgX = ((cx - rect.left) / rect.width)  * 330 - 5;
+    const svgY = ((cy - rect.top)  / rect.height) * 330 - 5;
+    return Math.atan2(svgY - CY, svgX - CX) * (180 / Math.PI);
+  }
+
+  function applyRotation() {
+    group.setAttribute('transform', `rotate(${angle},${CX},${CY})`);
+  }
+
+  /* Main animation loop — always running */
+  function loop() {
+    if (!dragging) {
+      if (Math.abs(velocity) < MIN_VEL) {
+        // Smoothly restore auto-spin direction
+        velocity += (AUTO_SPEED - velocity) * 0.05;
+      } else {
+        velocity *= FRICTION;
+        // Once slow enough, nudge back toward auto
+        if (Math.abs(velocity) < AUTO_SPEED * 2) {
+          velocity += (AUTO_SPEED - velocity) * 0.02;
+        }
+      }
+      angle += velocity;
+      applyRotation();
+    }
+    rafId = requestAnimationFrame(loop);
+  }
+
+  /* Drag start */
+  function onStart(e) {
+    e.preventDefault();
+    dragging = true;
+    velocity = 0;
+    prevMouseAngle = clientToAngle(e);
+    lastTime = performance.now();
+  }
+
+  /* Drag move */
+  function onMove(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    const now = performance.now();
+    const dt  = Math.max(now - lastTime, 1);
+    const cur = clientToAngle(e);
+    let delta = cur - prevMouseAngle;
+    if (delta >  180) delta -= 360;
+    if (delta < -180) delta += 360;
+
+    velocity = delta / dt * 16; // scale to per-frame
+    angle   += delta;
+    applyRotation();
+    prevMouseAngle = cur;
+    lastTime = now;
+  }
+
+  /* Drag end — let inertia + loop take over */
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    // clamp velocity so it doesn't spin wildly
+    velocity = Math.max(-8, Math.min(8, velocity));
+  }
+
+  // Mouse
+  wrap.addEventListener('mousedown',  onStart);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup',   onEnd);
+  // Touch
+  wrap.addEventListener('touchstart', onStart, { passive: false });
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('touchend',  onEnd);
+
+  // Kick off loop
+  loop();
+})();
+</script>
+
+<!-- ══ RESULT SEARCH MODAL ══ -->
+<div id="resultModal">
+  <div class="rm-box">
+    <button class="rm-close" onclick="document.getElementById('resultModal').style.display='none'">&times;</button>
+    <div class="rm-title">📋 नतिजा हेर्नुहोस्</div>
+
+    <div class="rm-field">
+      <label>विद्यार्थीको नाम</label>
+      <input type="text" id="rmName" placeholder="पूरा नाम लेख्नुहोस्">
+    </div>
+    <div class="rm-row">
+      <div class="rm-field">
+        <label>जन्ममिति</label>
+        <input type="text" id="rmDOB" placeholder="२०५५/०२/१५">
+      </div>
+      <div class="rm-field">
+        <label>शैक्षिक वर्ष</label>
+        <select id="rmYear">
+          <option value="">— छान्नुहोस् —</option>
+          <option value="2083">२०८३</option>
+          <option value="2082">२०८२</option>
+          <option value="2081">२०८१</option>
+        </select>
+      </div>
+    </div>
+    <div class="rm-row">
+      <div class="rm-field">
+        <label>कक्षा</label>
+        <select id="rmClass">
+          <option value="">— छान्नुहोस् —</option>
+          <option value="class6">कक्षा ६</option>
+          <option value="class7">कक्षा ७</option>
+          <option value="class8">कक्षा ८</option>
+          <option value="class9">कक्षा ९</option>
+          <option value="class10">कक्षा १०</option>
+          <option value="class11">कक्षा ११</option>
+          <option value="class12">कक्षा १२</option>
+        </select>
+      </div>
+      <div class="rm-field">
+        <label>परीक्षा</label>
+        <select id="rmExam">
+          <option value="">— छान्नुहोस् —</option>
+          <option value="traimasik">त्रैमासिक</option>
+          <option value="ardhavaarshik">अर्धवार्षिक</option>
+          <option value="vaarshik">वार्षिक</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="rm-error" id="rmError">विद्यार्थीको नतिजा फेला परेन। नाम र जन्ममिति मिलाउनुहोस्।</div>
+    <button class="rm-btn" onclick="searchResult()">🔍 नतिजा खोज्नुहोस्</button>
+  </div>
+</div>
+
+<!-- ══ RESULT DISPLAY ══ -->
+<div id="resultDisplay">
+  <div class="rd-box">
+    <button class="rd-close" onclick="document.getElementById('resultDisplay').style.display='none'">&times;</button>
+    <div class="rd-name" id="rdName"></div>
+    <div class="rd-meta" id="rdMeta"></div>
+    <table class="rd-table">
+      <thead><tr><th>विषय</th><th>पूर्णाङ्क</th><th>प्राप्ताङ्क</th><th>ग्रेड</th></tr></thead>
+      <tbody id="rdBody"></tbody>
+    </table>
+    <div class="rd-total" id="rdTotal"></div>
+    <button class="rd-back" onclick="document.getElementById('resultDisplay').style.display='none';document.getElementById('resultModal').style.display='flex';">← फिर्ता जानुहोस्</button>
+  </div>
+</div>
+
+<script>
+// ══ RESULT SEARCH LOGIC ══
+async function searchResult() {
+  const name  = document.getElementById('rmName').value.trim();
+  const dob   = document.getElementById('rmDOB').value.trim();
+  const year  = document.getElementById('rmYear').value;
+  const cls   = document.getElementById('rmClass').value;
+  const exam  = document.getElementById('rmExam').value;
+  const errEl = document.getElementById('rmError');
+  errEl.style.display = 'none';
+
+  if (!name || !dob || !year || !cls || !exam) {
+    errEl.textContent = 'कृपया सबै खाना भर्नुहोस्।';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // JSON path: Results/2083/traimasik/class6.json
+  const path = `Results/${year}/${exam}/${cls}.json`;
+
+  let data;
+  try {
+    const res = await fetch(path);
+    if (!res.ok) throw new Error('not found');
+    data = await res.json();
+  } catch {
+    errEl.textContent = 'नतिजा फाइल फेला परेन। ('+path+')';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Search student by name + dob (case-insensitive, trim)
+  const student = (data.students || []).find(s =>
+    s.name.trim().toLowerCase() === name.toLowerCase() &&
+    s.dob.trim() === dob
+  );
+
+  if (!student) {
+    errEl.textContent = 'नाम वा जन्ममिति मिलेन। पुनः जाँच गर्नुहोस्।';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Fill result display
+  const examLabels = { traimasik: 'त्रैमासिक', ardhavaarshik: 'अर्धवार्षिक', vaarshik: 'वार्षिक' };
+  const clsLabels  = { class6:'कक्षा ६', class7:'कक्षा ७', class8:'कक्षा ८', class9:'कक्षा ९', class10:'कक्षा १०', class11:'कक्षा ११', class12:'कक्षा १२' };
+
+  document.getElementById('rdName').textContent = '🎓 ' + student.name;
+  document.getElementById('rdMeta').textContent =
+    `जन्ममिति: ${student.dob} | ${clsLabels[cls]} | ${examLabels[exam]} परीक्षा | वर्ष: ${year}`;
+
+  const tbody = document.getElementById('rdBody');
+  tbody.innerHTML = '';
+  let total = 0, maxTotal = 0;
+
+  (student.subjects || []).forEach(sub => {
+    const tr = document.createElement('tr');
+    const grade = getGrade(sub.obtained, sub.full);
+    tr.innerHTML = `<td>${sub.name}</td><td>${sub.full}</td><td>${sub.obtained}</td><td>${grade}</td>`;
+    tbody.appendChild(tr);
+    total    += sub.obtained;
+    maxTotal += sub.full;
+  });
+
+  const pct = maxTotal ? Math.round(total / maxTotal * 100) : 0;
+  document.getElementById('rdTotal').textContent =
+    `जम्मा: ${total} / ${maxTotal}  (${pct}%)`;
+
+  document.getElementById('resultModal').style.display  = 'none';
+  document.getElementById('resultDisplay').style.display = 'flex';
+}
+
+function getGrade(obt, full) {
+  if (!full) return '—';
+  const p = obt / full * 100;
+  if (p >= 90) return 'A+';
+  if (p >= 80) return 'A';
+  if (p >= 70) return 'B+';
+  if (p >= 60) return 'B';
+  if (p >= 50) return 'C+';
+  if (p >= 40) return 'C';
+  if (p >= 35) return 'D';
+  return 'NG';
+}
+
+// Close modal on backdrop click
+['resultModal','resultDisplay'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+});
+</script>
+
+<script>
+// ══ GRAVITY BOXES — sky/white theme ══
+(function () {
+  const grid = document.getElementById('gravity-grid');
+  if (!grid) return;
+
+  const BOX = 12, GAP = 2, STEP = BOX + GAP;
+  let px = null, py = null;
+  let animId = null;
+
+  // Rest color: #d6eaf8 (--sky), pressed color: #ffffff (white)
+  const R0 = 0xd6, G0 = 0xea, B0 = 0xf8; // #d6eaf8 sky
+  const R1 = 0xff, G1 = 0xff, B1 = 0xff; // #ffffff white
+
+  const RADIUS = 110, R2 = RADIUS * RADIUS;
+  const STIFF = 0.25, DAMP = 0.58;
+
+  let boxes = [], dep, vel, cx, cy, total = 0;
+
+  function init() {
+    if (animId) cancelAnimationFrame(animId);
+    grid.innerHTML = '';
+
+    const W = grid.offsetWidth || window.innerWidth;
+    const H = grid.offsetHeight || 260;
+    const cols = Math.floor((W - 4) / STEP);
+    const rows = Math.floor((H - 4) / STEP);
+    total = cols * rows;
+
+    grid.style.gridTemplateColumns = `repeat(${cols}, ${BOX}px)`;
+    grid.style.alignContent = 'start';
+    grid.style.gap = GAP + 'px';
+    grid.style.padding = '2px';
+
+    boxes = [];
+    for (let i = 0; i < total; i++) {
+      const b = document.createElement('div');
+      b.style.cssText = `width:${BOX}px;height:${BOX}px;border-radius:2px;background:#d6eaf8;`;
+      grid.appendChild(b);
+      boxes.push(b);
+    }
+
+    cx = new Float32Array(total);
+    cy = new Float32Array(total);
+    dep = new Float32Array(total);
+    vel = new Float32Array(total);
+
+    buildCenters();
+    tick();
+  }
+
+  function buildCenters() {
+    const gr = grid.getBoundingClientRect();
+    const cols = Math.floor((gr.width - 4) / STEP);
+    for (let i = 0; i < total; i++) {
+      const r = Math.floor(i / cols), c = i % cols;
+      cx[i] = gr.left + c * STEP + BOX / 2;
+      cy[i] = gr.top  + r * STEP + BOX / 2;
+    }
+  }
+
+  function tick() {
+    for (let i = 0; i < total; i++) {
+      let tgt = 0;
+      if (px !== null) {
+        const dx = cx[i] - px, dy = cy[i] - py;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < R2) {
+          const ratio = Math.sqrt(d2) / RADIUS;
+          tgt = (1 - ratio) * (1 - ratio);
+        }
+      }
+      vel[i] = vel[i] * DAMP + (tgt - dep[i]) * STIFF;
+      dep[i] += vel[i];
+      if (dep[i] < 0) { dep[i] = 0; vel[i] = 0; }
+
+      const depth = dep[i];
+      if (depth < 0.0015 && tgt === 0) {
+        dep[i] = 0; vel[i] = 0;
+        boxes[i].style.cssText = `width:${BOX}px;height:${BOX}px;border-radius:2px;background:#d6eaf8;`;
+        continue;
+      }
+
+      const sc  = 1 - depth * 0.48;
+      const sh  = (depth * 5).toFixed(1);
+      const sh2 = (depth * 11).toFixed(1);
+      const sia = Math.min(depth * 0.88, 0.85).toFixed(2);
+      const cr  = (R0 + (R1 - R0) * depth) | 0;
+      const cg  = (G0 + (G1 - G0) * depth) | 0;
+      const cb  = (B0 + (B1 - B0) * depth) | 0;
+
+      boxes[i].style.cssText =
+        `width:${BOX}px;height:${BOX}px;border-radius:2px;` +
+        `background:rgb(${cr},${cg},${cb});` +
+        `transform:scale(${sc.toFixed(3)});` +
+        `box-shadow:inset 0 ${sh}px ${sh2}px rgba(0,0,0,${sia});`;
+    }
+    animId = requestAnimationFrame(tick);
+  }
+
+  // ── Events — window level ताकि scroll/touch सबैले काम गरोस् ──
+  const section = document.getElementById('gravity-boxes-section');
+  section.addEventListener('mousemove',   e => { px = e.clientX; py = e.clientY; buildCenters(); });
+  section.addEventListener('mouseleave',  () => { px = null; py = null; });
+  section.addEventListener('touchstart',  e => { e.preventDefault(); px = e.touches[0].clientX; py = e.touches[0].clientY; buildCenters(); }, { passive: false });
+  section.addEventListener('touchmove',   e => { e.preventDefault(); px = e.touches[0].clientX; py = e.touches[0].clientY; }, { passive: false });
+  section.addEventListener('touchend',    () => { px = null; py = null; });
+  section.addEventListener('touchcancel', () => { px = null; py = null; });
+
+  setTimeout(init, 150);
+  window.addEventListener('resize', () => setTimeout(init, 150));
+})();
+</script>
+
+<script>
+// ══ LEKH / HISTORY MODAL ══
+let lekhLoaded = false;
+async function openLekh() {
+  document.getElementById('lekhBackdrop').classList.add('open');
+  document.getElementById('lekhModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (lekhLoaded) return;
+  const content = document.getElementById('lekhContent');
+  try {
+    const res = await fetch('lekh.json');
+    if (!res.ok) throw new Error();
+    const d = await res.json(); // {title, subtitle, sections:[{heading,paragraphs:[]}]}
+    let html = `<h2>${d.title}</h2><div class="lekh-sub">${d.subtitle || ''}</div>`;
+    (d.sections || []).forEach(sec => {
+      if (sec.heading) html += `<h3>${sec.heading}</h3>`;
+      (sec.paragraphs || []).forEach(p => { html += `<p>${p}</p>`; });
+    });
+    content.innerHTML = html;
+    lekhLoaded = true;
+  } catch {
+    content.innerHTML = '<p>इतिहास लोड हुन सकेन। <code>lekh.json</code> फाइल राख्नुहोस्।</p>';
+  }
+}
+function closeLekh() {
+  document.getElementById('lekhBackdrop').classList.remove('open');
+  document.getElementById('lekhModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+</script>
+
+<!-- FIREBASE: लगइन, शिक्षक पोस्ट, लाइक/कमेन्ट/सेयर -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBO5KZq2WLLDCX8eZoL53jxCGqgNJLG-ts",
+  authDomain: "durga-d8936.firebaseapp.com",
+  projectId: "durga-d8936",
+  storageBucket: "durga-d8936.firebasestorage.app",
+  messagingSenderId: "290047636515",
+  appId: "1:290047636515:web:8ffab23a344c2544c22d96",
+  measurementId: "G-ZK11P0FG4Z"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let currentUser = null;
+let isTeacher = false;
+let lastPostsSnapshot = [];
+const openComments = new Set();
+const editingComments = new Set();
+const lastCommentsSnapshot = {};
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str == null ? '' : String(str);
+  return d.innerHTML;
+}
+
+function toggleHeaderMenu() {
+  const dropdown = document.getElementById('headerDropdown');
+  const btn = document.getElementById('menuDotsBtn');
+  const open = dropdown.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+document.addEventListener('click', (e) => {
+  const menu = document.querySelector('.header-menu');
+  const dropdown = document.getElementById('headerDropdown');
+  if (menu && dropdown && !menu.contains(e.target)) {
+    dropdown.classList.remove('open');
+    document.getElementById('menuDotsBtn').setAttribute('aria-expanded', 'false');
+  }
+});
+
+// ADITYA थिम स्विचर
+const ADITYA_THEME_CSS = { blue: 'styles-blue.css', green: 'styles-green.css', teal: 'styles-teal.css', indigo: 'styles-indigo.css', black: 'styles-black.css', terracotta: 'styles.css' };
+const ADITYA_THEME_LOGO = { blue: 'photos/aditya-logo-blue.png', green: 'photos/aditya-logo-green.png', teal: 'photos/aditya-logo-teal.png', indigo: 'photos/aditya-logo-indigo.png', black: 'photos/aditya-logo-black.png', terracotta: 'photos/aditya-logo.png' };
+
+function setAdityaTheme(name) {
+  if (!ADITYA_THEME_CSS[name]) return;
+  let override = document.getElementById('themeStylesheetOverride');
+  if (name === 'terracotta') {
+    if (override) override.remove();
+  } else {
+    if (!override) {
+      override = document.createElement('link');
+      override.rel = 'stylesheet';
+      override.id = 'themeStylesheetOverride';
+      document.head.appendChild(override);
+    }
+    override.href = ADITYA_THEME_CSS[name];
+  }
+  const logo = document.getElementById('adityaLogoImg');
+  if (logo) logo.src = ADITYA_THEME_LOGO[name];
+  try { localStorage.setItem('adityaTheme', name); } catch(e) {}
+  document.querySelectorAll('.theme-swatch').forEach(el => {
+    el.classList.toggle('active', el.dataset.theme === name);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  let saved = 'terracotta';
+  try { saved = localStorage.getItem('adityaTheme') || 'terracotta'; } catch(e) {}
+  document.querySelectorAll('.theme-swatch').forEach(el => {
+    el.classList.toggle('active', el.dataset.theme === saved);
+  });
+});
+
+function loginWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(err => {
+    alert('लगइन गर्न सकिएन: ' + err.message);
+  });
+}
+
+function logout() {
+  auth.signOut();
+  const dropdown = document.getElementById('headerDropdown');
+  if (dropdown) dropdown.classList.remove('open');
+}
+
+function renderAuthBox() {
+  const boxes = [document.getElementById('authBox'), document.getElementById('authBoxHero')].filter(Boolean);
+  boxes.forEach(box => {
+    if (currentUser) {
+      const initial = (currentUser.email || '?').trim().charAt(0).toUpperCase();
+      box.innerHTML = `
+        <div class="auth-user" title="${escapeHtml(currentUser.email)}">
+          <span class="auth-avatar">${initial}</span>
+        </div>
+        <button class="auth-logout" onclick="logout()">लगआउट</button>`;
+    } else {
+      box.innerHTML = `<button class="auth-btn" onclick="loginWithGoogle()">🔑 लगइन</button>`;
+    }
+  });
+}
+
+auth.onAuthStateChanged(async (user) => {
+  currentUser = user;
+  isTeacher = false;
+  document.getElementById('loginHint').style.display = user ? 'none' : 'block';
+  document.getElementById('teacherPostForm').style.display = 'none';
+  document.getElementById('noticeForm').style.display = 'none';
+
+  if (user) {
+    try {
+      const teacherDoc = await db.collection('teachers').doc(user.email).get();
+      isTeacher = teacherDoc.exists;
+    } catch (e) { isTeacher = false; }
+    document.getElementById('teacherPostForm').style.display = isTeacher ? 'block' : 'none';
+    document.getElementById('noticeForm').style.display = isTeacher ? 'block' : 'none';
+  }
+  renderAuthBox();
+  renderPosts(lastPostsSnapshot);
+  if (typeof renderNoticeManageList === 'function') renderNoticeManageList();
+  if (typeof renderNoticeSocial === 'function') renderNoticeSocial();
+});
+
+function togglePostFormBody() {
+  const body = document.getElementById('teacherPostFormBody');
+  const btn = document.getElementById('teacherPostFormToggleBtn');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? '➕' : '➖';
+  btn.setAttribute('aria-label', isOpen ? 'फारम खोल्नुहोस्' : 'फारम बन्द गर्नुहोस्');
+}
+
+async function submitPost() {
+  if (!currentUser || !isTeacher) return;
+  const titleEl = document.getElementById('postTitleInput');
+  const bodyEl = document.getElementById('postBodyInput');
+  const mediaEl = document.getElementById('postMediaUrlInput');
+  const title = titleEl.value.trim();
+  const body = bodyEl.value.trim();
+  const mediaUrl = mediaEl.value.trim();
+  if (!title || !body) { alert('कृपया शीर्षक र विवरण दुवै लेख्नुहोस्।'); return; }
+  try {
+    await db.collection('posts').add({
+      title, body,
+      mediaUrl: mediaUrl || null,
+      authorName: currentUser.displayName || currentUser.email,
+      authorEmail: currentUser.email,
+      authorPhoto: currentUser.photoURL || '',
+      likes: {},
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    titleEl.value = ''; bodyEl.value = ''; mediaEl.value = '';
+    const formBody = document.getElementById('teacherPostFormBody');
+    const toggleBtn = document.getElementById('teacherPostFormToggleBtn');
+    if (formBody) formBody.style.display = 'none';
+    if (toggleBtn) { toggleBtn.textContent = '➕'; toggleBtn.setAttribute('aria-label', 'फारम खोल्नुहोस्'); }
+  } catch (e) {
+    alert('पोस्ट गर्न सकिएन: ' + e.message);
+  }
+}
+
+// फोटो/भिडियो link बाट embed गर्ने HTML बनाउने
+function renderMediaEmbed(url) {
+  if (!url) return '';
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
+  if (yt) {
+    return `<div class="post-media"><iframe src="https://www.youtube.com/embed/${yt[1]}" allowfullscreen></iframe></div>`;
+  }
+  if (/\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url)) {
+    return `<div class="post-media"><video src="${url}" controls></video></div>`;
+  }
+  return `<div class="post-media"><img src="${url}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`;
+}
+
+function formatDate(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('ne-NP', { year: 'numeric', month: 'short', day: 'numeric' }) +
+    ' ' + d.toLocaleTimeString('ne-NP', { hour: '2-digit', minute: '2-digit' });
+}
+
+db.collection('posts').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+  lastPostsSnapshot = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderPosts(lastPostsSnapshot);
+}, () => {
+  document.getElementById('postsFeed').innerHTML = '<div class="posts-empty">पोस्टहरू लोड हुन सकेन।</div>';
+});
+
+function renderPosts(posts) {
+  const feed = document.getElementById('postsFeed');
+  if (!posts || posts.length === 0) {
+    feed.innerHTML = '<div class="posts-empty">अहिलेसम्म कुनै पोस्ट छैन।</div>';
+    return;
+  }
+  feed.innerHTML = posts.map(p => {
+    const likes = p.likes || {};
+    const likeCount = Object.keys(likes).length;
+    const liked = currentUser && likes[currentUser.uid];
+    const commentsOpen = openComments.has(p.id);
+    const initial = (p.authorName || '?').trim().charAt(0);
+    return `
+      <div class="post-card" data-id="${p.id}">
+        <div class="post-head">
+          <div class="post-avatar">${p.authorPhoto ? `<img src="${p.authorPhoto}" alt="">` : initial}</div>
+          <div>
+            <div class="post-author">${escapeHtml(p.authorName || 'शिक्षक')}</div>
+            <div class="post-date">${formatDate(p.createdAt)}</div>
+          </div>
+        </div>
+        <div class="post-title">${escapeHtml(p.title)}</div>
+        <div class="post-body">${escapeHtml(p.body)}</div>
+        ${renderMediaEmbed(p.mediaUrl)}
+        <div class="post-actions">
+          <button class="post-action-btn like-btn ${liked ? 'liked' : ''}" onclick="toggleLike('${p.id}', this)" aria-label="लाइक"><span class="like-icon"><svg viewBox="0 0 24 24" width="21" height="21"><path d="M12 20.7s-7.1-4.55-9.85-8.66C.5 9.62.98 6.1 3.6 4.28c2.2-1.53 5.05-1.13 6.8.96l1.6 1.9 1.6-1.9c1.75-2.09 4.6-2.49 6.8-.96 2.62 1.82 3.1 5.34 1.45 7.76C19.1 16.15 12 20.7 12 20.7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg></span><span class="like-count">${likeCount}</span></button>
+          <button class="post-action-btn ${commentsOpen ? 'comments-active' : ''}" onclick="toggleComments('${p.id}', this)" aria-label="कमेन्ट"><span class="comment-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4.4 3.3A.6.6 0 0 1 3.6 20V17H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg></span></button>
+          <button class="post-action-btn" onclick="sharePost('${p.id}', this)" aria-label="सेयर"><span class="share-icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="6" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><line x1="8.2" y1="10.8" x2="15.8" y2="7.2" stroke="currentColor" stroke-width="1.7"/><line x1="8.2" y1="13.2" x2="15.8" y2="16.8" stroke="currentColor" stroke-width="1.7"/></svg></span></button>
+        </div>
+        <div class="comment-box ${commentsOpen ? 'open' : ''}" id="commentBox-${p.id}">
+          <div class="comment-list" id="commentList-${p.id}">कमेन्ट लोड हुँदैछ...</div>
+          ${currentUser ? `
+          <div class="comment-input-row">
+            <input type="text" id="commentInput-${p.id}" placeholder="कमेन्ट लेख्नुहोस्...">
+            <button onclick="submitComment('${p.id}')">पठाउनुहोस्</button>
+          </div>` : `<p style="font-size:0.8rem;color:var(--text-light);margin-top:8px;">कमेन्ट गर्न लगइन गर्नुहोस्।</p>`}
+        </div>
+      </div>`;
+  }).join('');
+
+  posts.forEach(p => { if (openComments.has(p.id)) loadComments(p.id); });
+}
+
+async function toggleLike(postId, btn) {
+  if (!currentUser) { alert('लाइक गर्न लगइन गर्नुहोस्।'); return; }
+  const ref = db.collection('posts').doc(postId);
+  const post = lastPostsSnapshot.find(p => p.id === postId);
+  const likes = (post && post.likes) || {};
+  const already = !!likes[currentUser.uid];
+  const field = `likes.${currentUser.uid}`;
+  if (btn && !already) {
+    btn.classList.add('like-burst');
+    spawnLikeParticles(btn);
+    setTimeout(() => btn.classList.remove('like-burst'), 450);
+  }
+  try {
+    await ref.update({ [field]: already ? firebase.firestore.FieldValue.delete() : true });
+  } catch (e) {
+    alert('लाइक गर्न सकिएन: ' + e.message);
+  }
+}
+
+function spawnLikeParticles(btn) {
+  const rect = btn.getBoundingClientRect();
+  const icon = btn.querySelector('.like-icon');
+  const originX = icon ? icon.getBoundingClientRect().left + icon.offsetWidth / 2 : rect.left + 18;
+  const originY = icon ? icon.getBoundingClientRect().top + icon.offsetHeight / 2 : rect.top + rect.height / 2;
+  const emojis = ['❤️', '💙', '💕'];
+  for (let i = 0; i < 5; i++) {
+    const p = document.createElement('span');
+    p.className = 'like-particle';
+    p.textContent = emojis[i % emojis.length];
+    p.style.left = originX + 'px';
+    p.style.top = originY + 'px';
+    const angle = (Math.random() * 80 - 40) * (Math.PI / 180);
+    const dist = 30 + Math.random() * 24;
+    p.style.setProperty('--tx', (Math.sin(angle) * dist).toFixed(1) + 'px');
+    p.style.setProperty('--ty', (-Math.cos(angle) * dist - 20).toFixed(1) + 'px');
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 700);
+  }
+}
+
+function toggleComments(postId, btn) {
+  const box = document.getElementById(`commentBox-${postId}`);
+  if (openComments.has(postId)) {
+    openComments.delete(postId);
+    box.classList.remove('open');
+    if (btn) btn.classList.remove('comments-active');
+  } else {
+    openComments.add(postId);
+    box.classList.add('open');
+    if (btn) btn.classList.add('comments-active');
+    loadComments(postId);
+    setTimeout(() => {
+      const input = document.getElementById(`commentInput-${postId}`);
+      if (input) input.focus();
+    }, 200);
+  }
+}
+
+function loadComments(postId) {
+  db.collection('posts').doc(postId).collection('comments')
+    .orderBy('createdAt', 'asc')
+    .onSnapshot((snap) => {
+      lastCommentsSnapshot[postId] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderComments(postId);
+    });
+}
+
+function renderComments(postId) {
+  const list = document.getElementById(`commentList-${postId}`);
+  if (!list) return;
+  const comments = lastCommentsSnapshot[postId] || [];
+  if (comments.length === 0) {
+    list.innerHTML = '<p style="font-size:0.8rem;color:var(--text-light);">अहिलेसम्म कुनै कमेन्ट छैन।</p>';
+    return;
+  }
+  list.innerHTML = comments.map(c => {
+    const canModify = !!currentUser && (isTeacher || c.authorUid === currentUser.uid || (c.authorEmail && c.authorEmail === currentUser.email));
+    const isEditing = editingComments.has(`${postId}::${c.id}`);
+    if (isEditing) {
+      return `
+        <div class="comment-item comment-item-editing" data-id="${c.id}">
+          <textarea class="comment-edit-input" id="editInput-${postId}-${c.id}" rows="2">${escapeHtml(c.text)}</textarea>
+          <div class="comment-item-actions">
+            <button class="comment-mini-btn comment-mini-save" onclick="saveEditComment('${postId}','${c.id}')" title="सेभ गर्नुहोस्">✔️</button>
+            <button class="comment-mini-btn" onclick="cancelEditComment('${postId}','${c.id}')" title="रद्द गर्नुहोस्">✕</button>
+          </div>
+        </div>`;
+    }
+    return `
+      <div class="comment-item" data-id="${c.id}">
+        <div class="comment-item-main"><b>${escapeHtml(c.authorName || 'प्रयोगकर्ता')}:</b> <span class="comment-text">${escapeHtml(c.text)}</span>${c.edited ? '<span class="comment-edited-tag">(सम्पादित)</span>' : ''}</div>
+        ${canModify ? `
+        <div class="comment-item-actions">
+          <button class="comment-mini-btn" onclick="startEditComment('${postId}','${c.id}')" title="सम्पादन गर्नुहोस्">✏️</button>
+          <button class="comment-mini-btn comment-mini-delete" onclick="deleteComment('${postId}','${c.id}')" title="मेटाउनुहोस्">🗑️</button>
+        </div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function startEditComment(postId, commentId) {
+  editingComments.add(`${postId}::${commentId}`);
+  renderComments(postId);
+  const input = document.getElementById(`editInput-${postId}-${commentId}`);
+  if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
+}
+
+function cancelEditComment(postId, commentId) {
+  editingComments.delete(`${postId}::${commentId}`);
+  renderComments(postId);
+}
+
+async function saveEditComment(postId, commentId) {
+  const input = document.getElementById(`editInput-${postId}-${commentId}`);
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) { alert('कमेन्ट खाली हुन सक्दैन।'); return; }
+  try {
+    await db.collection('posts').doc(postId).collection('comments').doc(commentId).update({
+      text,
+      edited: true,
+      editedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    editingComments.delete(`${postId}::${commentId}`);
+  } catch (e) {
+    alert('कमेन्ट सम्पादन गर्न सकिएन: ' + e.message);
+  }
+}
+
+async function deleteComment(postId, commentId) {
+  if (!confirm('यो कमेन्ट मेटाउने पक्का हो?')) return;
+  try {
+    const item = document.querySelector(`#commentList-${postId} .comment-item[data-id="${commentId}"]`);
+    if (item) item.classList.add('comment-item-removing');
+    setTimeout(async () => {
+      try {
+        await db.collection('posts').doc(postId).collection('comments').doc(commentId).delete();
+      } catch (e) {
+        alert('कमेन्ट मेटाउन सकिएन: ' + e.message);
+      }
+    }, 220);
+  } catch (e) {
+    alert('कमेन्ट मेटाउन सकिएन: ' + e.message);
+  }
+}
+
+async function submitComment(postId) {
+  if (!currentUser) return;
+  const input = document.getElementById(`commentInput-${postId}`);
+  const text = input.value.trim();
+  if (!text) return;
+  try {
+    await db.collection('posts').doc(postId).collection('comments').add({
+      text,
+      authorName: currentUser.displayName || currentUser.email,
+      authorEmail: currentUser.email,
+      authorUid: currentUser.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    input.value = '';
+  } catch (e) {
+    alert('कमेन्ट पठाउन सकिएन: ' + e.message);
+  }
+}
+
+function sharePost(postId, btn) {
+  const post = lastPostsSnapshot.find(p => p.id === postId);
+  const title = post ? post.title : 'पोस्ट';
+  const url = window.location.href.split('#')[0] + '#community';
+  const flashShared = () => {
+    if (!btn) return;
+    const original = btn.innerHTML;
+    btn.classList.add('share-pulse');
+    btn.innerHTML = '<span class="share-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+    setTimeout(() => {
+      btn.classList.remove('share-pulse');
+      btn.innerHTML = original;
+    }, 1400);
+  };
+  if (navigator.share) {
+    navigator.share({ title: title, url: url }).then(flashShared).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      flashShared();
+    }).catch(() => { prompt('यो लिंक कपी गर्नुहोस्:', url); });
+  } else {
+    prompt('यो लिंक कपी गर्नुहोस्:', url);
+  }
+}
+</script>
+
+<script>
+// ══ ब्ल्याकबोर्ड (सूचना) — Firestore बाट, शिक्षकले लेख्न/edit/delete गर्न मिल्ने ══
+let lastNoticesSnapshot = [];
+let editingNoticeId = null;
+
+const FONT_STACKS = {
+  akshar:      "'Akshar','Noto Sans Devanagari',sans-serif",
+  khand:       "'Khand','Noto Sans Devanagari',sans-serif",
+  'noto-serif':"'Noto Serif Devanagari',serif",
+  siddhanta:   "'Siddhanta','Noto Sans Devanagari',sans-serif"
+};
+
+// पहिलेको news/*.json फाइलहरूमा भएकै structure अनुसारका टेम्प्लेट
+const NOTICE_TEMPLATES = {
+  notice: {
+    title: 'जरुरी सूचना',
+    body: 'सम्पूर्ण विद्यार्थी तथा अभिभावकहरूलाई जानकारी गराइन्छ कि...',
+    footer: 'विद्यालय प्रशासन'
+  },
+  holiday: {
+    title: 'बिदाको सूचना',
+    body: 'मिति ..... देखि ..... सम्म विद्यालय बिदा रहने भएकोले सबैलाई जानकारी गराइन्छ।',
+    footer: 'विद्यालय प्रशासन'
+  },
+  result: {
+    title: 'परीक्षाको नतिजा प्रकाशन',
+    body: 'यस वर्षको परीक्षाको नतिजा प्रकाशित भएको छ। सबै उत्तीर्ण विद्यार्थीलाई बधाई एवं शुभकामना।',
+    footer: 'परीक्षा शाखा'
+  },
+  sports: {
+    title: 'खेलकुद प्रतियोगिता सम्बन्धी सूचना',
+    body: 'विद्यालयको खेलकुद कार्यक्रम मिति ..... मा हुने भएकोले सहभागी हुन अनुरोध छ।',
+    footer: 'खेलकुद समिति'
+  },
+  meeting: {
+    title: 'अभिभावक–शिक्षक बैठक',
+    body: 'आगामी मिति ..... गते विद्यालयमा अभिभावक–शिक्षक बैठक हुने भएकाले सबै अभिभावकहरूलाई समयमै उपस्थित हुन हार्दिक अनुरोध छ।',
+    footer: 'प्रधानाध्यापक कार्यालय'
+  },
+  exam: {
+    title: 'परीक्षा तालिका सूचना',
+    body: 'त्रैमासिक/वार्षिक परीक्षा मिति ..... बाट सुरु हुने भएकोले विद्यार्थीहरूलाई तयारी गर्न अनुरोध छ। (तल तालिका पनि थप्न सक्नुहुन्छ)',
+    footer: 'परीक्षा शाखा'
+  },
+  special: {
+    title: 'विशेष सूचना',
+    body: 'सम्पूर्ण विद्यार्थी तथा अभिभावकहरूलाई जरुरी जानकारी गराइन्छ कि...',
+    footer: 'विद्यालय प्रशासन'
+  }
+};
+
+function applyNoticeTemplate() {
+  const key = document.getElementById('noticeTemplateSelect').value;
+  if (!key || !NOTICE_TEMPLATES[key]) return;
+  const t = NOTICE_TEMPLATES[key];
+  document.getElementById('noticeTitleInput').value = t.title;
+  document.getElementById('noticeBodyInput').value = t.body;
+  document.getElementById('noticeFooterInput').value = t.footer;
+}
+
+function toggleNoticeFormBody() {
+  const body = document.getElementById('noticeFormBody');
+  const btn = document.getElementById('noticeFormToggleBtn');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? '➕' : '➖';
+  btn.setAttribute('aria-label', isOpen ? 'फारम खोल्नुहोस्' : 'फारम बन्द गर्नुहोस्');
+}
+
+function openNoticeForm() {
+  document.getElementById('noticeFormBody').style.display = 'block';
+  document.getElementById('noticeFormToggleBtn').textContent = '➖';
+  document.getElementById('noticeFormToggleBtn').setAttribute('aria-label', 'फारम बन्द गर्नुहोस्');
+}
+
+function toggleNoticeTableFields() {
+  const on = document.getElementById('noticeTableToggle').checked;
+  document.getElementById('noticeTableFields').style.display = on ? 'block' : 'none';
+  if (on && tableColumns.length === 0) initTableBuilderDefault();
+}
+
+// ── तालिका builder (box-based, JSON headers/rows structure अनुसार) ──
+let tableColumns = [];
+let tableRows = [];
+
+function escAttr(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function initTableBuilderDefault() {
+  tableColumns = ['मिति', 'क-६', 'क-७', 'क-८'];
+  tableRows = [ new Array(tableColumns.length).fill('') ];
+  renderTableBuilder();
+}
+
+function renderTableBuilder() {
+  const colsBox = document.getElementById('tableColumnsRow');
+  const rowsBox = document.getElementById('tableRowsContainer');
+  if (!colsBox || !rowsBox) return;
+
+  colsBox.innerHTML = tableColumns.map((c, i) => `
+    <div class="table-column-cell">
+      <input type="text" value="${escAttr(c)}" oninput="updateTableColumn(${i}, this.value)" placeholder="स्तम्भ नाम">
+      ${tableColumns.length > 1 ? `<button type="button" class="table-remove-btn" onclick="removeTableColumn(${i})">✕</button>` : ''}
+    </div>`).join('');
+
+  rowsBox.innerHTML = tableRows.map((row, r) => `
+    <div class="table-row-cells">
+      ${row.map((val, c) => `<input type="text" value="${escAttr(val)}" oninput="updateTableCell(${r},${c},this.value)" placeholder="${escAttr(tableColumns[c] || '')}">`).join('')}
+      <button type="button" class="table-remove-btn" onclick="removeTableRow(${r})">✕</button>
+    </div>`).join('');
+}
+
+function updateTableColumn(i, val) { tableColumns[i] = val; }
+function updateTableCell(r, c, val) { tableRows[r][c] = val; }
+
+function addTableColumn() {
+  tableColumns.push('');
+  tableRows.forEach(row => row.push(''));
+  renderTableBuilder();
+}
+function removeTableColumn(i) {
+  if (tableColumns.length <= 1) return;
+  tableColumns.splice(i, 1);
+  tableRows.forEach(row => row.splice(i, 1));
+  renderTableBuilder();
+}
+function addTableRow() {
+  tableRows.push(new Array(tableColumns.length).fill(''));
+  renderTableBuilder();
+}
+function removeTableRow(r) {
+  tableRows.splice(r, 1);
+  if (tableRows.length === 0) tableRows.push(new Array(tableColumns.length).fill(''));
+  renderTableBuilder();
+}
+
+async function submitNotice() {
+  if (!currentUser || !isTeacher) return;
+  const font   = document.getElementById('noticeFontSelect').value;
+  const date   = document.getElementById('noticeDateInput').value.trim();
+  const title  = document.getElementById('noticeTitleInput').value.trim();
+  const body   = document.getElementById('noticeBodyInput').value.trim();
+  const footer = document.getElementById('noticeFooterInput').value.trim();
+  const isTable = document.getElementById('noticeTableToggle').checked;
+
+  if (!title) { alert('कृपया शीर्षक लेख्नुहोस्।'); return; }
+  if (!isTable && !body) { alert('कृपया विवरण लेख्नुहोस्।'); return; }
+
+  const data = {
+    font: font || 'akshar',
+    date: date || null,
+    title, body: body || null,
+    footer: footer || null,
+    type: isTable ? 'table' : 'text'
+  };
+
+  if (isTable) {
+    const headers = tableColumns.map(h => h.trim());
+    const rows = tableRows.map(row => row.map(c => c.trim()));
+    const hasContent = rows.some(row => row.some(c => c !== ''));
+    if (headers.length === 0 || !hasContent) { alert('कृपया तालिकाका स्तम्भ र कम्तिमा एउटा row भर्नुहोस्।'); return; }
+    data.headers = headers;
+    // Firestore मा array-भित्र-array (nested array) सपोर्ट हुँदैन, त्यसैले हरेक row लाई {cells:[...]} object मा राख्ने
+    data.rows = rows.map(r => ({ cells: r }));
+  }
+
+  try {
+    if (editingNoticeId) {
+      await db.collection('notices').doc(editingNoticeId).update(data);
+    } else {
+      await db.collection('notices').add({
+        ...data,
+        authorName: currentUser.displayName || currentUser.email,
+        authorEmail: currentUser.email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+    cancelNoticeEdit();
+  } catch (e) {
+    alert('सूचना लेख्न सकिएन: ' + e.message);
+  }
+}
+
+function editNotice(id) {
+  const n = lastNoticesSnapshot.find(x => x.id === id);
+  if (!n) return;
+  editingNoticeId = id;
+  document.getElementById('noticeTemplateSelect').value = '';
+  document.getElementById('noticeDateInput').value = n.date || '';
+  document.getElementById('noticeTitleInput').value = n.title || '';
+  document.getElementById('noticeBodyInput').value = n.body || '';
+  document.getElementById('noticeFooterInput').value = n.footer || '';
+
+  document.getElementById('noticeFontSelect').value = n.font || 'akshar';
+
+  const isTable = n.type === 'table';
+  document.getElementById('noticeTableToggle').checked = isTable;
+  if (isTable && n.headers && n.rows) {
+    tableColumns = [...n.headers];
+    // पुरानो format (raw array) र नयाँ format ({cells:[...]}) दुवैसँग compatible
+    tableRows = n.rows.map(r => Array.isArray(r) ? [...r] : [...(r.cells || [])]);
+  } else {
+    tableColumns = [];
+    tableRows = [];
+  }
+  renderTableBuilder();
+  toggleNoticeTableFields();
+
+  document.getElementById('noticeSubmitBtn').innerHTML = '<span>✏️</span>अपडेट गर्नुहोस्';
+  document.getElementById('noticeCancelBtn').style.display = 'inline-block';
+  openNoticeForm();
+  document.getElementById('noticeForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelNoticeEdit() {
+  editingNoticeId = null;
+  document.getElementById('noticeTemplateSelect').value = '';
+  document.getElementById('noticeFontSelect').value = 'akshar';
+  document.getElementById('noticeDateInput').value = '';
+  document.getElementById('noticeTitleInput').value = '';
+  document.getElementById('noticeBodyInput').value = '';
+  document.getElementById('noticeFooterInput').value = '';
+  document.getElementById('noticeTableToggle').checked = false;
+  tableColumns = [];
+  tableRows = [];
+  renderTableBuilder();
+  toggleNoticeTableFields();
+  document.getElementById('noticeSubmitBtn').innerHTML = '<span>✏️</span>कालोपाटीमा लेख्नुहोस्';
+  document.getElementById('noticeCancelBtn').style.display = 'none';
+}
+
+async function deleteNotice(id) {
+  if (!confirm('यो सूचना कालोपाटीबाट मेटाउने पक्का हो?')) return;
+  try {
+    await db.collection('notices').doc(id).delete();
+    if (editingNoticeId === id) cancelNoticeEdit();
+  } catch (e) {
+    alert('मेटाउन सकिएन: ' + e.message);
+  }
+}
+
+function renderNoticeManageList() {
+  const box = document.getElementById('noticeManageList');
+  if (!box) return;
+  if (!isTeacher) { box.innerHTML = ''; return; }
+  if (lastNoticesSnapshot.length === 0) {
+    box.innerHTML = '<div class="notice-manage-empty">अहिलेसम्म कुनै सूचना लेखिएको छैन।</div>';
+    return;
+  }
+  box.innerHTML = lastNoticesSnapshot.map(n => `
+    <div class="notice-manage-item">
+      <div class="notice-manage-text">
+        <b>${escapeHtml(n.title || '')}</b>
+        <span>${escapeHtml(n.date || '')}${n.type === 'table' ? ' · तालिका' : ''}</span>
+      </div>
+      <div class="notice-manage-actions">
+        <button onclick="editNotice('${n.id}')">✏️ Edit</button>
+        <button onclick="deleteNotice('${n.id}')" class="notice-delete-btn">🗑️ Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+// ══ कालोपाटी slideshow — seamless (दुवैतिर) अनन्त loop, auto-slide + manual swipe ══
+(function () {
+  const track   = document.getElementById('bbTrack');
+  const dotsBox = document.getElementById('bbDots');
+  const wrap    = document.getElementById('bbWrap');
+
+  let realCount = 0;   // कति वटा साँच्चिकै सूचना छन्
+  let pos       = 0;   // track मा हालको position (clone सहित index)
+  let timer     = null;
+  let looping   = false; // >1 सूचना भएमा मात्र clone-loop चालू हुन्छ
+
+  function buildTable(n) {
+    if (n.type !== 'table' || !n.headers || !n.rows) return '';
+    const thead = `<tr>${n.headers.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr>`;
+    // पुरानो format (raw array) र नयाँ format ({cells:[...]}) दुवैसँग compatible
+    const tbody = n.rows.map(r => {
+      const cells = Array.isArray(r) ? r : (r.cells || []);
+      return `<tr>${cells.map(c => `<td>${escapeHtml(c)}</td>`).join('')}</tr>`;
+    }).join('');
+    return `<div class="bb-table-wrap"><table class="bb-table"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`;
+  }
+
+  function buildSlideEl(s) {
+    const el = document.createElement('div');
+    el.className = 'bb-slide';
+    el.style.setProperty('--bb-font', FONT_STACKS[s.font] || FONT_STACKS.akshar);
+    const topRow = s.date ? `<div class="bb-top-row"><span class="bb-date">${escapeHtml(s.date)}</span></div>` : '';
+    const bodyLines = (s.body || '').split('\n').filter(Boolean)
+      .map(line => `<div class="bb-line">${escapeHtml(line)}</div>`).join('');
+    el.innerHTML = `${topRow}<div class="bb-heading">${escapeHtml(s.title || '')}</div>` +
+      (bodyLines ? `<div class="bb-lines">${bodyLines}</div>` : '') +
+      buildTable(s) +
+      (s.footer ? `<div class="bb-footer">— ${escapeHtml(s.footer)}</div>` : '');
+    return el;
+  }
+
+  // track मा हालको position अनुसार translateX राख्ने (animate=false भए बिना transition तुरुन्त)
+  function setTrackPos(p, animate) {
+    track.style.transition = animate ? '' : 'none';
+    track.style.transform = `translateX(-${p * 100}%)`;
+    if (!animate) track.offsetHeight; // reflow force गरेर transition:none तुरुन्तै लागू गर्ने
+  }
+
+  function updateDots(realIndex) {
+    const dotEls = dotsBox.querySelectorAll('.bb-dot');
+    dotEls.forEach((d, i) => d.classList.toggle('active', i === realIndex));
+    if (typeof onNoticeSlideChange === 'function') onNoticeSlideChange(realIndex);
+  }
+
+  function render() {
+    const slides = lastNoticesSnapshot;
+    track.innerHTML = '';
+    dotsBox.innerHTML = '';
+    realCount = slides.length;
+    if (realCount === 0) {
+      track.innerHTML = '<div class="bb-loading-msg">हाल कुनै सूचना छैन।</div>';
+      if (typeof onNoticeSlideChange === 'function') onNoticeSlideChange(-1);
+      return;
+    }
+    looping = realCount > 1;
+
+    // वास्तविक सूचनाहरू + दुवैतिर seamless loop का लागि clone
+    if (looping) track.appendChild(buildSlideEl(slides[realCount - 1])); // अन्तिमको clone सुरुमा
+    slides.forEach(s => track.appendChild(buildSlideEl(s)));
+    if (looping) track.appendChild(buildSlideEl(slides[0]));             // पहिलोको clone अन्त्यमा
+
+    slides.forEach((s, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'bb-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToReal(i);
+      dotsBox.appendChild(dot);
+    });
+
+    pos = looping ? 1 : 0; // looping भए clone को कारणले वास्तविक पहिलो सूचना index 1 मा हुन्छ
+    setTrackPos(pos, false);
+    startAuto();
+    if (typeof onNoticeSlideChange === 'function') onNoticeSlideChange(0);
+  }
+
+  // dir: +1 (अर्को) वा -1 (अघिल्लो)
+  function step(dir) {
+    if (!realCount || !looping) return; // एउटै सूचना भए loop आवश्यक छैन
+    pos += dir;
+    setTrackPos(pos, true);
+  }
+
+  function goToReal(i) {
+    if (!realCount) return;
+    pos = looping ? (i + 1) : 0;
+    setTrackPos(pos, true);
+    updateDots(i);
+  }
+
+  // clone मा पुगेपछि छेउमै (बिना animation) साँच्चिकै स्लाइडमा snap back गर्ने → अनन्त feel
+  track.addEventListener('transitionend', () => {
+    if (!looping) return;
+    if (pos >= realCount + 1) {          // अन्तिम clone (पहिलोको नक्कल) मा पुग्यो
+      pos = 1;
+      setTrackPos(pos, false);
+    } else if (pos <= 0) {               // सुरुको clone (अन्तिमको नक्कल) मा पुग्यो
+      pos = realCount;
+      setTrackPos(pos, false);
+    }
+    const realIndex = ((pos - 1) + realCount) % realCount;
+    updateDots(realIndex);
+  });
+
+  function startAuto() {
+    if (timer) clearInterval(timer);
+    if (realCount > 1) timer = setInterval(() => step(1), 5000);
+  }
+
+  // ══ Swipe support (touch + mouse drag दुवैको लागि, दुवैतिर seamless loop) ══
+  let dragStartX = 0;
+  let dragging = false;
+  let dragMoved = 0;
+
+  function dragStart(x) {
+    if (!realCount) return;
+    dragStartX = x;
+    dragMoved = 0;
+    dragging = true;
+    if (timer) clearInterval(timer); // स्वाइप गर्दा auto-slide रोक्ने
+    track.style.transition = 'none';
+  }
+  function dragMove(x) {
+    if (!dragging) return;
+    dragMoved = x - dragStartX;
+    const pct = (dragMoved / wrap.clientWidth) * 100;
+    track.style.transform = `translateX(calc(-${pos * 100}% + ${pct}%))`;
+  }
+  function dragEnd() {
+    if (!dragging) return;
+    dragging = false;
+    if (Math.abs(dragMoved) > 40) {
+      step(dragMoved < 0 ? 1 : -1);
+    } else {
+      setTrackPos(pos, true); // सानो movement भए आफ्नै स्लाइडमा फर्किने
+    }
+    startAuto();
+  }
+
+  if (wrap) {
+    // Touch (मोबाइल)
+    wrap.addEventListener('touchstart', e => dragStart(e.touches[0].clientX), { passive: true });
+    wrap.addEventListener('touchmove', e => dragMove(e.touches[0].clientX), { passive: true });
+    wrap.addEventListener('touchend', dragEnd, { passive: true });
+
+    // Mouse drag (डेस्कटप/ल्यापटपमा पनि स्वाइप जस्तै काम गरोस् भनेर)
+    wrap.addEventListener('mousedown', e => { e.preventDefault(); dragStart(e.clientX); });
+    window.addEventListener('mousemove', e => { if (dragging) dragMove(e.clientX); });
+    window.addEventListener('mouseup', () => { if (dragging) dragEnd(); });
+  }
+
+  db.collection('notices').orderBy('createdAt', 'asc').onSnapshot((snap) => {
+    lastNoticesSnapshot = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    render();
+    renderNoticeManageList();
+    if (typeof onNoticesDataChange === 'function') onNoticesDataChange();
+  }, () => {
+    track.innerHTML = '<div class="bb-loading-msg">सूचना लोड हुन सकेन।</div>';
+  });
+})();
+</script>
+
+<!-- कालोपाटीमा हाल देखिरहेको सूचनाको लाइक/कमेन्ट/सेयर लजिक -->
+<script>
+let activeNoticeId = null;
+let noticeCommentsOpen = false;
+let noticeCommentsUnsub = null;
+let lastNoticeCommentsSnapshot = [];
+const editingNoticeComments = new Set();
+
+// स्वाइप/स्लाइड-चेन्ज हुँदा bbTrack IIFE ले यो कल गर्छ
+function onNoticeSlideChange(realIndex) {
+  const slides = (typeof lastNoticesSnapshot !== 'undefined') ? lastNoticesSnapshot : [];
+  const n = realIndex >= 0 ? slides[realIndex] : null;
+  const newId = n ? n.id : null;
+  if (newId === activeNoticeId) { renderNoticeSocial(); return; }
+  activeNoticeId = newId;
+  noticeCommentsOpen = false;
+  editingNoticeComments.clear();
+  if (noticeCommentsUnsub) { noticeCommentsUnsub(); noticeCommentsUnsub = null; }
+  lastNoticeCommentsSnapshot = [];
+  renderNoticeSocial();
+}
+
+// सूचनाहरूको डाटा (जस्तै लाइक गणना) परिवर्तन हुँदा bbTrack IIFE ले यो कल गर्छ
+function onNoticesDataChange() {
+  renderNoticeSocial();
+}
+
+function renderNoticeSocial() {
+  const bar = document.getElementById('noticeSocial');
+  if (!bar) return;
+  const slides = (typeof lastNoticesSnapshot !== 'undefined') ? lastNoticesSnapshot : [];
+  const n = slides.find(x => x.id === activeNoticeId);
+  if (!n) { bar.style.display = 'none'; return; }
+  bar.style.display = '';
+
+  const likeBtn = document.getElementById('noticeLikeBtn');
+  const commentBtn = document.getElementById('noticeCommentBtn');
+  const box = document.getElementById('noticeCommentBox');
+  const inputRow = document.getElementById('noticeCommentInputRow');
+  const loginHint = document.getElementById('noticeLoginHint');
+
+  const likes = n.likes || {};
+  const likeCount = Object.keys(likes).length;
+  const liked = !!(currentUser && likes[currentUser.uid]);
+  likeBtn.classList.toggle('liked', liked);
+  likeBtn.querySelector('.like-count').textContent = likeCount;
+
+  commentBtn.classList.toggle('comments-active', noticeCommentsOpen);
+  box.classList.toggle('open', noticeCommentsOpen);
+  inputRow.style.display = currentUser ? 'flex' : 'none';
+  loginHint.style.display = currentUser ? 'none' : 'block';
+
+  if (noticeCommentsOpen) renderNoticeComments();
+}
+
+async function toggleNoticeLike(btn) {
+  if (!currentUser) { alert('लाइक गर्न लगइन गर्नुहोस्।'); return; }
+  if (!activeNoticeId) return;
+  const n = lastNoticesSnapshot.find(x => x.id === activeNoticeId);
+  const likes = (n && n.likes) || {};
+  const already = !!likes[currentUser.uid];
+  if (!already) {
+    btn.classList.add('like-burst');
+    if (typeof spawnLikeParticles === 'function') spawnLikeParticles(btn);
+    setTimeout(() => btn.classList.remove('like-burst'), 450);
+  }
+  try {
+    await db.collection('notices').doc(activeNoticeId).update({
+      [`likes.${currentUser.uid}`]: already ? firebase.firestore.FieldValue.delete() : true
+    });
+  } catch (e) {
+    alert('लाइक गर्न सकिएन: ' + e.message);
+  }
+}
+
+function toggleNoticeComments(btn) {
+  if (!activeNoticeId) return;
+  noticeCommentsOpen = !noticeCommentsOpen;
+  if (noticeCommentsOpen) {
+    loadNoticeComments(activeNoticeId);
+    setTimeout(() => {
+      const input = document.getElementById('noticeCommentInput');
+      if (input) input.focus();
+    }, 200);
+  } else if (noticeCommentsUnsub) {
+    noticeCommentsUnsub(); noticeCommentsUnsub = null;
+  }
+  renderNoticeSocial();
+}
+
+function loadNoticeComments(noticeId) {
+  if (noticeCommentsUnsub) { noticeCommentsUnsub(); noticeCommentsUnsub = null; }
+  noticeCommentsUnsub = db.collection('notices').doc(noticeId).collection('comments')
+    .orderBy('createdAt', 'asc')
+    .onSnapshot((snap) => {
+      if (noticeId !== activeNoticeId) return;
+      lastNoticeCommentsSnapshot = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderNoticeComments();
+    });
+}
+
+function renderNoticeComments() {
+  const list = document.getElementById('noticeCommentList');
+  if (!list) return;
+  const comments = lastNoticeCommentsSnapshot;
+  if (!comments.length) {
+    list.innerHTML = '<p style="font-size:0.8rem;color:var(--text-light);">अहिलेसम्म कुनै कमेन्ट छैन।</p>';
+    return;
+  }
+  list.innerHTML = comments.map(c => {
+    const canModify = !!currentUser && (isTeacher || c.authorUid === currentUser.uid || (c.authorEmail && c.authorEmail === currentUser.email));
+    const isEditing = editingNoticeComments.has(c.id);
+    if (isEditing) {
+      return `
+        <div class="comment-item comment-item-editing" data-id="${c.id}">
+          <textarea class="comment-edit-input" id="noticeEditInput-${c.id}" rows="2">${escapeHtml(c.text)}</textarea>
+          <div class="comment-item-actions">
+            <button class="comment-mini-btn comment-mini-save" onclick="saveEditNoticeComment('${c.id}')" title="सेभ गर्नुहोस्">✔️</button>
+            <button class="comment-mini-btn" onclick="cancelEditNoticeComment('${c.id}')" title="रद्द गर्नुहोस्">✕</button>
+          </div>
+        </div>`;
+    }
+    return `
+      <div class="comment-item" data-id="${c.id}">
+        <div class="comment-item-main"><b>${escapeHtml(c.authorName || 'प्रयोगकर्ता')}:</b> <span class="comment-text">${escapeHtml(c.text)}</span>${c.edited ? '<span class="comment-edited-tag">(सम्पादित)</span>' : ''}</div>
+        ${canModify ? `
+        <div class="comment-item-actions">
+          <button class="comment-mini-btn" onclick="startEditNoticeComment('${c.id}')" title="सम्पादन गर्नुहोस्">✏️</button>
+          <button class="comment-mini-btn comment-mini-delete" onclick="deleteNoticeComment('${c.id}')" title="मेटाउनुहोस्">🗑️</button>
+        </div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function startEditNoticeComment(id) {
+  editingNoticeComments.add(id);
+  renderNoticeComments();
+  const input = document.getElementById(`noticeEditInput-${id}`);
+  if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
+}
+
+function cancelEditNoticeComment(id) {
+  editingNoticeComments.delete(id);
+  renderNoticeComments();
+}
+
+async function saveEditNoticeComment(id) {
+  const input = document.getElementById(`noticeEditInput-${id}`);
+  if (!input || !activeNoticeId) return;
+  const text = input.value.trim();
+  if (!text) { alert('कमेन्ट खाली हुन सक्दैन।'); return; }
+  try {
+    await db.collection('notices').doc(activeNoticeId).collection('comments').doc(id).update({
+      text,
+      edited: true,
+      editedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    editingNoticeComments.delete(id);
+  } catch (e) {
+    alert('कमेन्ट सम्पादन गर्न सकिएन: ' + e.message);
+  }
+}
+
+async function deleteNoticeComment(id) {
+  if (!confirm('यो कमेन्ट मेटाउने पक्का हो?')) return;
+  const noticeId = activeNoticeId;
+  if (!noticeId) return;
+  const item = document.querySelector(`#noticeCommentList .comment-item[data-id="${id}"]`);
+  if (item) item.classList.add('comment-item-removing');
+  setTimeout(async () => {
+    try {
+      await db.collection('notices').doc(noticeId).collection('comments').doc(id).delete();
+    } catch (e) {
+      alert('कमेन्ट मेटाउन सकिएन: ' + e.message);
+    }
+  }, 220);
+}
+
+async function submitNoticeComment() {
+  if (!currentUser || !activeNoticeId) return;
+  const input = document.getElementById('noticeCommentInput');
+  const text = input.value.trim();
+  if (!text) return;
+  try {
+    await db.collection('notices').doc(activeNoticeId).collection('comments').add({
+      text,
+      authorName: currentUser.displayName || currentUser.email,
+      authorEmail: currentUser.email,
+      authorUid: currentUser.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    input.value = '';
+  } catch (e) {
+    alert('कमेन्ट पठाउन सकिएन: ' + e.message);
+  }
+}
+
+function shareNotice(btn) {
+  const n = (lastNoticesSnapshot || []).find(x => x.id === activeNoticeId);
+  const title = n ? n.title : 'सूचना';
+  const url = window.location.href.split('#')[0] + '#notices';
+  const flashShared = () => {
+    if (!btn) return;
+    const original = btn.innerHTML;
+    btn.classList.add('share-pulse');
+    btn.innerHTML = '<span class="share-icon"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+    setTimeout(() => {
+      btn.classList.remove('share-pulse');
+      btn.innerHTML = original;
+    }, 1400);
+  };
+  if (navigator.share) {
+    navigator.share({ title: title, url: url }).then(flashShared).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(flashShared).catch(() => { prompt('यो लिंक कपी गर्नुहोस्:', url); });
+  } else {
+    prompt('यो लिंक कपी गर्नुहोस्:', url);
+  }
+}
+</script>
+
+<!-- PWA SERVICE WORKER -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>

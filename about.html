@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>बारेमा - कालिका मानवज्ञान माध्यमिक विद्यालय</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5c2f26">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" id="themeStylesheet">
+<script>
+(function(){
+  try {
+    var saved = localStorage.getItem('adityaTheme');
+    var map = { blue: 'styles-blue.css', green: 'styles-green.css', teal: 'styles-teal.css', indigo: 'styles-indigo.css', black: 'styles-black.css', terracotta: 'styles.css' };
+    if (saved && map[saved]) {
+      document.write('<link rel="stylesheet" href="' + map[saved] + '" id="themeStylesheetOverride">');
+    }
+  } catch(e) {}
+})();
+</script>
+<style>
+  /* यो पेजमा header सधैं सामान्य (responsive) तरिकाले देखिन्छ, desktop-forced होइन */
+  #siteHeader { position: sticky !important; top: 0 !important; width: 100% !important; transform: none !important; }
+  #headerSpacer { display: none !important; }
+  .about-page-inner { max-width: 1080px; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="siteHeader">
+  <div class="logo-area">
+    <img src="photos/aditya-logo.png" alt="ADITYA" class="aditya-logo-img" id="adityaLogoImg">
+    <script>
+      (function(){
+        try {
+          var saved = localStorage.getItem('adityaTheme');
+          var logoMap = { blue: 'photos/aditya-logo-blue.png', green: 'photos/aditya-logo-green.png', teal: 'photos/aditya-logo-teal.png', indigo: 'photos/aditya-logo-indigo.png', black: 'photos/aditya-logo-black.png' };
+          if (saved && logoMap[saved]) {
+            document.getElementById('adityaLogoImg').src = logoMap[saved];
+          }
+        } catch(e) {}
+      })();
+    </script>
+  </div>
+  <nav>
+    <a href="index.html">गृहपृष्ठ</a>
+    <a href="about.html" class="active">बारेमा</a>
+    <a href="index.html#community">समुदाय</a>
+    <a href="#contact">सम्पर्क</a>
+    <a href="index.html#admission" class="btn-admit">भर्ना खुला</a>
+  </nav>
+  <div class="auth-box" id="authBox">
+    <button class="auth-btn" id="loginBtn" onclick="loginWithGoogle()">🔑 लगइन</button>
+  </div>
+</header>
+
+<div class="about-page-inner">
+
+  <!-- PURPOSE / ABOUT -->
+  <section class="why-section" id="purpose">
+    <div class="section-label">हाम्रो परिचय</div>
+    <div class="section-title">किन ADITYA?</div>
+    <p class="section-sub" style="max-width:760px;margin-left:auto;margin-right:auto;line-height:1.85;">
+      ADITYA (Association of Dharmic Inspiring Truthful Youth for Adhyatma) युवावर्गलाई सनातन धर्मको जागरण अभियानसँग जोड्न र वैदिक वाङ्मयको संरक्षण गर्ने उद्देश्यले स्थापना गरिएको संस्था हो। आजको पुस्तालाई आफ्नो सांस्कृतिक तथा आध्यात्मिक जरासँग परिचित गराउँदै, वेद, शास्त्र र सनातन परम्पराका मूल्यमान्यताहरूलाई सत्य र सरल तरिकाले युवा पुस्तासम्म पुर्‍याउनु नै हाम्रो मुख्य लक्ष्य हो।
+    </p>
+  </section>
+
+  <!-- WHY -->
+  <section class="why-section" id="why">
+    <div class="section-label">हाम्रा गतिविधिहरू</div>
+    <div class="section-title">ADITYA सँग जोडिनुका कारणहरू</div>
+    <p class="section-sub">युवा पुस्तालाई सनातन धर्म र वैदिक ज्ञानसँग जोड्न हामी निरन्तर समर्पित छौँ।</p>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">🕉️</div><h3>सत्संग तथा भजन</h3><p>नियमित भजन-कीर्तन र सत्संगमार्फत आध्यात्मिक वातावरण निर्माण।</p></div>
+      <div class="feature-card"><div class="feature-icon">📖</div><h3>वैदिक अध्ययन कक्षा</h3><p>वेद, गीता र शास्त्रका मूल शिक्षालाई सरल भाषामा युवासम्म पुर्‍याउने कक्षा।</p></div>
+      <div class="feature-card"><div class="feature-icon">🪔</div><h3>पर्व तथा उत्सव</h3><p>जन्माष्टमी, शिवरात्रि जस्ता पर्वहरूमा सांस्कृतिक तथा धार्मिक कार्यक्रम।</p></div>
+      <div class="feature-card"><div class="feature-icon">🧘</div><h3>योग तथा ध्यान</h3><p>शारीरिक र मानसिक स्वास्थ्यका लागि नियमित योग र ध्यान अभ्यास।</p></div>
+      <div class="feature-card"><div class="feature-icon">✍️</div><h3>धार्मिक लेख-रचना</h3><p>सनातन विषयमा लेख, कविता र रचनाहरू तयार गरी प्रकाशन।</p></div>
+      <div class="feature-card"><div class="feature-icon">🤝</div><h3>सेवा कार्यक्रम</h3><p>समाजसेवा र परोपकारी कार्यमार्फत धर्मको व्यावहारिक अभ्यास।</p></div>
+      <div class="feature-card"><div class="feature-icon">👥</div><h3>युवा सहभागिता</h3><p>नियमित भेला र छलफलद्वारा युवा पुस्तालाई सक्रिय रूपमा संलग्न गराउने।</p></div>
+      <div class="feature-card"><div class="feature-icon">📚</div><h3>ग्रन्थ संरक्षण</h3><p>वैदिक तथा शास्त्रीय ग्रन्थहरूको संकलन, संरक्षण र सम्पादन।</p></div>
+    </div>
+  </section>
+
+  <!-- PHOTO GALLERY SECTION -->
+  <section class="gallery-section" id="gallery">
+    <div class="section-label">तस्बिरहरू</div>
+    <div class="section-title">विद्यालयका झलकहरू</div>
+    <p class="section-sub">हाम्रा विशेष कार्यक्रम, कक्षाकोठा र विद्यार्थीहरूका यादगार पलहरू।</p>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="gallery-loading">तस्बिरहरू लोड हुँदैछन्…</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lb-backdrop" id="lbBackdrop" onclick="closeLb(event)">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>कालिका मानवज्ञान माध्यमिक विद्यालय</h4>
+      <p>गुणस्तरीय शिक्षा प्रदान गरी बच्चाहरूको सर्वाङ्गीण विकासमा समर्पित।</p>
+    </div>
+    <div class="footer-col">
+      <h4>द्रुत लिङ्कहरू</h4>
+      <a href="index.html#home">गृहपृष्ठ</a>
+      <a href="about.html#why">विशेषताहरू</a>
+      <a href="index.html#notices">सूचना पाटी</a>
+      <a href="index.html#admission">भर्ना</a>
+    </div>
+    <div class="footer-col">
+      <h4>सम्पर्क</h4>
+      <p>📞 071-437072</p>
+      <p>📍 Butwal-10, Kalikanagar, Rupendehi</p>
+      <a href="http://www.kalikaschoolbtl.edu.np">🌐 www.kalikaschoolbtl.edu.np</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© २०८२ कालिका मानवज्ञान माध्यमिक विद्यालय। सर्वाधिकार सुरक्षित।</span>
+    <span>Butwal-10, Kalikanagar</span>
+  </div>
+</footer>
+
+<!-- BOTTOM APP BAR -->
+<div class="bottom-app-bar">
+  <div class="bottom-app-bar-inner">
+    <a href="index.html#home" class="app-icon-btn" title="गृहपृष्ठ"><span>🏠</span></a>
+    <a href="index.html#community" class="app-icon-btn" title="समुदाय"><span>👥</span></a>
+    <a href="about.html" class="app-icon-btn" title="बारेमा"><span>ℹ️</span></a>
+    <a href="#gallery" class="app-icon-btn" title="ग्यालरी"><span>🖼️</span></a>
+    <a href="#contact" class="app-icon-btn" title="सम्पर्क"><span>☎️</span></a>
+  </div>
+</div>
+
+<script>
+// ══ PHOTO GALLERY ══
+async function loadGallery() {
+  const grid = document.getElementById('galleryGrid');
+  try {
+    const res = await fetch('photos/description.json');
+    if (!res.ok) throw new Error('not found');
+    const data = await res.json(); // [{file:"post1.jpg", desc:"..."}]
+    grid.innerHTML = '';
+    data.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'gallery-card';
+      card.innerHTML = `<img src="photos/${item.file}" alt="${item.desc}" loading="lazy">
+        <div class="g-desc">${item.desc}</div>`;
+      card.querySelector('img').onclick = () => openLb('photos/' + item.file, item.desc);
+      grid.appendChild(card);
+    });
+    if (data.length === 0) grid.innerHTML = '<div class="gallery-loading">तस्बिरहरू छैनन्।</div>';
+  } catch {
+    grid.innerHTML = '<div class="gallery-loading">तस्बिरहरू लोड हुन सकेन। <code>photos/description.json</code> फाइल राख्नुहोस्।</div>';
+  }
+}
+
+function openLb(src, caption) {
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lbCaption').textContent = caption;
+  document.getElementById('lbBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb(e) {
+  if (e && e.target !== e.currentTarget && e.target.tagName === 'IMG') return;
+  document.getElementById('lbBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+loadGallery();
+</script>
+
+<!-- FIREBASE: लगइन (header मा login/logout देखाउनका लागि मात्र) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBO5KZq2WLLDCX8eZoL53jxCGqgNJLG-ts",
+  authDomain: "durga-d8936.firebaseapp.com",
+  projectId: "durga-d8936",
+  storageBucket: "durga-d8936.firebasestorage.app",
+  messagingSenderId: "290047636515",
+  appId: "1:290047636515:web:8ffab23a344c2544c22d96",
+  measurementId: "G-ZK11P0FG4Z"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+let currentUser = null;
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str == null ? '' : String(str);
+  return d.innerHTML;
+}
+
+function loginWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(err => {
+    alert('लगइन गर्न सकिएन: ' + err.message);
+  });
+}
+
+function logout() { auth.signOut(); }
+
+function renderAuthBox() {
+  const box = document.getElementById('authBox');
+  if (!box) return;
+  if (currentUser) {
+    const initial = (currentUser.email || '?').trim().charAt(0).toUpperCase();
+    box.innerHTML = `
+      <div class="auth-user" title="${escapeHtml(currentUser.email)}">
+        <span class="auth-avatar">${initial}</span>
+      </div>
+      <button class="auth-logout" onclick="logout()">लगआउट</button>`;
+  } else {
+    box.innerHTML = `<button class="auth-btn" onclick="loginWithGoogle()">🔑 लगइन</button>`;
+  }
+}
+
+auth.onAuthStateChanged((user) => {
+  currentUser = user;
+  renderAuthBox();
+});
+</script>
+
+<!-- PWA SERVICE WORKER -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>
