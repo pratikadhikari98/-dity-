@@ -75,14 +75,29 @@
 
 <!-- SHOWCASE + YOUTUBE + SOCIAL -->
 <section class="showcase-section" id="showcase">
-  <div class="showcase-top">
-    <div class="showcase-text">
-      <p>सनातन संस्कृति, अध्यात्म र युवा पुस्ताबीचको पुल बन्ने हाम्रो प्रयास सधैं जारी रहनेछ।</p>
+  <div class="showcase-slider">
+    <div class="showcase-slides">
+      <div class="showcase-top showcase-slide">
+        <div class="showcase-text">
+          <p>सनातन संस्कृति, अध्यात्म र युवा पुस्ताबीचको पुल बन्ने हाम्रो प्रयास सधैं जारी रहनेछ।</p>
+        </div>
+        <div class="showcase-photo">
+          <img src="photos/about-couple.png" alt="ADITYA">
+        </div>
+      </div>
+      <div class="showcase-top showcase-slide">
+        <div class="showcase-text">
+          <p>२९ औं गुरुस्मृति भण्डाराको पूर्वसन्ध्यामा "परमानन्द काव्य वाटिका" — साहित्य, संगीत र कलाको अनुपम संगम। मिति: माघ ११, २०८२। स्थान: श्री दुर्गा वैदिक परमानन्द सन्न्यास आश्रम, नयाँमिल, रुपन्देही।</p>
+        </div>
+        <div class="showcase-photo">
+          <img src="photos/event-parmananda.jpg" alt="परमानन्द काव्य वाटिका">
+        </div>
+      </div>
     </div>
-    <div class="showcase-photo">
-      <img src="photos/about-couple.png" alt="ADITYA">
-    </div>
+    <div class="showcase-dots"></div>
   </div>
+
+  <div style="margin-top:26px;"></div>
 
   <div class="yt-heading">
     <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M46.5 12.8c-.55-2.05-2.15-3.67-4.2-4.22C38.7 7.5 24 7.5 24 7.5s-14.7 0-18.3 1.08c-2.05.55-3.65 2.17-4.2 4.22C0.5 16.4.5 24 .5 24s0 7.6 1 11.2c.55 2.05 2.15 3.6 4.2 4.15C9.3 40.5 24 40.5 24 40.5s14.7 0 18.3-1.15c2.05-.55 3.65-2.1 4.2-4.15 1-3.6 1-11.2 1-11.2s0-7.6-1-11.2z" fill="#FF0000"/><path d="M19.5 31.5v-15L31.8 24z" fill="#fff"/></svg>
@@ -328,6 +343,53 @@ loadGallery();
 
   setTimeout(init, 150);
   window.addEventListener('resize', () => setTimeout(init, 150));
+})();
+</script>
+
+<!-- SHOWCASE SLIDER — auto + manual swipe -->
+<script>
+(function(){
+  document.querySelectorAll('.showcase-slider').forEach(function(slider){
+    var track = slider.querySelector('.showcase-slides');
+    var dotsWrap = slider.querySelector('.showcase-dots');
+    var slides = track ? track.children : [];
+    if (!track || !slides.length) return;
+
+    dotsWrap.innerHTML = '';
+    for (var i = 0; i < slides.length; i++) {
+      var d = document.createElement('span');
+      d.dataset.index = i;
+      if (i === 0) d.classList.add('active');
+      d.addEventListener('click', function(){
+        var idx = +this.dataset.index;
+        track.scrollTo({ left: track.clientWidth * idx, behavior: 'smooth' });
+      });
+      dotsWrap.appendChild(d);
+    }
+    var dots = dotsWrap.children;
+
+    function currentIndex(){
+      return Math.round(track.scrollLeft / track.clientWidth);
+    }
+    function setActive(idx){
+      for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === idx);
+    }
+    track.addEventListener('scroll', function(){ setActive(currentIndex()); }, { passive: true });
+
+    if (slides.length > 1) {
+      var autoTimer = null;
+      function nextSlide(){
+        var next = (currentIndex() + 1) % slides.length;
+        track.scrollTo({ left: track.clientWidth * next, behavior: 'smooth' });
+      }
+      function startAuto(){ stopAuto(); autoTimer = setInterval(nextSlide, 4500); }
+      function stopAuto(){ if (autoTimer) clearInterval(autoTimer); }
+      startAuto();
+      track.addEventListener('pointerdown', stopAuto);
+      track.addEventListener('pointerup', function(){ setTimeout(startAuto, 1800); });
+      track.addEventListener('mouseleave', function(){ setTimeout(startAuto, 1800); });
+    }
+  });
 })();
 </script>
 
