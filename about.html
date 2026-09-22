@@ -11,17 +11,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css" id="themeStylesheet">
-<script>
-(function(){
-  try {
-    var saved = localStorage.getItem('adityaTheme');
-    var map = { blue: 'styles-blue.css', green: 'styles-green.css', teal: 'styles-teal.css', indigo: 'styles-indigo.css', black: 'styles-black.css', terracotta: 'styles.css' };
-    if (saved && map[saved]) {
-      document.write('<link rel="stylesheet" href="' + map[saved] + '" id="themeStylesheetOverride">');
-    }
-  } catch(e) {}
-})();
-</script>
 <style>
   /* यो पेजमा header सधैं सामान्य (responsive) तरिकाले देखिन्छ, desktop-forced होइन */
   #siteHeader { position: sticky !important; top: 0 !important; width: 100% !important; transform: none !important; }
@@ -35,28 +24,13 @@
 <header id="siteHeader">
   <div class="logo-area">
     <img src="photos/aditya-logo.png" alt="ADITYA" class="aditya-logo-img" id="adityaLogoImg">
-    <script>
-      (function(){
-        try {
-          var saved = localStorage.getItem('adityaTheme');
-          var logoMap = { blue: 'photos/aditya-logo-blue.png', green: 'photos/aditya-logo-green.png', teal: 'photos/aditya-logo-teal.png', indigo: 'photos/aditya-logo-indigo.png', black: 'photos/aditya-logo-black.png' };
-          if (saved && logoMap[saved]) {
-            document.getElementById('adityaLogoImg').src = logoMap[saved];
-          }
-        } catch(e) {}
-      })();
-    </script>
   </div>
   <nav>
     <a href="index.html">गृहपृष्ठ</a>
     <a href="about.html" class="active">बारेमा</a>
-    <a href="index.html#community">समुदाय</a>
     <a href="#contact">सम्पर्क</a>
-    <a href="index.html#admission" class="btn-admit">भर्ना खुला</a>
+    <a href="#admission" class="btn-admit">भर्ना खुला</a>
   </nav>
-  <div class="auth-box" id="authBox">
-    <button class="auth-btn" id="loginBtn" onclick="loginWithGoogle()">🔑 लगइन</button>
-  </div>
 </header>
 
 <div class="about-page-inner">
@@ -99,6 +73,69 @@
 
 </div>
 
+<!-- SHOWCASE + YOUTUBE + SOCIAL -->
+<section class="showcase-section" id="showcase">
+  <div class="showcase-top">
+    <div class="showcase-text">
+      <p>सनातन संस्कृति, अध्यात्म र युवा पुस्ताबीचको पुल बन्ने हाम्रो प्रयास सधैं जारी रहनेछ।</p>
+    </div>
+    <div class="showcase-photo">
+      <img src="photos/about-couple.png" alt="ADITYA">
+    </div>
+  </div>
+
+  <div class="yt-heading">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M46.5 12.8c-.55-2.05-2.15-3.67-4.2-4.22C38.7 7.5 24 7.5 24 7.5s-14.7 0-18.3 1.08c-2.05.55-3.65 2.17-4.2 4.22C0.5 16.4.5 24 .5 24s0 7.6 1 11.2c.55 2.05 2.15 3.6 4.2 4.15C9.3 40.5 24 40.5 24 40.5s14.7 0 18.3-1.15c2.05-.55 3.65-2.1 4.2-4.15 1-3.6 1-11.2 1-11.2s0-7.6-1-11.2z" fill="#FF0000"/><path d="M19.5 31.5v-15L31.8 24z" fill="#fff"/></svg>
+    <span>YouTube</span>
+  </div>
+  <div class="yt-row">
+    <a class="yt-card" href="https://youtu.be/tR3_oEVN0DA?si=QGP041dQ_64hAhHE" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/tR3_oEVN0DA/hqdefault.jpg" alt="YouTube video" loading="lazy">
+      <p>हाम्रो कार्यक्रमको झलक</p>
+    </a>
+    <a class="yt-card" href="https://youtu.be/tR3_oEVN0DA?si=QGP041dQ_64hAhHE" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/tR3_oEVN0DA/hqdefault.jpg" alt="YouTube video" loading="lazy">
+      <p>हाम्रो कार्यक्रमको झलक</p>
+    </a>
+  </div>
+
+  <div class="social-row">
+    <span class="social-icon disabled" title="चाँडै आउँदैछ">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M46.5 12.8c-.55-2.05-2.15-3.67-4.2-4.22C38.7 7.5 24 7.5 24 7.5s-14.7 0-18.3 1.08c-2.05.55-3.65 2.17-4.2 4.22C0.5 16.4.5 24 .5 24s0 7.6 1 11.2c.55 2.05 2.15 3.6 4.2 4.15C9.3 40.5 24 40.5 24 40.5s14.7 0 18.3-1.15c2.05-.55 3.65-2.1 4.2-4.15 1-3.6 1-11.2 1-11.2s0-7.6-1-11.2z" fill="#FF0000"/><path d="M19.5 31.5v-15L31.8 24z" fill="#fff"/></svg>
+    </span>
+    <a class="social-icon" href="https://www.facebook.com/share/1Dkz17TPeV/" target="_blank" rel="noopener" aria-label="Facebook">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#1877F2"/><path d="M27 24.5h4l.6-4.5h-4.6v-2.9c0-1.3.35-2.2 2.25-2.2H32V11c-.6-.08-2.4-.25-4.4-.25-4.35 0-7.3 2.65-7.3 7.5V20h-4.9v4.5h4.9V38h5.7V24.5z" fill="#fff"/></svg>
+    </a>
+    <span class="social-icon disabled" title="चाँडै आउँदैछ">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="igGrad2" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#FED373"/><stop offset="25%" stop-color="#F15245"/><stop offset="60%" stop-color="#D92E7F"/><stop offset="100%" stop-color="#9B36B7"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="14" fill="url(#igGrad2)"/><rect x="13" y="13" width="22" height="22" rx="7" fill="none" stroke="#fff" stroke-width="2.6"/><circle cx="24" cy="24" r="6.2" fill="none" stroke="#fff" stroke-width="2.6"/><circle cx="32.5" cy="15.5" r="1.6" fill="#fff"/></svg>
+    </span>
+    <span class="social-icon disabled" title="चाँडै आउँदैछ">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" fill="#FBBF24"/><path d="M2 6l10 7 10-7" fill="none" stroke="#fff" stroke-width="1.5"/></svg>
+    </span>
+    <a class="social-icon" href="tel:9769312708" aria-label="Phone">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#5B8DEF"/><path d="M8 7c0 6 3 9 9 9l1-2-3-1-1 1c-2-1-3-2-4-4l1-1-1-3-2 1z" fill="#fff"/></svg>
+    </a>
+    <a class="social-icon" href="https://www.google.com/maps/search/?api=1&query=Butwal+Nayamil+Nepal" target="_blank" rel="noopener" aria-label="Location">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF4444"/><path d="M12 5a5 5 0 00-5 5c0 4 5 9 5 9s5-5 5-9a5 5 0 00-5-5z" fill="#fff"/><circle cx="12" cy="10" r="2" fill="#EF4444"/></svg>
+    </a>
+    <a class="social-icon" href="https://pratikadhikari98.com.np/" target="_blank" rel="noopener" aria-label="प्रतीक साहित्य सङ्ग्रह">
+      <img src="photos/sahitya-icon.png" alt="प्रतीक साहित्य सङ्ग्रह" style="width:100%;height:100%;object-fit:cover;">
+    </a>
+  </div>
+</section>
+
+<!-- GRAVITY BOXES SECTION -->
+<section id="gravity-boxes-section" style="background:transparent;padding:0;margin:0;width:100%;overflow:hidden;">
+  <div id="gravity-grid" style="width:100%;height:260px;display:grid;"></div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="admission">
+  <h2>आजै भर्ना गर्नुहोस् — सीटहरू सीमित छन्!</h2>
+  <p>तपाईँको नानीबाबुको उज्ज्वल भविष्यको शुरुवात कालिका मानवज्ञानबाट गर्नुहोस्।</p>
+  <a href="tel:071437072" class="btn-white">📞 ०७१-४३७०७२ मा फोन गर्नुहोस्</a>
+</section>
+
 <!-- LIGHTBOX -->
 <div class="lb-backdrop" id="lbBackdrop" onclick="closeLb(event)">
   <button class="lb-close" onclick="closeLb()">✕</button>
@@ -117,8 +154,7 @@
       <h4>द्रुत लिङ्कहरू</h4>
       <a href="index.html#home">गृहपृष्ठ</a>
       <a href="about.html#why">विशेषताहरू</a>
-      <a href="index.html#notices">सूचना पाटी</a>
-      <a href="index.html#admission">भर्ना</a>
+      <a href="#admission">भर्ना</a>
     </div>
     <div class="footer-col">
       <h4>सम्पर्क</h4>
@@ -137,7 +173,6 @@
 <div class="bottom-app-bar">
   <div class="bottom-app-bar-inner">
     <a href="index.html#home" class="app-icon-btn" title="गृहपृष्ठ"><span>🏠</span></a>
-    <a href="index.html#community" class="app-icon-btn" title="समुदाय"><span>👥</span></a>
     <a href="about.html" class="app-icon-btn" title="बारेमा"><span>ℹ️</span></a>
     <a href="#gallery" class="app-icon-btn" title="ग्यालरी"><span>🖼️</span></a>
     <a href="#contact" class="app-icon-btn" title="सम्पर्क"><span>☎️</span></a>
@@ -182,60 +217,120 @@ function closeLb(e) {
 loadGallery();
 </script>
 
-<!-- FIREBASE: लगइन (header मा login/logout देखाउनका लागि मात्र) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBO5KZq2WLLDCX8eZoL53jxCGqgNJLG-ts",
-  authDomain: "durga-d8936.firebaseapp.com",
-  projectId: "durga-d8936",
-  storageBucket: "durga-d8936.firebasestorage.app",
-  messagingSenderId: "290047636515",
-  appId: "1:290047636515:web:8ffab23a344c2544c22d96",
-  measurementId: "G-ZK11P0FG4Z"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-let currentUser = null;
+// ══ GRAVITY BOXES — sky/white theme ══
+(function () {
+  const grid = document.getElementById('gravity-grid');
+  if (!grid) return;
 
-function escapeHtml(str) {
-  const d = document.createElement('div');
-  d.textContent = str == null ? '' : String(str);
-  return d.innerHTML;
-}
+  const BOX = 12, GAP = 2, STEP = BOX + GAP;
+  let px = null, py = null;
+  let animId = null;
 
-function loginWithGoogle() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).catch(err => {
-    alert('लगइन गर्न सकिएन: ' + err.message);
-  });
-}
+  // Rest color: #d6eaf8 (--sky), pressed color: #ffffff (white)
+  const R0 = 0xd6, G0 = 0xea, B0 = 0xf8; // #d6eaf8 sky
+  const R1 = 0xff, G1 = 0xff, B1 = 0xff; // #ffffff white
 
-function logout() { auth.signOut(); }
+  const RADIUS = 110, R2 = RADIUS * RADIUS;
+  const STIFF = 0.25, DAMP = 0.58;
 
-function renderAuthBox() {
-  const box = document.getElementById('authBox');
-  if (!box) return;
-  if (currentUser) {
-    const initial = (currentUser.email || '?').trim().charAt(0).toUpperCase();
-    box.innerHTML = `
-      <div class="auth-user" title="${escapeHtml(currentUser.email)}">
-        <span class="auth-avatar">${initial}</span>
-      </div>
-      <button class="auth-logout" onclick="logout()">लगआउट</button>`;
-  } else {
-    box.innerHTML = `<button class="auth-btn" onclick="loginWithGoogle()">🔑 लगइन</button>`;
+  let boxes = [], dep, vel, cx, cy, total = 0;
+
+  function init() {
+    if (animId) cancelAnimationFrame(animId);
+    grid.innerHTML = '';
+
+    const W = grid.offsetWidth || window.innerWidth;
+    const H = grid.offsetHeight || 260;
+    const cols = Math.floor((W - 4) / STEP);
+    const rows = Math.floor((H - 4) / STEP);
+    total = cols * rows;
+
+    grid.style.gridTemplateColumns = `repeat(${cols}, ${BOX}px)`;
+    grid.style.alignContent = 'start';
+    grid.style.gap = GAP + 'px';
+    grid.style.padding = '2px';
+
+    boxes = [];
+    for (let i = 0; i < total; i++) {
+      const b = document.createElement('div');
+      b.style.cssText = `width:${BOX}px;height:${BOX}px;border-radius:2px;background:#d6eaf8;`;
+      grid.appendChild(b);
+      boxes.push(b);
+    }
+
+    cx = new Float32Array(total);
+    cy = new Float32Array(total);
+    dep = new Float32Array(total);
+    vel = new Float32Array(total);
+
+    buildCenters();
+    tick();
   }
-}
 
-auth.onAuthStateChanged((user) => {
-  currentUser = user;
-  renderAuthBox();
-});
+  function buildCenters() {
+    const gr = grid.getBoundingClientRect();
+    const cols = Math.floor((gr.width - 4) / STEP);
+    for (let i = 0; i < total; i++) {
+      const r = Math.floor(i / cols), c = i % cols;
+      cx[i] = gr.left + c * STEP + BOX / 2;
+      cy[i] = gr.top  + r * STEP + BOX / 2;
+    }
+  }
+
+  function tick() {
+    for (let i = 0; i < total; i++) {
+      let tgt = 0;
+      if (px !== null) {
+        const dx = cx[i] - px, dy = cy[i] - py;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < R2) {
+          const ratio = Math.sqrt(d2) / RADIUS;
+          tgt = (1 - ratio) * (1 - ratio);
+        }
+      }
+      vel[i] = vel[i] * DAMP + (tgt - dep[i]) * STIFF;
+      dep[i] += vel[i];
+      if (dep[i] < 0) { dep[i] = 0; vel[i] = 0; }
+
+      const depth = dep[i];
+      if (depth < 0.0015 && tgt === 0) {
+        dep[i] = 0; vel[i] = 0;
+        boxes[i].style.cssText = `width:${BOX}px;height:${BOX}px;border-radius:2px;background:#d6eaf8;`;
+        continue;
+      }
+
+      const sc  = 1 - depth * 0.48;
+      const sh  = (depth * 5).toFixed(1);
+      const sh2 = (depth * 11).toFixed(1);
+      const sia = Math.min(depth * 0.88, 0.85).toFixed(2);
+      const cr  = (R0 + (R1 - R0) * depth) | 0;
+      const cg  = (G0 + (G1 - G0) * depth) | 0;
+      const cb  = (B0 + (B1 - B0) * depth) | 0;
+
+      boxes[i].style.cssText =
+        `width:${BOX}px;height:${BOX}px;border-radius:2px;` +
+        `background:rgb(${cr},${cg},${cb});` +
+        `transform:scale(${sc.toFixed(3)});` +
+        `box-shadow:inset 0 ${sh}px ${sh2}px rgba(0,0,0,${sia});`;
+    }
+    animId = requestAnimationFrame(tick);
+  }
+
+  // ── Events — window level ताकि scroll/touch सबैले काम गरोस् ──
+  const section = document.getElementById('gravity-boxes-section');
+  section.addEventListener('mousemove',   e => { px = e.clientX; py = e.clientY; buildCenters(); });
+  section.addEventListener('mouseleave',  () => { px = null; py = null; });
+  section.addEventListener('touchstart',  e => { e.preventDefault(); px = e.touches[0].clientX; py = e.touches[0].clientY; buildCenters(); }, { passive: false });
+  section.addEventListener('touchmove',   e => { e.preventDefault(); px = e.touches[0].clientX; py = e.touches[0].clientY; }, { passive: false });
+  section.addEventListener('touchend',    () => { px = null; py = null; });
+  section.addEventListener('touchcancel', () => { px = null; py = null; });
+
+  setTimeout(init, 150);
+  window.addEventListener('resize', () => setTimeout(init, 150));
+})();
 </script>
 
-<!-- PWA SERVICE WORKER -->
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
