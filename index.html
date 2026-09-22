@@ -224,27 +224,10 @@ window.addEventListener('orientationchange', scaleDesktopTop);
   </div>
 </section>
 
-<!-- SHOWCASE PHOTO + TEXT — swipeable carousel -->
+<!-- SHOWCASE PHOTO + TEXT — swipeable carousel (content loads from data/showcase.json) -->
 <section class="showcase-section" id="showcase">
-  <div class="showcase-slider" id="showcaseSlider">
-    <div class="showcase-slides" id="showcaseSlides">
-      <div class="showcase-top showcase-slide">
-        <div class="showcase-text">
-          <p>सनातन संस्कृति, अध्यात्म र युवा पुस्ताबीचको पुल बन्ने हाम्रो प्रयास सधैं जारी रहनेछ।</p>
-        </div>
-        <div class="showcase-photo">
-          <img src="photos/about-couple.png" alt="ADITYA">
-        </div>
-      </div>
-      <div class="showcase-top showcase-slide">
-        <div class="showcase-text">
-          <p>२९ औं गुरुस्मृति भण्डाराको पूर्वसन्ध्यामा "परमानन्द काव्य वाटिका" — साहित्य, संगीत र कलाको अनुपम संगम। मिति: माघ ११, २०८२। स्थान: श्री दुर्गा वैदिक परमानन्द सन्न्यास आश्रम, नयाँमिल, रुपन्देही।</p>
-        </div>
-        <div class="showcase-photo">
-          <img src="photos/event-parmananda.jpg" alt="परमानन्द काव्य वाटिका">
-        </div>
-      </div>
-    </div>
+  <div class="showcase-slider" data-source="data/showcase.json">
+    <div class="showcase-slides" id="showcaseSlides"></div>
     <div class="showcase-dots" id="showcaseDots"></div>
   </div>
 </section>
@@ -637,15 +620,24 @@ function closeLekh() {
 
 <!-- FIREBASE: लगइन, शिक्षक पोस्ट, लाइक/कमेन्ट/सेयर -->
 
-<!-- SHOWCASE SLIDER — auto + manual swipe -->
+<!-- SHOWCASE SLIDER — loads slides from data/showcase.json, auto + manual swipe -->
 <script>
 (function(){
-  document.querySelectorAll('.showcase-slider').forEach(function(slider){
+  function escapeHtml(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
+
+  function initSlider(slider, items){
     var track = slider.querySelector('.showcase-slides');
     var dotsWrap = slider.querySelector('.showcase-dots');
-    var slides = track ? track.children : [];
-    if (!track || !slides.length) return;
+    if (!track || !items || !items.length) return;
 
+    track.innerHTML = items.map(function(item){
+      return '<div class="showcase-top showcase-slide">' +
+               '<div class="showcase-text"><p>' + escapeHtml(item.text) + '</p></div>' +
+               '<div class="showcase-photo"><img src="' + escapeHtml(item.image) + '" alt="ADITYA"></div>' +
+             '</div>';
+    }).join('');
+
+    var slides = track.children;
     dotsWrap.innerHTML = '';
     for (var i = 0; i < slides.length; i++) {
       var d = document.createElement('span');
@@ -680,6 +672,15 @@ function closeLekh() {
       track.addEventListener('pointerup', function(){ setTimeout(startAuto, 1800); });
       track.addEventListener('mouseleave', function(){ setTimeout(startAuto, 1800); });
     }
+  }
+
+  document.querySelectorAll('.showcase-slider').forEach(function(slider){
+    var src = slider.dataset.source;
+    if (!src) return;
+    fetch(src, { cache: 'no-store' })
+      .then(function(r){ return r.json(); })
+      .then(function(items){ initSlider(slider, items); })
+      .catch(function(){ /* JSON load गर्न सकिएन */ });
   });
 })();
 </script>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ADITYA — Content Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #5c2f26;
+    --blue-mid: #935447;
+    --sky: #f0ddd3;
+    --sky-pale: #faf1ec;
+    --text: #1a2a3a;
+    --text-light: #7a5548;
+    --ok: #2e7d32;
+    --err: #b91c1c;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:'Noto Sans Devanagari', sans-serif; background:var(--sky-pale); color:var(--text); padding: 20px 16px 80px; }
+  h1 { font-size:1.3rem; color:var(--blue-dark); margin: 0 0 4px; }
+  .sub { color:var(--text-light); font-size:0.85rem; margin-bottom: 20px; }
+  .card { background:#fff; border-radius:16px; padding:18px; margin-bottom:18px; box-shadow: 0 4px 16px rgba(92,47,38,0.08); }
+  .card h2 { font-size:1rem; color:var(--blue-mid); margin:0 0 12px; }
+  label { display:block; font-size:0.82rem; color:var(--text-light); margin-bottom:4px; margin-top:10px; }
+  input[type=text], input[type=password], textarea {
+    width:100%; padding:10px 12px; border:1px solid #e6d5cc; border-radius:10px;
+    font-family:inherit; font-size:0.92rem; background:var(--sky-pale); color:var(--text);
+  }
+  textarea { resize:vertical; min-height:70px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  .row > div { flex:1 1 140px; }
+  button {
+    font-family:inherit; font-weight:700; border:none; border-radius:10px; padding:10px 16px;
+    cursor:pointer; font-size:0.9rem;
+  }
+  .btn-primary { background:var(--blue-mid); color:#fff; }
+  .btn-outline { background:#fff; border:1px solid var(--blue-mid); color:var(--blue-mid); }
+  .btn-danger { background:#fdeceb; color:var(--err); }
+  .btn-primary:disabled, .btn-outline:disabled { opacity:.5; cursor:not-allowed; }
+  .slide-card { border:1px solid #eee0d8; border-radius:14px; padding:14px; margin-bottom:14px; position:relative; }
+  .slide-card img { max-width:120px; max-height:90px; object-fit:cover; border-radius:8px; display:block; margin-top:8px; }
+  .slide-actions { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+  .status { font-size:0.85rem; margin-top:10px; white-space:pre-wrap; }
+  .status.ok { color:var(--ok); }
+  .status.err { color:var(--err); }
+  .hint { font-size:0.78rem; color:#a08c82; margin-top:4px; }
+  .top-actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .badge { display:inline-block; background:var(--sky); color:var(--blue-dark); font-size:0.75rem; padding:2px 8px; border-radius:8px; margin-left:6px; }
+</style>
+</head>
+<body>
+
+<h1>ADITYA — Content Admin</h1>
+<div class="sub">Showcase (फोटो + टेक्स्ट slides) यहाँबाट edit गर्नुहोस् — Save गर्दा सिधै GitHub मा commit हुन्छ।</div>
+
+<div class="card">
+  <h2>1. GitHub जडान</h2>
+  <div class="row">
+    <div>
+      <label>GitHub Personal Access Token</label>
+      <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxx">
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <label>Owner / Username</label>
+      <input type="text" id="owner" placeholder="e.g. pratik98">
+    </div>
+    <div>
+      <label>Repository नाम</label>
+      <input type="text" id="repo" placeholder="e.g. aditya-website">
+    </div>
+    <div>
+      <label>Branch</label>
+      <input type="text" id="branch" placeholder="main" value="main">
+    </div>
+  </div>
+  <div class="hint">Token ब्राउजरमै (localStorage) save हुन्छ, कहीं पठाइँदैन — GitHub लाई बाहेक। यो browser अरूसँग share नगर्नुहोस्।<br>
+  Token कसरी बनाउने: GitHub → Settings → Developer settings → Personal access tokens → Generate new token (Fine-grained, यही repo मा "Contents: Read and write" अनुमति दिएर)।</div>
+  <div class="top-actions">
+    <button class="btn-primary" id="loadBtn">Load गर्नुहोस्</button>
+  </div>
+  <div class="status" id="connStatus"></div>
+</div>
+
+<div class="card" id="slidesCard" style="display:none;">
+  <h2>2. Showcase Slides <span class="badge" id="countBadge">0</span></h2>
+  <div id="slidesList"></div>
+  <div class="top-actions">
+    <button class="btn-outline" id="addBtn">+ नयाँ Slide थप्नुहोस्</button>
+    <button class="btn-primary" id="saveBtn">GitHub मा Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="saveStatus"></div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const JSON_PATH = 'data/showcase.json';
+let currentSha = null;
+let slides = []; // { text, image, _file (optional File to upload), _newPath }
+
+// ── localStorage persistence for connection fields ──
+['token','owner','repo','branch'].forEach(id => {
+  const saved = localStorage.getItem('adityaAdmin_' + id);
+  if (saved) $(id).value = saved;
+  $(id).addEventListener('change', () => localStorage.setItem('adityaAdmin_' + id, $(id).value.trim()));
+});
+
+function apiBase() {
+  return `https://api.github.com/repos/${$('owner').value.trim()}/${$('repo').value.trim()}`;
+}
+function headers() {
+  return {
+    'Authorization': 'Bearer ' + $('token').value.trim(),
+    'Accept': 'application/vnd.github+json'
+  };
+}
+function b64EncodeUnicode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result.split(',')[1]);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+function setStatus(el, msg, type) {
+  el.textContent = msg;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+async function loadData() {
+  setStatus($('connStatus'), 'Loading...', '');
+  try {
+    const branch = $('branch').value.trim() || 'main';
+    const res = await fetch(`${apiBase()}/contents/${JSON_PATH}?ref=${branch}`, { headers: headers() });
+    if (!res.ok) throw new Error(`GitHub बाट फाइल पढ्न सकिएन (${res.status}). Token/repo/branch जाँच्नुहोस्।`);
+    const data = await res.json();
+    currentSha = data.sha;
+    const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+    slides = JSON.parse(content);
+    renderSlides();
+    $('slidesCard').style.display = 'block';
+    setStatus($('connStatus'), '✓ Loaded भयो — ' + slides.length + ' slide(s)', 'ok');
+  } catch (err) {
+    setStatus($('connStatus'), '✗ ' + err.message, 'err');
+  }
+}
+
+function renderSlides() {
+  $('countBadge').textContent = slides.length;
+  const list = $('slidesList');
+  list.innerHTML = '';
+  slides.forEach((slide, i) => {
+    const div = document.createElement('div');
+    div.className = 'slide-card';
+    div.innerHTML = `
+      <label>Text</label>
+      <textarea data-idx="${i}" data-field="text">${escapeHtml(slide.text || '')}</textarea>
+      <label>अहिलेको फोटो path</label>
+      <input type="text" data-idx="${i}" data-field="image" value="${escapeHtml(slide.image || '')}">
+      <img src="${escapeHtml(slide.image || '')}" onerror="this.style.display='none'">
+      <label>नयाँ फोटो अपलोड गर्ने हो भने (optional — यसले माथिको path replace गर्छ)</label>
+      <input type="file" accept="image/*" data-idx="${i}" data-field="file">
+      <div class="slide-actions">
+        <span class="hint">Slide #${i + 1}</span>
+        <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+
+  list.querySelectorAll('textarea[data-field="text"], input[data-field="image"]').forEach(el => {
+    el.addEventListener('input', () => {
+      const idx = +el.dataset.idx;
+      slides[idx][el.dataset.field] = el.value;
+    });
+  });
+  list.querySelectorAll('input[data-field="file"]').forEach(el => {
+    el.addEventListener('change', () => {
+      const idx = +el.dataset.idx;
+      if (el.files && el.files[0]) slides[idx]._file = el.files[0];
+    });
+  });
+  list.querySelectorAll('button[data-action="delete"]').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = +el.dataset.idx;
+      slides.splice(idx, 1);
+      renderSlides();
+    });
+  });
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : String(s);
+  return d.innerHTML;
+}
+
+$('addBtn').addEventListener('click', () => {
+  slides.push({ text: '', image: '' });
+  renderSlides();
+});
+
+async function uploadImageIfNeeded(slide) {
+  if (!slide._file) return;
+  const branch = $('branch').value.trim() || 'main';
+  const safeName = Date.now() + '-' + slide._file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+  const path = 'photos/' + safeName;
+  const base64 = await fileToBase64(slide._file);
+  const res = await fetch(`${apiBase()}/contents/${path}`, {
+    method: 'PUT',
+    headers: headers(),
+    body: JSON.stringify({
+      message: 'admin: upload ' + safeName,
+      content: base64,
+      branch
+    })
+  });
+  if (!res.ok) {
+    const t = await res.text();
+    throw new Error('फोटो अपलोड गर्न सकिएन: ' + t);
+  }
+  slide.image = path;
+  delete slide._file;
+}
+
+$('saveBtn').addEventListener('click', async () => {
+  setStatus($('saveStatus'), 'Saving...', '');
+  $('saveBtn').disabled = true;
+  try {
+    // 1) Upload any new photos first
+    for (const slide of slides) {
+      await uploadImageIfNeeded(slide);
+    }
+    // 2) Re-fetch latest SHA to avoid conflicts
+    const branch = $('branch').value.trim() || 'main';
+    const shaRes = await fetch(`${apiBase()}/contents/${JSON_PATH}?ref=${branch}`, { headers: headers() });
+    if (shaRes.ok) {
+      const shaData = await shaRes.json();
+      currentSha = shaData.sha;
+    }
+    // 3) Save clean JSON (strip internal fields)
+    const clean = slides.map(s => ({ text: s.text || '', image: s.image || '' }));
+    const content = b64EncodeUnicode(JSON.stringify(clean, null, 2));
+    const putRes = await fetch(`${apiBase()}/contents/${JSON_PATH}`, {
+      method: 'PUT',
+      headers: headers(),
+      body: JSON.stringify({
+        message: 'admin: update showcase.json',
+        content,
+        sha: currentSha,
+        branch
+      })
+    });
+    if (!putRes.ok) {
+      const t = await putRes.text();
+      throw new Error('Save गर्न सकिएन: ' + t);
+    }
+    const putData = await putRes.json();
+    currentSha = putData.content.sha;
+    renderSlides();
+    setStatus($('saveStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ (rebuild पर्खनुहोस्)।', 'ok');
+  } catch (err) {
+    setStatus($('saveStatus'), '✗ ' + err.message, 'err');
+  } finally {
+    $('saveBtn').disabled = false;
+  }
+});
+
+$('loadBtn').addEventListener('click', loadData);
+</script>
+
+</body>
+</html>
