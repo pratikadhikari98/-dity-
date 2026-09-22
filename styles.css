@@ -19,8 +19,8 @@
     --text: #1a2a3a;
     --text-light: #7a5548;
   }
-  html { scroll-behavior: smooth; overscroll-behavior-y: none; background: var(--sky-pale); }
-  body { font-family: 'Noto Sans Devanagari', sans-serif; background: var(--sky-pale); color: var(--text); overflow-x: hidden; overscroll-behavior-y: none; }
+  html { scroll-behavior: smooth; background: var(--sky-pale); }
+  body { font-family: 'Noto Sans Devanagari', sans-serif; background: var(--sky-pale); color: var(--text); overflow-x: hidden; }
   h1, h2, h3 { letter-spacing: -0.01em; }
   ::selection { background: var(--blue-mid); color: var(--white); }
 

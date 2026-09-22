@@ -214,6 +214,26 @@ window.addEventListener('resize', scaleDesktopTop);
 window.addEventListener('orientationchange', scaleDesktopTop);
 </script>
 
+<!-- ☰ हेडर मेनु टगल -->
+<script>
+function toggleHeaderMenu() {
+  const dropdown = document.getElementById('headerDropdown');
+  const btn = document.getElementById('menuDotsBtn');
+  if (!dropdown) return;
+  const willOpen = !dropdown.classList.contains('open');
+  dropdown.classList.toggle('open', willOpen);
+  if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+}
+document.addEventListener('click', function(e){
+  const dropdown = document.getElementById('headerDropdown');
+  const btn = document.getElementById('menuDotsBtn');
+  if (!dropdown || !dropdown.classList.contains('open')) return;
+  if (dropdown.contains(e.target) || (btn && btn.contains(e.target))) return;
+  dropdown.classList.remove('open');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+});
+</script>
+
 <!-- PURPOSE / ABOUT -->
 <section class="why-section" id="purpose">
   <div class="about-inner">
