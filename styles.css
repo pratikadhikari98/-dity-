@@ -97,6 +97,8 @@
   .hero-text h2 { font-family: 'Noto Serif Devanagari', serif; font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 700; color: var(--blue-dark); line-height: 1.35; margin-bottom: 14px; }
   .hero-text h2 span { color: var(--blue-mid); }
   .hero-text h2.hero-shloka { font-size: clamp(1.5rem, 3.4vw, 2.3rem); line-height: 1.55; margin-top: -18px; }
+  .shloka-rotator { transition: opacity .35s ease; }
+  .shloka-rotator.fading { opacity: 0; }
   .hero-text p { font-size: 0.97rem; color: var(--text-light); line-height: 1.75; margin-bottom: 26px; max-width: 460px; }
   .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
   .btn-primary { background: var(--blue-mid); color: var(--white); padding: 13px 26px; border-radius: 10px; font-size: 0.93rem; font-weight: 700; text-decoration: none; transition: background .25s ease, transform .18s ease, box-shadow .25s ease; display: inline-block; box-shadow: 0 4px 14px rgba(147,84,71,.22); }

@@ -53,7 +53,7 @@
 <body>
 
 <h1>ADITYA — Content Admin</h1>
-<div class="sub">Showcase (फोटो + टेक्स्ट slides) यहाँबाट edit गर्नुहोस् — Save गर्दा सिधै GitHub मा commit हुन्छ।</div>
+<div class="sub">Showcase, श्लोक (Hero), र बारेमा टेक्स्ट — यहाँबाट edit गर्नुहोस्। Save गर्दा सिधै GitHub मा commit हुन्छ।</div>
 
 <div class="card">
   <h2>1. GitHub जडान</h2>
@@ -80,26 +80,44 @@
   <div class="hint">Token ब्राउजरमै (localStorage) save हुन्छ, कहीं पठाइँदैन — GitHub लाई बाहेक। यो browser अरूसँग share नगर्नुहोस्।<br>
   Token कसरी बनाउने: GitHub → Settings → Developer settings → Personal access tokens → Generate new token (Fine-grained, यही repo मा "Contents: Read and write" अनुमति दिएर)।</div>
   <div class="top-actions">
-    <button class="btn-primary" id="loadBtn">Load गर्नुहोस्</button>
+    <button class="btn-primary" id="loadBtn">सबै Load गर्नुहोस्</button>
   </div>
   <div class="status" id="connStatus"></div>
 </div>
 
-<div class="card" id="slidesCard" style="display:none;">
-  <h2>2. Showcase Slides <span class="badge" id="countBadge">0</span></h2>
-  <div id="slidesList"></div>
+<div class="card" id="showcaseCard" style="display:none;">
+  <h2>2. Showcase Slides <span class="badge" id="showcaseCount">0</span></h2>
+  <div id="showcaseList"></div>
   <div class="top-actions">
-    <button class="btn-outline" id="addBtn">+ नयाँ Slide थप्नुहोस्</button>
-    <button class="btn-primary" id="saveBtn">GitHub मा Save गर्नुहोस्</button>
+    <button class="btn-outline" id="showcaseAddBtn">+ नयाँ Slide थप्नुहोस्</button>
+    <button class="btn-primary" id="showcaseSaveBtn">Showcase Save गर्नुहोस्</button>
   </div>
-  <div class="status" id="saveStatus"></div>
+  <div class="status" id="showcaseStatus"></div>
+</div>
+
+<div class="card" id="shlokaCard" style="display:none;">
+  <h2>3. श्लोक (Hero — Wheel को साइडमा) <span class="badge" id="shlokaCount">0</span></h2>
+  <div class="hint">एकभन्दा बढी श्लोक राख्नुभयो भने, homepage मा हरेक ५ सेकेन्डमा अर्को श्लोक देखिन्छ।</div>
+  <div id="shlokaList"></div>
+  <div class="top-actions">
+    <button class="btn-outline" id="shlokaAddBtn">+ नयाँ श्लोक थप्नुहोस्</button>
+    <button class="btn-primary" id="shlokaSaveBtn">श्लोक Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="shlokaStatus"></div>
+</div>
+
+<div class="card" id="aboutCard" style="display:none;">
+  <h2>4. बारेमा टेक्स्ट (Homepage को "हाम्रो बारेमा" card)</h2>
+  <label>Text</label>
+  <textarea id="aboutTextArea" style="min-height:140px;"></textarea>
+  <div class="top-actions">
+    <button class="btn-primary" id="aboutSaveBtn">बारेमा Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="aboutStatus"></div>
 </div>
 
 <script>
 const $ = (id) => document.getElementById(id);
-const JSON_PATH = 'data/showcase.json';
-let currentSha = null;
-let slides = []; // { text, image, _file (optional File to upload), _newPath }
 
 // ── localStorage persistence for connection fields ──
 ['token','owner','repo','branch'].forEach(id => {
@@ -117,6 +135,9 @@ function headers() {
     'Accept': 'application/vnd.github+json'
   };
 }
+function branch() {
+  return $('branch').value.trim() || 'main';
+}
 function b64EncodeUnicode(str) {
   return btoa(unescape(encodeURIComponent(str)));
 }
@@ -128,152 +149,169 @@ function fileToBase64(file) {
     r.readAsDataURL(file);
   });
 }
-
-function setStatus(el, msg, type) {
-  el.textContent = msg;
-  el.className = 'status' + (type ? ' ' + type : '');
-}
-
-async function loadData() {
-  setStatus($('connStatus'), 'Loading...', '');
-  try {
-    const branch = $('branch').value.trim() || 'main';
-    const res = await fetch(`${apiBase()}/contents/${JSON_PATH}?ref=${branch}`, { headers: headers() });
-    if (!res.ok) throw new Error(`GitHub बाट फाइल पढ्न सकिएन (${res.status}). Token/repo/branch जाँच्नुहोस्।`);
-    const data = await res.json();
-    currentSha = data.sha;
-    const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
-    slides = JSON.parse(content);
-    renderSlides();
-    $('slidesCard').style.display = 'block';
-    setStatus($('connStatus'), '✓ Loaded भयो — ' + slides.length + ' slide(s)', 'ok');
-  } catch (err) {
-    setStatus($('connStatus'), '✗ ' + err.message, 'err');
-  }
-}
-
-function renderSlides() {
-  $('countBadge').textContent = slides.length;
-  const list = $('slidesList');
-  list.innerHTML = '';
-  slides.forEach((slide, i) => {
-    const div = document.createElement('div');
-    div.className = 'slide-card';
-    div.innerHTML = `
-      <label>Text</label>
-      <textarea data-idx="${i}" data-field="text">${escapeHtml(slide.text || '')}</textarea>
-      <label>अहिलेको फोटो path</label>
-      <input type="text" data-idx="${i}" data-field="image" value="${escapeHtml(slide.image || '')}">
-      <img src="${escapeHtml(slide.image || '')}" onerror="this.style.display='none'">
-      <label>नयाँ फोटो अपलोड गर्ने हो भने (optional — यसले माथिको path replace गर्छ)</label>
-      <input type="file" accept="image/*" data-idx="${i}" data-field="file">
-      <div class="slide-actions">
-        <span class="hint">Slide #${i + 1}</span>
-        <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
-      </div>
-    `;
-    list.appendChild(div);
-  });
-
-  list.querySelectorAll('textarea[data-field="text"], input[data-field="image"]').forEach(el => {
-    el.addEventListener('input', () => {
-      const idx = +el.dataset.idx;
-      slides[idx][el.dataset.field] = el.value;
-    });
-  });
-  list.querySelectorAll('input[data-field="file"]').forEach(el => {
-    el.addEventListener('change', () => {
-      const idx = +el.dataset.idx;
-      if (el.files && el.files[0]) slides[idx]._file = el.files[0];
-    });
-  });
-  list.querySelectorAll('button[data-action="delete"]').forEach(el => {
-    el.addEventListener('click', () => {
-      const idx = +el.dataset.idx;
-      slides.splice(idx, 1);
-      renderSlides();
-    });
-  });
-}
-
 function escapeHtml(s) {
   const d = document.createElement('div');
   d.textContent = s == null ? '' : String(s);
   return d.innerHTML;
 }
-
-$('addBtn').addEventListener('click', () => {
-  slides.push({ text: '', image: '' });
-  renderSlides();
-});
-
-async function uploadImageIfNeeded(slide) {
-  if (!slide._file) return;
-  const branch = $('branch').value.trim() || 'main';
-  const safeName = Date.now() + '-' + slide._file.name.replace(/[^a-zA-Z0-9._-]/g, '');
-  const path = 'photos/' + safeName;
-  const base64 = await fileToBase64(slide._file);
-  const res = await fetch(`${apiBase()}/contents/${path}`, {
-    method: 'PUT',
-    headers: headers(),
-    body: JSON.stringify({
-      message: 'admin: upload ' + safeName,
-      content: base64,
-      branch
-    })
-  });
-  if (!res.ok) {
-    const t = await res.text();
-    throw new Error('फोटो अपलोड गर्न सकिएन: ' + t);
-  }
-  slide.image = path;
-  delete slide._file;
+function setStatus(el, msg, type) {
+  el.textContent = msg;
+  el.className = 'status' + (type ? ' ' + type : '');
 }
 
-$('saveBtn').addEventListener('click', async () => {
-  setStatus($('saveStatus'), 'Saving...', '');
-  $('saveBtn').disabled = true;
+// ── Generic GitHub Contents helpers ──
+async function ghGetFile(path) {
+  const res = await fetch(`${apiBase()}/contents/${path}?ref=${branch()}`, { headers: headers() });
+  if (!res.ok) throw new Error(`"${path}" पढ्न सकिएन (${res.status}). Token/repo/branch जाँच्नुहोस्।`);
+  const data = await res.json();
+  const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+  return { json: JSON.parse(content), sha: data.sha };
+}
+async function ghPutFile(path, jsonValue, message) {
+  // refresh sha right before writing, to avoid conflicts
+  let sha = null;
   try {
-    // 1) Upload any new photos first
-    for (const slide of slides) {
-      await uploadImageIfNeeded(slide);
+    const cur = await fetch(`${apiBase()}/contents/${path}?ref=${branch()}`, { headers: headers() });
+    if (cur.ok) sha = (await cur.json()).sha;
+  } catch (e) {}
+  const content = b64EncodeUnicode(JSON.stringify(jsonValue, null, 2));
+  const body = { message, content, branch: branch() };
+  if (sha) body.sha = sha;
+  const res = await fetch(`${apiBase()}/contents/${path}`, {
+    method: 'PUT', headers: headers(), body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+async function ghUploadImage(file) {
+  const safeName = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+  const path = 'photos/' + safeName;
+  const base64 = await fileToBase64(file);
+  const res = await fetch(`${apiBase()}/contents/${path}`, {
+    method: 'PUT', headers: headers(),
+    body: JSON.stringify({ message: 'admin: upload ' + safeName, content: base64, branch: branch() })
+  });
+  if (!res.ok) throw new Error('फोटो अपलोड गर्न सकिएन: ' + await res.text());
+  return path;
+}
+
+// ═══════════════ SHOWCASE ═══════════════
+let showcaseItems = [];
+function renderShowcase() {
+  $('showcaseCount').textContent = showcaseItems.length;
+  const list = $('showcaseList');
+  list.innerHTML = '';
+  showcaseItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'slide-card';
+    div.innerHTML = `
+      <label>Text</label>
+      <textarea data-idx="${i}" data-field="text">${escapeHtml(item.text || '')}</textarea>
+      <label>अहिलेको फोटो path</label>
+      <input type="text" data-idx="${i}" data-field="image" value="${escapeHtml(item.image || '')}">
+      <img src="${escapeHtml(item.image || '')}" onerror="this.style.display='none'">
+      <label>नयाँ फोटो अपलोड गर्ने हो भने (optional)</label>
+      <input type="file" accept="image/*" data-idx="${i}" data-field="file">
+      <div class="slide-actions">
+        <span class="hint">Slide #${i + 1}</span>
+        <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
+      </div>`;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('textarea[data-field="text"], input[data-field="image"]').forEach(el => {
+    el.addEventListener('input', () => { showcaseItems[+el.dataset.idx][el.dataset.field] = el.value; });
+  });
+  list.querySelectorAll('input[data-field="file"]').forEach(el => {
+    el.addEventListener('change', () => { if (el.files[0]) showcaseItems[+el.dataset.idx]._file = el.files[0]; });
+  });
+  list.querySelectorAll('button[data-action="delete"]').forEach(el => {
+    el.addEventListener('click', () => { showcaseItems.splice(+el.dataset.idx, 1); renderShowcase(); });
+  });
+}
+$('showcaseAddBtn').addEventListener('click', () => { showcaseItems.push({ text: '', image: '' }); renderShowcase(); });
+$('showcaseSaveBtn').addEventListener('click', async () => {
+  setStatus($('showcaseStatus'), 'Saving...', '');
+  $('showcaseSaveBtn').disabled = true;
+  try {
+    for (const item of showcaseItems) {
+      if (item._file) { item.image = await ghUploadImage(item._file); delete item._file; }
     }
-    // 2) Re-fetch latest SHA to avoid conflicts
-    const branch = $('branch').value.trim() || 'main';
-    const shaRes = await fetch(`${apiBase()}/contents/${JSON_PATH}?ref=${branch}`, { headers: headers() });
-    if (shaRes.ok) {
-      const shaData = await shaRes.json();
-      currentSha = shaData.sha;
-    }
-    // 3) Save clean JSON (strip internal fields)
-    const clean = slides.map(s => ({ text: s.text || '', image: s.image || '' }));
-    const content = b64EncodeUnicode(JSON.stringify(clean, null, 2));
-    const putRes = await fetch(`${apiBase()}/contents/${JSON_PATH}`, {
-      method: 'PUT',
-      headers: headers(),
-      body: JSON.stringify({
-        message: 'admin: update showcase.json',
-        content,
-        sha: currentSha,
-        branch
-      })
-    });
-    if (!putRes.ok) {
-      const t = await putRes.text();
-      throw new Error('Save गर्न सकिएन: ' + t);
-    }
-    const putData = await putRes.json();
-    currentSha = putData.content.sha;
-    renderSlides();
-    setStatus($('saveStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ (rebuild पर्खनुहोस्)।', 'ok');
-  } catch (err) {
-    setStatus($('saveStatus'), '✗ ' + err.message, 'err');
-  } finally {
-    $('saveBtn').disabled = false;
-  }
+    const clean = showcaseItems.map(s => ({ text: s.text || '', image: s.image || '' }));
+    await ghPutFile('data/showcase.json', clean, 'admin: update showcase.json');
+    renderShowcase();
+    setStatus($('showcaseStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+  } catch (err) { setStatus($('showcaseStatus'), '✗ ' + err.message, 'err'); }
+  finally { $('showcaseSaveBtn').disabled = false; }
 });
 
-$('loadBtn').addEventListener('click', loadData);
+// ═══════════════ SHLOKA ═══════════════
+let shlokaItems = [];
+function renderShloka() {
+  $('shlokaCount').textContent = shlokaItems.length;
+  const list = $('shlokaList');
+  list.innerHTML = '';
+  shlokaItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'slide-card';
+    div.innerHTML = `
+      <label>श्लोक (हरेक लाइन नयाँ line मा लेख्नुहोस्)</label>
+      <textarea data-idx="${i}" data-field="shloka" style="min-height:100px;">${escapeHtml(item.shloka || '')}</textarea>
+      <label>श्लोकार्थ (अर्थ)</label>
+      <textarea data-idx="${i}" data-field="meaning">${escapeHtml(item.meaning || '')}</textarea>
+      <div class="slide-actions">
+        <span class="hint">श्लोक #${i + 1}</span>
+        <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
+      </div>`;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('textarea[data-field]').forEach(el => {
+    el.addEventListener('input', () => { shlokaItems[+el.dataset.idx][el.dataset.field] = el.value; });
+  });
+  list.querySelectorAll('button[data-action="delete"]').forEach(el => {
+    el.addEventListener('click', () => { shlokaItems.splice(+el.dataset.idx, 1); renderShloka(); });
+  });
+}
+$('shlokaAddBtn').addEventListener('click', () => { shlokaItems.push({ shloka: '', meaning: '' }); renderShloka(); });
+$('shlokaSaveBtn').addEventListener('click', async () => {
+  setStatus($('shlokaStatus'), 'Saving...', '');
+  $('shlokaSaveBtn').disabled = true;
+  try {
+    const clean = shlokaItems.map(s => ({ shloka: s.shloka || '', meaning: s.meaning || '' }));
+    await ghPutFile('data/shlokas.json', clean, 'admin: update shlokas.json');
+    renderShloka();
+    setStatus($('shlokaStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+  } catch (err) { setStatus($('shlokaStatus'), '✗ ' + err.message, 'err'); }
+  finally { $('shlokaSaveBtn').disabled = false; }
+});
+
+// ═══════════════ ABOUT TEXT ═══════════════
+$('aboutSaveBtn').addEventListener('click', async () => {
+  setStatus($('aboutStatus'), 'Saving...', '');
+  $('aboutSaveBtn').disabled = true;
+  try {
+    await ghPutFile('data/about.json', { text: $('aboutTextArea').value }, 'admin: update about.json');
+    setStatus($('aboutStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+  } catch (err) { setStatus($('aboutStatus'), '✗ ' + err.message, 'err'); }
+  finally { $('aboutSaveBtn').disabled = false; }
+});
+
+// ═══════════════ LOAD ALL ═══════════════
+$('loadBtn').addEventListener('click', async () => {
+  setStatus($('connStatus'), 'Loading...', '');
+  try {
+    const [showcase, shloka, about] = await Promise.all([
+      ghGetFile('data/showcase.json'),
+      ghGetFile('data/shlokas.json'),
+      ghGetFile('data/about.json')
+    ]);
+    showcaseItems = showcase.json; renderShowcase(); $('showcaseCard').style.display = 'block';
+    shlokaItems = shloka.json; renderShloka(); $('shlokaCard').style.display = 'block';
+    $('aboutTextArea').value = (about.json && about.json.text) || ''; $('aboutCard').style.display = 'block';
+    setStatus($('connStatus'), '✓ सबै Load भयो।', 'ok');
+  } catch (err) {
+    setStatus($('connStatus'), '✗ ' + err.message, 'err');
+  }
+});
 </script>
 
 </body>

@@ -59,7 +59,12 @@ news/, results/, lekh.json → पुराना template बाट बचे�
 5. "GitHub मा Save गर्नुहोस्" थिच्नुहोस् — यसले नयाँ फोटो (यदि छ भने) `photos/` मा अपलोड गर्छ अनि `data/showcase.json` अपडेट गरी सिधै GitHub मा commit गर्छ।
 6. केही मिनेटमा (Netlify/hosting rebuild हुँदा) वेबसाइटमा परिवर्तन देखिन्छ।
 
-**कहाँ data बस्छ:** `data/showcase.json` — यसैलाई `index.html` र `about.html` दुबैले page load हुँदा fetch गरेर showcase carousel देखाउँछन्। यो फाइल directly पनि edit गर्न मिल्छ (कुनै text editor बाट)।
+**कहाँ data बस्छ:**
+- `data/showcase.json` — Showcase carousel (photo+text), `index.html` र `about.html` दुबैमा
+- `data/shlokas.json` — Hero (wheel को साइड) मा देखिने श्लोक + अर्थ; एकभन्दा बढी राख्नुभयो भने हरेक ५ सेकेन्डमा अर्को श्लोक देखिन्छ
+- `data/about.json` — Homepage को "हाम्रो बारेमा" card को text
+
+यी सबै फाइल directly पनि edit गर्न मिल्छ (कुनै text editor बाट), वा admin.html बाट।
 
 ⚠️ **सुरक्षा नोट**: `admin.html` लाई link नगर्नुहोस् (header/footer मा नराख्नुहोस्) — जसलाई URL थाहा छ उसैले मात्र प्रयोग गरून् भन्नका लागि। Token आफ्नै मात्र भएको browser मा राख्नुहोस्, अरूसँग share नगर्नुहोस्।
 

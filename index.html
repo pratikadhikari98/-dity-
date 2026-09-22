@@ -42,9 +42,11 @@
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-text">
-    <h2 class="hero-shloka">केयूरा न विभूषयन्ति पुरुषं हारा न चन्द्रोज्ज्वलाः<br>न स्नानं न विलेपनं न कुसुमं नालङ्कृता मूर्धजाः।<br>वाण्येका समलङ्करोति पुरुषं या संस्कृता धार्यते<br>क्षीयन्ते खलु भूषणानि सततं वाग्भूषणं भूषणम्॥</h2>
-    <div class="section-label" style="text-align:left;">श्लोकार्थ</div>
-    <p>बाजुबन्द ले, चन्द्रमा जस्तो चम्किलो हारले, स्नानले, लेपनले, फूलले वा सजिएको कपालले पनि मानिसलाई साँच्चै अलंकृत गर्दैन। संस्कारयुक्त वाणी (सुसंस्कृत बोली) एउटैले मात्र मानिसलाई सजाउँछ। किनभने अरू सबै गहना समयसँगै क्षीण हुन्छन्, तर वाणीरूपी गहना नै सदा टिक्ने साँचो अलंकार हो।</p>
+    <div class="shloka-rotator" id="shlokaRotator" data-source="data/shlokas.json">
+      <h2 class="hero-shloka" id="shlokaText"></h2>
+      <div class="section-label" style="text-align:left;">श्लोकार्थ</div>
+      <p id="shlokaMeaning"></p>
+    </div>
     <div class="hero-btns">
       <a href="about.html#admission" class="btn-primary">भर्ना फारम भर्नुहोस्</a>
       <a href="#" onclick="openLekh();return false;" class="btn-outline">थप जान्नुहोस्</a>
@@ -241,9 +243,7 @@ document.addEventListener('click', function(e){
       <img src="photos/about-krishna.png" alt="ADITYA">
     </div>
     <div class="about-textcard">
-      <p class="about-text">
-        ADITYA (Association of Dharmic Inspiring Truthful Youth for Adhyatma) युवावर्गलाई सनातन धर्मको जागरण अभियानसँग जोड्न र वैदिक वाङ्मयको संरक्षण गर्ने उद्देश्यले स्थापना गरिएको संस्था हो। आजको पुस्तालाई आफ्नो सांस्कृतिक तथा आध्यात्मिक जरासँग परिचित गराउँदै, वेद, शास्त्र र सनातन परम्पराका मूल्यमान्यताहरूलाई सत्य र सरल तरिकाले युवा पुस्तासम्म पुर्‍याउनु नै हाम्रो मुख्य लक्ष्य हो।
-      </p>
+      <p class="about-text" id="aboutText" data-source="data/about.json"></p>
     </div>
   </div>
 </section>
@@ -706,6 +706,55 @@ function closeLekh() {
       .then(function(items){ initSlider(slider, items); })
       .catch(function(){ /* JSON load गर्न सकिएन */ });
   });
+})();
+</script>
+
+<!-- SHLOKA ROTATOR — data/shlokas.json बाट हरेक 5 सेकेन्डमा अर्को श्लोक -->
+<script>
+(function(){
+  var rotator = document.getElementById('shlokaRotator');
+  if (!rotator) return;
+  var src = rotator.dataset.source;
+  var textEl = document.getElementById('shlokaText');
+  var meaningEl = document.getElementById('shlokaMeaning');
+
+  fetch(src, { cache: 'no-store' })
+    .then(function(r){ return r.json(); })
+    .then(function(items){
+      if (!items || !items.length) return;
+      var idx = 0;
+      function render(i){
+        textEl.innerHTML = String(items[i].shloka || '').split('\n').map(function(line){
+          var d = document.createElement('div'); d.textContent = line; return d.innerHTML;
+        }).join('<br>');
+        meaningEl.textContent = items[i].meaning || '';
+      }
+      render(0);
+      if (items.length > 1) {
+        setInterval(function(){
+          rotator.classList.add('fading');
+          setTimeout(function(){
+            idx = (idx + 1) % items.length;
+            render(idx);
+            rotator.classList.remove('fading');
+          }, 350);
+        }, 5000);
+      }
+    })
+    .catch(function(){ /* लोड गर्न सकिएन */ });
+})();
+</script>
+
+<!-- ABOUT TEXT — data/about.json बाट -->
+<script>
+(function(){
+  var el = document.getElementById('aboutText');
+  if (!el) return;
+  var src = el.dataset.source;
+  fetch(src, { cache: 'no-store' })
+    .then(function(r){ return r.json(); })
+    .then(function(data){ el.textContent = (data && data.text) || ''; })
+    .catch(function(){ /* लोड गर्न सकिएन */ });
 })();
 </script>
 
