@@ -50,6 +50,8 @@
   .header-dropdown .auth-box { justify-content: center; }
   .theme-picker { padding: 4px 4px 10px; border-bottom: 1px solid var(--sky); margin-bottom: 8px; }
   .theme-picker-label { font-size: 0.72rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; text-align: center; }
+  .menu-admin-link { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 4px; border-radius: 8px; text-decoration: none; color: var(--text-light); font-size: 0.85rem; font-weight: 600; transition: background .15s; }
+  .menu-admin-link:hover { background: var(--sky-pale); }
   .theme-swatches { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; max-width: 190px; }
   .theme-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--white); box-shadow: 0 0 0 1.5px #d8d8d8; cursor: pointer; padding: 0; transition: transform .15s, box-shadow .15s; }
   .theme-swatch:hover { transform: scale(1.12); }
