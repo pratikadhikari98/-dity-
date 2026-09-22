@@ -42,3 +42,24 @@ news/, results/, lekh.json → पुराना template बाट बचे�
 ## थप जानकारी
 कुनै समस्या आए वा थप परिवर्तन चाहिएमा, यही zip भित्रका `index.html` / `about.html` / `styles.css` फाइल सिधै edit गरे पुग्छ — अरू कुनै tool/build प्रक्रिया चाहिँदैन।
 # Results-hern-milne
+
+## Admin Panel — website भित्रैबाट Showcase text/photo edit गर्ने (`admin.html`)
+कुनै coding नगरी, browser बाटै showcase slides (text + photo) add/edit/delete गर्न सकिने page हो। यसले GitHub मा सिधै commit गर्छ — कुनै server/database चाहिँदैन।
+
+**Setup (एकपटक मात्र):**
+1. GitHub मा जानुहोस् → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token।
+2. यही repository छान्नुहोस्, अनि Permissions मा "Contents: Read and write" दिनुहोस्।
+3. Token copy गर्नुहोस् (यो एकपटक मात्र देखिन्छ)।
+
+**प्रयोग गर्ने तरिका:**
+1. `yoursite.com/admin.html` खोल्नुहोस्।
+2. Token, GitHub username (owner), repository नाम, र branch (प्रायः `main`) भर्नुहोस् — यो browser मै save हुन्छ, फेरि भर्नु पर्दैन।
+3. "Load गर्नुहोस्" थिच्नुहोस् — अहिलेका सबै slide देखिन्छन्।
+4. जुनसुकै slide को text/photo edit गर्नुहोस्, नयाँ थप्न "+ नयाँ Slide थप्नुहोस्" थिच्नुहोस्, हटाउन "हटाउनुहोस्" थिच्नुहोस्।
+5. "GitHub मा Save गर्नुहोस्" थिच्नुहोस् — यसले नयाँ फोटो (यदि छ भने) `photos/` मा अपलोड गर्छ अनि `data/showcase.json` अपडेट गरी सिधै GitHub मा commit गर्छ।
+6. केही मिनेटमा (Netlify/hosting rebuild हुँदा) वेबसाइटमा परिवर्तन देखिन्छ।
+
+**कहाँ data बस्छ:** `data/showcase.json` — यसैलाई `index.html` र `about.html` दुबैले page load हुँदा fetch गरेर showcase carousel देखाउँछन्। यो फाइल directly पनि edit गर्न मिल्छ (कुनै text editor बाट)।
+
+⚠️ **सुरक्षा नोट**: `admin.html` लाई link नगर्नुहोस् (header/footer मा नराख्नुहोस्) — जसलाई URL थाहा छ उसैले मात्र प्रयोग गरून् भन्नका लागि। Token आफ्नै मात्र भएको browser मा राख्नुहोस्, अरूसँग share नगर्नुहोस्।
+
