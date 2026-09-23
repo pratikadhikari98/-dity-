@@ -66,8 +66,7 @@
 
   <!-- NEWS SECTION -->
   <section class="news-feed-section" id="news">
-    <div class="section-label">समाचार</div>
-    <div class="section-title">ताजा समाचार</div>
+    <h2 class="news-feed-heading"><span>🗞️</span> समाचार <span>🗞️</span></h2>
     <div class="news-feed-list" id="newsFeedList" data-source="data/news.json"></div>
   </section>
 
@@ -241,8 +240,9 @@ loadGallery();
       }
       el.innerHTML = items.map(function(item){
         var img = item.image ? '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '">' : '';
+        var title = item.title ? '<h3>' + esc(item.title) + '</h3>' : '';
         return '<div class="news-feed-card">' + img +
-               '<div class="nf-body"><h3>' + esc(item.title) + '</h3><p>' + esc(item.text) + '</p></div></div>';
+               '<div class="nf-body">' + title + '<div class="nf-columns">' + esc(item.text) + '</div></div></div>';
       }).join('');
     })
     .catch(function(){ el.innerHTML = '<div class="news-feed-empty">समाचार लोड गर्न सकिएन।</div>'; });
