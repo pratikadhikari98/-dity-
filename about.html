@@ -64,6 +64,13 @@
     </div>
   </section>
 
+  <!-- NEWS SECTION -->
+  <section class="news-feed-section" id="news">
+    <div class="section-label">समाचार</div>
+    <div class="section-title">ताजा समाचार</div>
+    <div class="news-feed-list" id="newsFeedList" data-source="data/news.json"></div>
+  </section>
+
   <!-- PHOTO GALLERY SECTION -->
   <section class="gallery-section" id="gallery">
     <div class="section-label">तस्बिरहरू</div>
@@ -174,7 +181,7 @@
 <div class="bottom-app-bar">
   <div class="bottom-app-bar-inner">
     <a href="index.html#home" class="app-icon-btn" title="गृहपृष्ठ"><span>🏠</span></a>
-    <a href="about.html" class="app-icon-btn" title="बारेमा"><span>ℹ️</span></a>
+    <a href="#news" class="app-icon-btn" title="समाचार"><span>🗞️</span></a>
     <a href="#gallery" class="app-icon-btn" title="ग्यालरी"><span>🖼️</span></a>
     <a href="#contact" class="app-icon-btn" title="सम्पर्क"><span>☎️</span></a>
   </div>
@@ -216,6 +223,30 @@ function closeLb(e) {
 }
 
 loadGallery();
+</script>
+
+<!-- NEWS FEED — data/news.json बाट -->
+<script>
+(function(){
+  var el = document.getElementById('newsFeedList');
+  if (!el) return;
+  var src = el.dataset.source;
+  function esc(s){ var d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
+  fetch(src, { cache: 'no-store' })
+    .then(function(r){ return r.json(); })
+    .then(function(items){
+      if (!items || !items.length) {
+        el.innerHTML = '<div class="news-feed-empty">हाल कुनै समाचार छैन।</div>';
+        return;
+      }
+      el.innerHTML = items.map(function(item){
+        var img = item.image ? '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '">' : '';
+        return '<div class="news-feed-card">' + img +
+               '<div class="nf-body"><h3>' + esc(item.title) + '</h3><p>' + esc(item.text) + '</p></div></div>';
+      }).join('');
+    })
+    .catch(function(){ el.innerHTML = '<div class="news-feed-empty">समाचार लोड गर्न सकिएन।</div>'; });
+})();
 </script>
 
 <script>

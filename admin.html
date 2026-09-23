@@ -116,6 +116,16 @@
   <div class="status" id="aboutStatus"></div>
 </div>
 
+<div class="card" id="newsCard" style="display:none;">
+  <h2>5. समाचार (About page — 🗞️) <span class="badge" id="newsCount">0</span></h2>
+  <div id="newsList"></div>
+  <div class="top-actions">
+    <button class="btn-outline" id="newsAddBtn">+ नयाँ समाचार थप्नुहोस्</button>
+    <button class="btn-primary" id="newsSaveBtn">समाचार Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="newsStatus"></div>
+</div>
+
 <script>
 const $ = (id) => document.getElementById(id);
 
@@ -295,18 +305,71 @@ $('aboutSaveBtn').addEventListener('click', async () => {
   finally { $('aboutSaveBtn').disabled = false; }
 });
 
+// ═══════════════ NEWS ═══════════════
+let newsItems = [];
+function renderNews() {
+  $('newsCount').textContent = newsItems.length;
+  const list = $('newsList');
+  list.innerHTML = '';
+  newsItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'slide-card';
+    div.innerHTML = `
+      <label>शीर्षक (Title)</label>
+      <input type="text" data-idx="${i}" data-field="title" value="${escapeHtml(item.title || '')}">
+      <label>विवरण (Text)</label>
+      <textarea data-idx="${i}" data-field="text">${escapeHtml(item.text || '')}</textarea>
+      <label>फोटो path (खाली राख्न मिल्छ — फोटो नचाहिए)</label>
+      <input type="text" data-idx="${i}" data-field="image" value="${escapeHtml(item.image || '')}">
+      ${item.image ? `<img src="${escapeHtml(item.image)}" onerror="this.style.display='none'">` : ''}
+      <label>नयाँ फोटो अपलोड गर्ने हो भने (optional)</label>
+      <input type="file" accept="image/*" data-idx="${i}" data-field="file">
+      <div class="slide-actions">
+        <span class="hint">समाचार #${i + 1}</span>
+        <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
+      </div>`;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('input[data-field="title"], textarea[data-field="text"], input[data-field="image"]').forEach(el => {
+    el.addEventListener('input', () => { newsItems[+el.dataset.idx][el.dataset.field] = el.value; });
+  });
+  list.querySelectorAll('input[data-field="file"]').forEach(el => {
+    el.addEventListener('change', () => { if (el.files[0]) newsItems[+el.dataset.idx]._file = el.files[0]; });
+  });
+  list.querySelectorAll('button[data-action="delete"]').forEach(el => {
+    el.addEventListener('click', () => { newsItems.splice(+el.dataset.idx, 1); renderNews(); });
+  });
+}
+$('newsAddBtn').addEventListener('click', () => { newsItems.push({ title: '', text: '', image: '' }); renderNews(); });
+$('newsSaveBtn').addEventListener('click', async () => {
+  setStatus($('newsStatus'), 'Saving...', '');
+  $('newsSaveBtn').disabled = true;
+  try {
+    for (const item of newsItems) {
+      if (item._file) { item.image = await ghUploadImage(item._file); delete item._file; }
+    }
+    const clean = newsItems.map(n => ({ title: n.title || '', text: n.text || '', image: n.image || '' }));
+    await ghPutFile('data/news.json', clean, 'admin: update news.json');
+    renderNews();
+    setStatus($('newsStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+  } catch (err) { setStatus($('newsStatus'), '✗ ' + err.message, 'err'); }
+  finally { $('newsSaveBtn').disabled = false; }
+});
+
 // ═══════════════ LOAD ALL ═══════════════
 $('loadBtn').addEventListener('click', async () => {
   setStatus($('connStatus'), 'Loading...', '');
   try {
-    const [showcase, shloka, about] = await Promise.all([
+    const [showcase, shloka, about, news] = await Promise.all([
       ghGetFile('data/showcase.json'),
       ghGetFile('data/shlokas.json'),
-      ghGetFile('data/about.json')
+      ghGetFile('data/about.json'),
+      ghGetFile('data/news.json')
     ]);
     showcaseItems = showcase.json; renderShowcase(); $('showcaseCard').style.display = 'block';
     shlokaItems = shloka.json; renderShloka(); $('shlokaCard').style.display = 'block';
     $('aboutTextArea').value = (about.json && about.json.text) || ''; $('aboutCard').style.display = 'block';
+    newsItems = news.json; renderNews(); $('newsCard').style.display = 'block';
     setStatus($('connStatus'), '✓ सबै Load भयो।', 'ok');
   } catch (err) {
     setStatus($('connStatus'), '✗ ' + err.message, 'err');

@@ -63,6 +63,7 @@ news/, results/, lekh.json → पुराना template बाट बचे�
 - `data/showcase.json` — Showcase carousel (photo+text), `index.html` र `about.html` दुबैमा
 - `data/shlokas.json` — Hero (wheel को साइड) मा देखिने श्लोक + अर्थ; एकभन्दा बढी राख्नुभयो भने हरेक ५ सेकेन्डमा अर्को श्लोक देखिन्छ
 - `data/about.json` — Homepage को "हाम्रो बारेमा" card को text
+- `data/news.json` — About page को समाचार section (🗞️ icon, /about.html#news) — title + text + फोटो (optional), जति पनि थप्न मिल्छ
 
 यी सबै फाइल directly पनि edit गर्न मिल्छ (कुनै text editor बाट), वा admin.html बाट।
 
