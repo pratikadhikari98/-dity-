@@ -317,20 +317,25 @@ function renderNews() {
     div.innerHTML = `
       <label>शीर्षक (Title)</label>
       <input type="text" data-idx="${i}" data-field="title" value="${escapeHtml(item.title || '')}">
-      <label>विवरण (Text)</label>
-      <textarea data-idx="${i}" data-field="text">${escapeHtml(item.text || '')}</textarea>
-      <label>फोटो path (खाली राख्न मिल्छ — फोटो नचाहिए)</label>
+      <label>टेक्स्ट रङ</label>
+      <input type="color" data-idx="${i}" data-field="color" value="${escapeHtml(item.color || '#1a2a3a')}" style="width:60px;height:36px;padding:2px;">
+      <label>माथिको Featured फोटो path (optional — शीर्षक भन्दा माथि देखिने ठूलो फोटो)</label>
       <input type="text" data-idx="${i}" data-field="image" value="${escapeHtml(item.image || '')}">
       ${item.image ? `<img src="${escapeHtml(item.image)}" onerror="this.style.display='none'">` : ''}
-      <label>नयाँ फोटो अपलोड गर्ने हो भने (optional)</label>
+      <label>Featured फोटो अपलोड (optional)</label>
       <input type="file" accept="image/*" data-idx="${i}" data-field="file">
+      <label>विवरण (Text) — बीचमा जुनसुकै ठाउँमा फोटो थप्न तल "फोटो यहाँ थप्नुहोस्" प्रयोग गर्नुहोस्</label>
+      <textarea data-idx="${i}" data-field="text" id="newsTextArea${i}" style="min-height:160px;">${escapeHtml(item.text || '')}</textarea>
+      <input type="file" accept="image/*" data-idx="${i}" data-field="inline-file" style="display:none;">
+      <button type="button" class="btn-outline" data-idx="${i}" data-action="insert-photo" style="margin-top:8px;">📷 यहाँ (cursor मा) फोटो थप्नुहोस्</button>
+      <div class="hint">जति पनि फोटो थप्न सकिन्छ — जहाँ cursor राखेर बटन थिच्नुहुन्छ, त्यहीं फोटो insert हुन्छ।</div>
       <div class="slide-actions">
         <span class="hint">समाचार #${i + 1}</span>
         <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
       </div>`;
     list.appendChild(div);
   });
-  list.querySelectorAll('input[data-field="title"], textarea[data-field="text"], input[data-field="image"]').forEach(el => {
+  list.querySelectorAll('input[data-field="title"], input[data-field="color"], textarea[data-field="text"], input[data-field="image"]').forEach(el => {
     el.addEventListener('input', () => { newsItems[+el.dataset.idx][el.dataset.field] = el.value; });
   });
   list.querySelectorAll('input[data-field="file"]').forEach(el => {
@@ -339,8 +344,39 @@ function renderNews() {
   list.querySelectorAll('button[data-action="delete"]').forEach(el => {
     el.addEventListener('click', () => { newsItems.splice(+el.dataset.idx, 1); renderNews(); });
   });
+  list.querySelectorAll('button[data-action="insert-photo"]').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = +el.dataset.idx;
+      const fileInput = list.querySelector(`input[data-field="inline-file"][data-idx="${idx}"]`);
+      fileInput.click();
+    });
+  });
+  list.querySelectorAll('input[data-field="inline-file"]').forEach(el => {
+    el.addEventListener('change', async () => {
+      const idx = +el.dataset.idx;
+      if (!el.files[0]) return;
+      const btn = list.querySelector(`button[data-action="insert-photo"][data-idx="${idx}"]`);
+      const originalLabel = btn.textContent;
+      btn.textContent = 'अपलोड हुँदैछ...'; btn.disabled = true;
+      try {
+        const path = await ghUploadImage(el.files[0]);
+        const ta = document.getElementById('newsTextArea' + idx);
+        const start = ta.selectionStart, end = ta.selectionEnd;
+        const insertion = `\n\n<img src="${path}" alt="">\n\n`;
+        const val = ta.value;
+        ta.value = val.slice(0, start) + insertion + val.slice(end);
+        newsItems[idx].text = ta.value;
+        const pos = start + insertion.length;
+        ta.focus(); ta.setSelectionRange(pos, pos);
+      } catch (err) {
+        alert('फोटो अपलोड गर्न सकिएन: ' + err.message);
+      } finally {
+        btn.textContent = originalLabel; btn.disabled = false; el.value = '';
+      }
+    });
+  });
 }
-$('newsAddBtn').addEventListener('click', () => { newsItems.push({ title: '', text: '', image: '' }); renderNews(); });
+$('newsAddBtn').addEventListener('click', () => { newsItems.push({ title: '', text: '', image: '', color: '#1a2a3a' }); renderNews(); });
 $('newsSaveBtn').addEventListener('click', async () => {
   setStatus($('newsStatus'), 'Saving...', '');
   $('newsSaveBtn').disabled = true;
@@ -348,7 +384,7 @@ $('newsSaveBtn').addEventListener('click', async () => {
     for (const item of newsItems) {
       if (item._file) { item.image = await ghUploadImage(item._file); delete item._file; }
     }
-    const clean = newsItems.map(n => ({ title: n.title || '', text: n.text || '', image: n.image || '' }));
+    const clean = newsItems.map(n => ({ title: n.title || '', text: n.text || '', image: n.image || '', color: n.color || '#1a2a3a' }));
     await ghPutFile('data/news.json', clean, 'admin: update news.json');
     renderNews();
     setStatus($('newsStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');

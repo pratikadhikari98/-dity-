@@ -224,13 +224,23 @@ function closeLb(e) {
 loadGallery();
 </script>
 
-<!-- NEWS FEED — data/news.json बाट -->
+<!-- NEWS FEED — data/news.json बाट (text मा HTML/img/रङ चल्छ) -->
 <script>
 (function(){
   var el = document.getElementById('newsFeedList');
   if (!el) return;
   var src = el.dataset.source;
   function esc(s){ var d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
+  function toParagraphHtml(raw){
+    var blocks = String(raw || '').split(/\n\s*\n/);
+    return blocks.map(function(b){
+      var trimmed = b.trim();
+      if (!trimmed) return '';
+      // यदि यो ब्लक सिधै <img ...> ट्याग हो भने त्यसलाई as-is राख्ने, नत्र escape गरेर <br> सहित paragraph बनाउने
+      if (/^<img\b/i.test(trimmed)) return trimmed;
+      return '<p>' + esc(trimmed).replace(/\n/g, '<br>') + '</p>';
+    }).join('');
+  }
   fetch(src, { cache: 'no-store' })
     .then(function(r){ return r.json(); })
     .then(function(items){
@@ -241,8 +251,9 @@ loadGallery();
       el.innerHTML = items.map(function(item){
         var img = item.image ? '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '">' : '';
         var title = item.title ? '<h3>' + esc(item.title) + '</h3>' : '';
+        var color = item.color ? 'color:' + esc(item.color) + ';' : '';
         return '<div class="news-feed-card">' + img +
-               '<div class="nf-body">' + title + '<div class="nf-columns">' + esc(item.text) + '</div></div></div>';
+               '<div class="nf-body">' + title + '<div class="nf-columns" style="' + color + '">' + toParagraphHtml(item.text) + '</div></div></div>';
       }).join('');
     })
     .catch(function(){ el.innerHTML = '<div class="news-feed-empty">समाचार लोड गर्न सकिएन।</div>'; });
