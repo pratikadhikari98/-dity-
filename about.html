@@ -253,7 +253,7 @@ loadGallery();
         var title = item.title ? '<h3>' + esc(item.title) + '</h3>' : '';
         var color = item.color ? 'color:' + esc(item.color) + ';' : '';
         return '<div class="news-feed-card">' + img +
-               '<div class="nf-body">' + title + '<div class="nf-columns-wrap"><div class="nf-columns" style="' + color + '">' + toParagraphHtml(item.text) + '</div></div></div></div>';
+               '<div class="nf-body">' + title + '<div class="nf-columns" style="' + color + '">' + toParagraphHtml(item.text) + '</div></div></div>';
       }).join('');
     })
     .catch(function(){ el.innerHTML = '<div class="news-feed-empty">समाचार लोड गर्न सकिएन।</div>'; });
