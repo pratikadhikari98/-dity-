@@ -117,13 +117,34 @@
 </div>
 
 <div class="card" id="newsCard" style="display:none;">
-  <h2>5. समाचार (About page — 🗞️) <span class="badge" id="newsCount">0</span></h2>
+  <h2>5. समाचार 1 (About page — 🗞️) <span class="badge" id="newsCount">0</span></h2>
   <div id="newsList"></div>
   <div class="top-actions">
     <button class="btn-outline" id="newsAddBtn">+ नयाँ समाचार थप्नुहोस्</button>
-    <button class="btn-primary" id="newsSaveBtn">समाचार Save गर्नुहोस्</button>
+    <button class="btn-primary" id="newsSaveBtn">समाचार 1 Save गर्नुहोस्</button>
   </div>
   <div class="status" id="newsStatus"></div>
+</div>
+
+<div class="card" id="news2Card" style="display:none;">
+  <h2>6. समाचार 2 <span class="badge" id="news2Count">0</span></h2>
+  <div id="news2List"></div>
+  <div class="top-actions">
+    <button class="btn-outline" id="news2AddBtn">+ नयाँ समाचार थप्नुहोस्</button>
+    <button class="btn-primary" id="news2SaveBtn">समाचार 2 Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="news2Status"></div>
+</div>
+
+<div class="card" id="adsCard" style="display:none;">
+  <h2>7. विज्ञापन तस्बिरहरू (समाचार 2 तल — auto-swipe loop) <span class="badge" id="adsCount">0</span></h2>
+  <div class="hint">जति पनि फोटो थप्न मिल्छ — तिनीहरू auto-swipe loop मा homepage मा देखिन्छन्।</div>
+  <div id="adsList"></div>
+  <div class="top-actions">
+    <button class="btn-outline" id="adsAddBtn">+ नयाँ फोटो थप्नुहोस्</button>
+    <button class="btn-primary" id="adsSaveBtn">विज्ञापन Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="adsStatus"></div>
 </div>
 
 <script>
@@ -305,112 +326,173 @@ $('aboutSaveBtn').addEventListener('click', async () => {
   finally { $('aboutSaveBtn').disabled = false; }
 });
 
-// ═══════════════ NEWS ═══════════════
-let newsItems = [];
-function renderNews() {
-  $('newsCount').textContent = newsItems.length;
-  const list = $('newsList');
+// ═══════════════ NEWS (generic factory — दुबै समाचार 1 र 2 का लागि) ═══════════════
+function makeNewsEditor(cfg) {
+  // cfg: { items: [], listId, countId, addBtnId, saveBtnId, statusId, jsonPath, taPrefix }
+  let items = [];
+  function render() {
+    $(cfg.countId).textContent = items.length;
+    const list = $(cfg.listId);
+    list.innerHTML = '';
+    items.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'slide-card';
+      const taId = cfg.taPrefix + i;
+      div.innerHTML = `
+        <label>शीर्षक (Title)</label>
+        <input type="text" data-idx="${i}" data-field="title" value="${escapeHtml(item.title || '')}">
+        <label>टेक्स्ट रङ</label>
+        <input type="color" data-idx="${i}" data-field="color" value="${escapeHtml(item.color || '#1a2a3a')}" style="width:60px;height:36px;padding:2px;">
+        <label>माथिको Featured फोटो path (optional)</label>
+        <input type="text" data-idx="${i}" data-field="image" value="${escapeHtml(item.image || '')}">
+        ${item.image ? `<img src="${escapeHtml(item.image)}" onerror="this.style.display='none'">` : ''}
+        <label>Featured फोटो अपलोड (optional)</label>
+        <input type="file" accept="image/*" data-idx="${i}" data-field="file">
+        <label>विवरण (Text) — बीचमा जुनसुकै ठाउँमा फोटो थप्न तल बटन प्रयोग गर्नुहोस्</label>
+        <textarea data-idx="${i}" data-field="text" id="${taId}" style="min-height:160px;">${escapeHtml(item.text || '')}</textarea>
+        <input type="file" accept="image/*" data-idx="${i}" data-field="inline-file" style="display:none;">
+        <button type="button" class="btn-outline" data-idx="${i}" data-action="insert-photo" style="margin-top:8px;">📷 यहाँ (cursor मा) फोटो थप्नुहोस्</button>
+        <div class="hint">जति पनि फोटो थप्न सकिन्छ — जहाँ cursor राखेर बटन थिच्नुहुन्छ, त्यहीं फोटो insert हुन्छ।</div>
+        <div class="slide-actions">
+          <span class="hint">समाचार #${i + 1}</span>
+          <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
+        </div>`;
+      list.appendChild(div);
+    });
+    list.querySelectorAll('input[data-field="title"], input[data-field="color"], textarea[data-field="text"], input[data-field="image"]').forEach(el => {
+      el.addEventListener('input', () => { items[+el.dataset.idx][el.dataset.field] = el.value; });
+    });
+    list.querySelectorAll('input[data-field="file"]').forEach(el => {
+      el.addEventListener('change', () => { if (el.files[0]) items[+el.dataset.idx]._file = el.files[0]; });
+    });
+    list.querySelectorAll('button[data-action="delete"]').forEach(el => {
+      el.addEventListener('click', () => { items.splice(+el.dataset.idx, 1); render(); });
+    });
+    list.querySelectorAll('button[data-action="insert-photo"]').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = +el.dataset.idx;
+        list.querySelector(`input[data-field="inline-file"][data-idx="${idx}"]`).click();
+      });
+    });
+    list.querySelectorAll('input[data-field="inline-file"]').forEach(el => {
+      el.addEventListener('change', async () => {
+        const idx = +el.dataset.idx;
+        if (!el.files[0]) return;
+        const btn = list.querySelector(`button[data-action="insert-photo"][data-idx="${idx}"]`);
+        const originalLabel = btn.textContent;
+        btn.textContent = 'अपलोड हुँदैछ...'; btn.disabled = true;
+        try {
+          const path = await ghUploadImage(el.files[0]);
+          const ta = document.getElementById(cfg.taPrefix + idx);
+          const start = ta.selectionStart, end = ta.selectionEnd;
+          const insertion = `\n\n<img src="${path}" alt="">\n\n`;
+          const val = ta.value;
+          ta.value = val.slice(0, start) + insertion + val.slice(end);
+          items[idx].text = ta.value;
+          const pos = start + insertion.length;
+          ta.focus(); ta.setSelectionRange(pos, pos);
+        } catch (err) {
+          alert('फोटो अपलोड गर्न सकिएन: ' + err.message);
+        } finally {
+          btn.textContent = originalLabel; btn.disabled = false; el.value = '';
+        }
+      });
+    });
+  }
+  $(cfg.addBtnId).addEventListener('click', () => { items.push({ title: '', text: '', image: '', color: '#1a2a3a' }); render(); });
+  $(cfg.saveBtnId).addEventListener('click', async () => {
+    setStatus($(cfg.statusId), 'Saving...', '');
+    $(cfg.saveBtnId).disabled = true;
+    try {
+      for (const item of items) {
+        if (item._file) { item.image = await ghUploadImage(item._file); delete item._file; }
+      }
+      const clean = items.map(n => ({ title: n.title || '', text: n.text || '', image: n.image || '', color: n.color || '#1a2a3a' }));
+      await ghPutFile(cfg.jsonPath, clean, 'admin: update ' + cfg.jsonPath);
+      render();
+      setStatus($(cfg.statusId), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+    } catch (err) { setStatus($(cfg.statusId), '✗ ' + err.message, 'err'); }
+    finally { $(cfg.saveBtnId).disabled = false; }
+  });
+  return {
+    setItems(v) { items = v; render(); },
+    getPath() { return cfg.jsonPath; }
+  };
+}
+const newsEditor1 = makeNewsEditor({ listId:'newsList', countId:'newsCount', addBtnId:'newsAddBtn', saveBtnId:'newsSaveBtn', statusId:'newsStatus', jsonPath:'data/news.json', taPrefix:'newsTextArea' });
+const newsEditor2 = makeNewsEditor({ listId:'news2List', countId:'news2Count', addBtnId:'news2AddBtn', saveBtnId:'news2SaveBtn', statusId:'news2Status', jsonPath:'data/news2.json', taPrefix:'news2TextArea' });
+
+// ═══════════════ ADS (image-only list, auto-swipe loop) ═══════════════
+let adsItems = [];
+function renderAds() {
+  $('adsCount').textContent = adsItems.length;
+  const list = $('adsList');
   list.innerHTML = '';
-  newsItems.forEach((item, i) => {
+  adsItems.forEach((item, i) => {
     const div = document.createElement('div');
     div.className = 'slide-card';
     div.innerHTML = `
-      <label>शीर्षक (Title)</label>
-      <input type="text" data-idx="${i}" data-field="title" value="${escapeHtml(item.title || '')}">
-      <label>टेक्स्ट रङ</label>
-      <input type="color" data-idx="${i}" data-field="color" value="${escapeHtml(item.color || '#1a2a3a')}" style="width:60px;height:36px;padding:2px;">
-      <label>माथिको Featured फोटो path (optional — शीर्षक भन्दा माथि देखिने ठूलो फोटो)</label>
+      <label>फोटो path</label>
       <input type="text" data-idx="${i}" data-field="image" value="${escapeHtml(item.image || '')}">
       ${item.image ? `<img src="${escapeHtml(item.image)}" onerror="this.style.display='none'">` : ''}
-      <label>Featured फोटो अपलोड (optional)</label>
+      <label>नयाँ फोटो अपलोड</label>
       <input type="file" accept="image/*" data-idx="${i}" data-field="file">
-      <label>विवरण (Text) — बीचमा जुनसुकै ठाउँमा फोटो थप्न तल "फोटो यहाँ थप्नुहोस्" प्रयोग गर्नुहोस्</label>
-      <textarea data-idx="${i}" data-field="text" id="newsTextArea${i}" style="min-height:160px;">${escapeHtml(item.text || '')}</textarea>
-      <input type="file" accept="image/*" data-idx="${i}" data-field="inline-file" style="display:none;">
-      <button type="button" class="btn-outline" data-idx="${i}" data-action="insert-photo" style="margin-top:8px;">📷 यहाँ (cursor मा) फोटो थप्नुहोस्</button>
-      <div class="hint">जति पनि फोटो थप्न सकिन्छ — जहाँ cursor राखेर बटन थिच्नुहुन्छ, त्यहीं फोटो insert हुन्छ।</div>
       <div class="slide-actions">
-        <span class="hint">समाचार #${i + 1}</span>
+        <span class="hint">फोटो #${i + 1}</span>
         <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
       </div>`;
     list.appendChild(div);
   });
-  list.querySelectorAll('input[data-field="title"], input[data-field="color"], textarea[data-field="text"], input[data-field="image"]').forEach(el => {
-    el.addEventListener('input', () => { newsItems[+el.dataset.idx][el.dataset.field] = el.value; });
+  list.querySelectorAll('input[data-field="image"]').forEach(el => {
+    el.addEventListener('input', () => { adsItems[+el.dataset.idx].image = el.value; });
   });
   list.querySelectorAll('input[data-field="file"]').forEach(el => {
-    el.addEventListener('change', () => { if (el.files[0]) newsItems[+el.dataset.idx]._file = el.files[0]; });
+    el.addEventListener('change', () => { if (el.files[0]) adsItems[+el.dataset.idx]._file = el.files[0]; });
   });
   list.querySelectorAll('button[data-action="delete"]').forEach(el => {
-    el.addEventListener('click', () => { newsItems.splice(+el.dataset.idx, 1); renderNews(); });
-  });
-  list.querySelectorAll('button[data-action="insert-photo"]').forEach(el => {
-    el.addEventListener('click', () => {
-      const idx = +el.dataset.idx;
-      const fileInput = list.querySelector(`input[data-field="inline-file"][data-idx="${idx}"]`);
-      fileInput.click();
-    });
-  });
-  list.querySelectorAll('input[data-field="inline-file"]').forEach(el => {
-    el.addEventListener('change', async () => {
-      const idx = +el.dataset.idx;
-      if (!el.files[0]) return;
-      const btn = list.querySelector(`button[data-action="insert-photo"][data-idx="${idx}"]`);
-      const originalLabel = btn.textContent;
-      btn.textContent = 'अपलोड हुँदैछ...'; btn.disabled = true;
-      try {
-        const path = await ghUploadImage(el.files[0]);
-        const ta = document.getElementById('newsTextArea' + idx);
-        const start = ta.selectionStart, end = ta.selectionEnd;
-        const insertion = `\n\n<img src="${path}" alt="">\n\n`;
-        const val = ta.value;
-        ta.value = val.slice(0, start) + insertion + val.slice(end);
-        newsItems[idx].text = ta.value;
-        const pos = start + insertion.length;
-        ta.focus(); ta.setSelectionRange(pos, pos);
-      } catch (err) {
-        alert('फोटो अपलोड गर्न सकिएन: ' + err.message);
-      } finally {
-        btn.textContent = originalLabel; btn.disabled = false; el.value = '';
-      }
-    });
+    el.addEventListener('click', () => { adsItems.splice(+el.dataset.idx, 1); renderAds(); });
   });
 }
-$('newsAddBtn').addEventListener('click', () => { newsItems.push({ title: '', text: '', image: '', color: '#1a2a3a' }); renderNews(); });
-$('newsSaveBtn').addEventListener('click', async () => {
-  setStatus($('newsStatus'), 'Saving...', '');
-  $('newsSaveBtn').disabled = true;
+$('adsAddBtn').addEventListener('click', () => { adsItems.push({ image: '' }); renderAds(); });
+$('adsSaveBtn').addEventListener('click', async () => {
+  setStatus($('adsStatus'), 'Saving...', '');
+  $('adsSaveBtn').disabled = true;
   try {
-    for (const item of newsItems) {
+    for (const item of adsItems) {
       if (item._file) { item.image = await ghUploadImage(item._file); delete item._file; }
     }
-    const clean = newsItems.map(n => ({ title: n.title || '', text: n.text || '', image: n.image || '', color: n.color || '#1a2a3a' }));
-    await ghPutFile('data/news.json', clean, 'admin: update news.json');
-    renderNews();
-    setStatus($('newsStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
-  } catch (err) { setStatus($('newsStatus'), '✗ ' + err.message, 'err'); }
-  finally { $('newsSaveBtn').disabled = false; }
+    const clean = adsItems.map(a => ({ image: a.image || '' }));
+    await ghPutFile('data/ads.json', clean, 'admin: update ads.json');
+    renderAds();
+    setStatus($('adsStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+  } catch (err) { setStatus($('adsStatus'), '✗ ' + err.message, 'err'); }
+  finally { $('adsSaveBtn').disabled = false; }
 });
 
 // ═══════════════ LOAD ALL ═══════════════
 $('loadBtn').addEventListener('click', async () => {
   setStatus($('connStatus'), 'Loading...', '');
   try {
-    const [showcase, shloka, about, news] = await Promise.all([
+    const [showcase, shloka, about, news, news2, ads] = await Promise.all([
       ghGetFile('data/showcase.json'),
       ghGetFile('data/shlokas.json'),
       ghGetFile('data/about.json'),
-      ghGetFile('data/news.json')
+      ghGetFile('data/news.json'),
+      ghGetFile('data/news2.json'),
+      ghGetFile('data/ads.json')
     ]);
     showcaseItems = showcase.json; renderShowcase(); $('showcaseCard').style.display = 'block';
     shlokaItems = shloka.json; renderShloka(); $('shlokaCard').style.display = 'block';
     $('aboutTextArea').value = (about.json && about.json.text) || ''; $('aboutCard').style.display = 'block';
-    newsItems = news.json; renderNews(); $('newsCard').style.display = 'block';
+    newsEditor1.setItems(news.json); $('newsCard').style.display = 'block';
+    newsEditor2.setItems(news2.json); $('news2Card').style.display = 'block';
+    adsItems = ads.json; renderAds(); $('adsCard').style.display = 'block';
     setStatus($('connStatus'), '✓ सबै Load भयो।', 'ok');
   } catch (err) {
     setStatus($('connStatus'), '✗ ' + err.message, 'err');
   }
 });
+
 </script>
 
 </body>
