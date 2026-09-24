@@ -67,7 +67,9 @@ news/, results/, lekh.json → पुराना template बाट बचे�
 - `data/news2.json` — "समाचार 2" panel — 1-column layout (फोटो जुनसुकै ठाउँमा, पूरा चौडाइमा)।
 - `data/ads.json` — समाचार 2 को अन्त्यमा देखिने विज्ञापन तस्बिर carousel — auto-swipe loop (हरेक 3.5 सेकेन्ड) + manual swipe।
 
-🗞️ नेभिगेसनले अब `news.html` भन्ने छुट्टै पेज खोल्छ (about.html भित्रको section होइन) — त्यसैले क्लिक गर्दा केवल समाचार 1 र 2 मात्र देखिन्छ, बारेमा/features जस्ता अरू content मिसिँदैन।
+🗞️ नेभिगेसनले अब `news.html` भन्ने छुट्टै पेज खोल्छ (about.html भित्रको section होइन) — त्यसैले क्लिक गर्दा केवल समाचार 1 र 2 मात्र देखिन्छ, बारेमा/features जस्ता अरू content मिसिँदैन। दुबै panel बीचको heading ("🗞️ समाचार") हटाइएको छ र gap साँघुरो बनाइएको छ।
+
+समाचार text मा अब कुनै पनि अंश Bold वा फरक रङ बनाउन मिल्छ — admin.html मा text छान्नुहोस् (select गर्नुहोस्) अनि "Bold बनाउनुहोस्" वा "रङ लगाउनुहोस्" बटन थिच्नुहोस्।
 
 यी सबै फाइल directly पनि edit गर्न मिल्छ (कुनै text editor बाट), वा admin.html बाट।
 

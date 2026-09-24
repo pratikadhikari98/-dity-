@@ -15,17 +15,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=20260922" id="themeStylesheet">
 <style>
-  #siteHeader { position: sticky !important; top: 0 !important; width: 100% !important; transform: none !important; }
-  #headerSpacer { display: none !important; }
   .news-page-inner { max-width: 1080px; margin: 0 auto; }
+  .news-feed-section { padding-top: 24px; padding-bottom: 24px; }
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<header id="siteHeader">
+<header>
   <div class="logo-area">
-    <img src="photos/aditya-logo.png" alt="ADITYA" class="aditya-logo-img" id="adityaLogoImg">
+    <img src="photos/aditya-logo.png" alt="ADITYA" class="aditya-logo-img">
   </div>
   <nav>
     <a href="index.html">गृहपृष्ठ</a>
@@ -40,12 +39,10 @@
   <!-- NEWS SECTION (Newspaper 1 + Newspaper 2) -->
   <div id="news">
     <section class="news-feed-section">
-      <h2 class="news-feed-heading"><span>🗞️</span> समाचार <span>🗞️</span></h2>
       <div class="news-feed-list" id="newsFeedList" data-source="data/news.json"></div>
     </section>
 
     <section class="news-feed-section">
-      <h2 class="news-feed-heading"><span>🗞️</span> समाचार 2 <span>🗞️</span></h2>
       <div class="news-feed-list news-feed-list-single" id="newsFeedList2" data-source="data/news2.json"></div>
       <div class="ad-carousel" id="adCarousel" data-source="data/ads.json">
         <div class="ad-carousel-track" id="adCarouselTrack"></div>
@@ -76,7 +73,8 @@
       var trimmed = b.trim();
       if (!trimmed) return '';
       if (/^<img\b/i.test(trimmed)) return trimmed;
-      return '<p>' + esc(trimmed).replace(/\n/g, '<br>') + '</p>';
+      // यहाँ HTML (<b>, <span style="color:...">, आदि) चल्छ — admin ले टाइप गरेको जस्ताको तस्तै देखिन्छ
+      return '<p>' + trimmed.replace(/\n/g, '<br>') + '</p>';
     }).join('');
   }
   function loadNewsFeed(el, columnsClass){

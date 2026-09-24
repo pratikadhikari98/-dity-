@@ -348,11 +348,16 @@ function makeNewsEditor(cfg) {
         ${item.image ? `<img src="${escapeHtml(item.image)}" onerror="this.style.display='none'">` : ''}
         <label>Featured फोटो अपलोड (optional)</label>
         <input type="file" accept="image/*" data-idx="${i}" data-field="file">
-        <label>विवरण (Text) — बीचमा जुनसुकै ठाउँमा फोटो थप्न तल बटन प्रयोग गर्नुहोस्</label>
+        <label>विवरण (Text) — कुनै अंश selection (छान्नु) गरेर तल Bold/रङ बटन थिच्दा त्यही अंश मात्र बोल्ड/रङमा बदलिन्छ। फोटो थप्न cursor राखेर "फोटो थप्नुहोस्" थिच्नुहोस्।</label>
         <textarea data-idx="${i}" data-field="text" id="${taId}" style="min-height:160px;">${escapeHtml(item.text || '')}</textarea>
         <input type="file" accept="image/*" data-idx="${i}" data-field="inline-file" style="display:none;">
-        <button type="button" class="btn-outline" data-idx="${i}" data-action="insert-photo" style="margin-top:8px;">📷 यहाँ (cursor मा) फोटो थप्नुहोस्</button>
-        <div class="hint">जति पनि फोटो थप्न सकिन्छ — जहाँ cursor राखेर बटन थिच्नुहुन्छ, त्यहीं फोटो insert हुन्छ।</div>
+        <input type="color" data-idx="${i}" data-field="inline-color" style="display:none;">
+        <div class="row" style="margin-top:8px;">
+          <button type="button" class="btn-outline" data-idx="${i}" data-action="insert-photo">📷 फोटो थप्नुहोस्</button>
+          <button type="button" class="btn-outline" data-idx="${i}" data-action="make-bold"><b>B</b> Bold बनाउनुहोस्</button>
+          <button type="button" class="btn-outline" data-idx="${i}" data-action="make-color">🎨 रङ लगाउनुहोस्</button>
+        </div>
+        <div class="hint">जति पनि फोटो थप्न सकिन्छ, जुनसुकै ठाउँमा। छानिएको (selected) टेक्स्टलाई मात्र Bold वा रङ लगाउन मिल्छ।</div>
         <div class="slide-actions">
           <span class="hint">समाचार #${i + 1}</span>
           <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
@@ -372,6 +377,40 @@ function makeNewsEditor(cfg) {
       el.addEventListener('click', () => {
         const idx = +el.dataset.idx;
         list.querySelector(`input[data-field="inline-file"][data-idx="${idx}"]`).click();
+      });
+    });
+    list.querySelectorAll('button[data-action="make-bold"]').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = +el.dataset.idx;
+        const ta = document.getElementById(cfg.taPrefix + idx);
+        const start = ta.selectionStart, end = ta.selectionEnd;
+        if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि यो बटन थिच्नुहोस्।'); return; }
+        const val = ta.value;
+        const selected = val.slice(start, end);
+        const wrapped = '<b>' + selected + '</b>';
+        ta.value = val.slice(0, start) + wrapped + val.slice(end);
+        items[idx].text = ta.value;
+        const pos = start + wrapped.length;
+        ta.focus(); ta.setSelectionRange(pos, pos);
+      });
+    });
+    list.querySelectorAll('button[data-action="make-color"]').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = +el.dataset.idx;
+        const ta = document.getElementById(cfg.taPrefix + idx);
+        const start = ta.selectionStart, end = ta.selectionEnd;
+        if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि यो बटन थिच्नुहोस्।'); return; }
+        const colorInput = list.querySelector(`input[data-field="inline-color"][data-idx="${idx}"]`);
+        colorInput.onchange = () => {
+          const val = ta.value;
+          const selected = val.slice(start, end);
+          const wrapped = `<span style="color:${colorInput.value}">${selected}</span>`;
+          ta.value = val.slice(0, start) + wrapped + val.slice(end);
+          items[idx].text = ta.value;
+          const pos = start + wrapped.length;
+          ta.focus(); ta.setSelectionRange(pos, pos);
+        };
+        colorInput.click();
       });
     });
     list.querySelectorAll('input[data-field="inline-file"]').forEach(el => {
