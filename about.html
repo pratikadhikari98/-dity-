@@ -31,6 +31,7 @@
   <nav>
     <a href="index.html">गृहपृष्ठ</a>
     <a href="about.html" class="active">बारेमा</a>
+    <a href="news.html">समाचार</a>
     <a href="#contact">सम्पर्क</a>
     <a href="#admission" class="btn-admit">भर्ना खुला</a>
   </nav>
@@ -63,23 +64,6 @@
       <div class="feature-card"><div class="feature-icon">📚</div><h3>ग्रन्थ संरक्षण</h3><p>वैदिक तथा शास्त्रीय ग्रन्थहरूको संकलन, संरक्षण र सम्पादन।</p></div>
     </div>
   </section>
-
-  <!-- NEWS SECTION (Newspaper 1 + Newspaper 2) -->
-  <div id="news">
-    <section class="news-feed-section">
-      <h2 class="news-feed-heading"><span>🗞️</span> समाचार <span>🗞️</span></h2>
-      <div class="news-feed-list" id="newsFeedList" data-source="data/news.json"></div>
-    </section>
-
-    <section class="news-feed-section">
-      <h2 class="news-feed-heading"><span>🗞️</span> समाचार 2 <span>🗞️</span></h2>
-      <div class="news-feed-list" id="newsFeedList2" data-source="data/news2.json"></div>
-      <div class="ad-carousel" id="adCarousel" data-source="data/ads.json">
-        <div class="ad-carousel-track" id="adCarouselTrack"></div>
-        <div class="ad-carousel-dots" id="adCarouselDots"></div>
-      </div>
-    </section>
-  </div>
 
   <!-- PHOTO GALLERY SECTION -->
   <section class="gallery-section" id="gallery">
@@ -191,7 +175,7 @@
 <div class="bottom-app-bar">
   <div class="bottom-app-bar-inner">
     <a href="index.html#home" class="app-icon-btn" title="गृहपृष्ठ"><span>🏠</span></a>
-    <a href="#news" class="app-icon-btn" title="समाचार"><span>🗞️</span></a>
+    <a href="news.html" class="app-icon-btn" title="समाचार"><span>🗞️</span></a>
     <a href="#gallery" class="app-icon-btn" title="ग्यालरी"><span>🖼️</span></a>
     <a href="#contact" class="app-icon-btn" title="सम्पर्क"><span>☎️</span></a>
   </div>
@@ -235,93 +219,6 @@ function closeLb(e) {
 loadGallery();
 </script>
 
-<!-- NEWS FEED — data/news.json र data/news2.json बाट (text मा HTML/img/रङ चल्छ) -->
-<script>
-(function(){
-  function esc(s){ var d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
-  function toParagraphHtml(raw){
-    var blocks = String(raw || '').split(/\n\s*\n/);
-    return blocks.map(function(b){
-      var trimmed = b.trim();
-      if (!trimmed) return '';
-      if (/^<img\b/i.test(trimmed)) return trimmed;
-      return '<p>' + esc(trimmed).replace(/\n/g, '<br>') + '</p>';
-    }).join('');
-  }
-  function loadNewsFeed(el){
-    if (!el) return;
-    var src = el.dataset.source;
-    fetch(src, { cache: 'no-store' })
-      .then(function(r){ return r.json(); })
-      .then(function(items){
-        if (!items || !items.length) {
-          el.innerHTML = '<div class="news-feed-empty">हाल कुनै समाचार छैन।</div>';
-          return;
-        }
-        el.innerHTML = items.map(function(item){
-          var img = item.image ? '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '">' : '';
-          var title = item.title ? '<h3>' + esc(item.title) + '</h3>' : '';
-          var color = item.color ? 'color:' + esc(item.color) + ';' : '';
-          return '<div class="news-feed-card">' + img +
-                 '<div class="nf-body">' + title + '<div class="nf-columns" style="' + color + '">' + toParagraphHtml(item.text) + '</div></div></div>';
-        }).join('');
-      })
-      .catch(function(){ el.innerHTML = '<div class="news-feed-empty">समाचार लोड गर्न सकिएन।</div>'; });
-  }
-  loadNewsFeed(document.getElementById('newsFeedList'));
-  loadNewsFeed(document.getElementById('newsFeedList2'));
-})();
-</script>
-
-<!-- AD CAROUSEL — data/ads.json बाट, auto + manual swipe, loop -->
-<script>
-(function(){
-  var wrap = document.getElementById('adCarousel');
-  if (!wrap) return;
-  var track = document.getElementById('adCarouselTrack');
-  var dotsWrap = document.getElementById('adCarouselDots');
-  var src = wrap.dataset.source;
-
-  fetch(src, { cache: 'no-store' })
-    .then(function(r){ return r.json(); })
-    .then(function(items){
-      if (!items || !items.length) { wrap.style.display = 'none'; return; }
-      track.innerHTML = items.map(function(item){
-        return '<div class="ad-slide"><img src="' + item.image + '" alt="विज्ञापन"></div>';
-      }).join('');
-      var slides = track.children;
-      dotsWrap.innerHTML = '';
-      for (var i = 0; i < slides.length; i++) {
-        var d = document.createElement('span');
-        d.dataset.index = i;
-        if (i === 0) d.classList.add('active');
-        d.addEventListener('click', function(){
-          track.scrollTo({ left: track.clientWidth * (+this.dataset.index), behavior: 'smooth' });
-        });
-        dotsWrap.appendChild(d);
-      }
-      var dots = dotsWrap.children;
-      function currentIndex(){ return Math.round(track.scrollLeft / track.clientWidth); }
-      function setActive(idx){ for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === idx); }
-      track.addEventListener('scroll', function(){ setActive(currentIndex()); }, { passive: true });
-
-      if (slides.length > 1) {
-        var autoTimer = null;
-        function nextSlide(){
-          var next = (currentIndex() + 1) % slides.length;
-          track.scrollTo({ left: track.clientWidth * next, behavior: 'smooth' });
-        }
-        function startAuto(){ stopAuto(); autoTimer = setInterval(nextSlide, 3500); }
-        function stopAuto(){ if (autoTimer) clearInterval(autoTimer); }
-        startAuto();
-        track.addEventListener('pointerdown', stopAuto);
-        track.addEventListener('pointerup', function(){ setTimeout(startAuto, 1800); });
-        track.addEventListener('mouseleave', function(){ setTimeout(startAuto, 1800); });
-      }
-    })
-    .catch(function(){ wrap.style.display = 'none'; });
-})();
-</script>
 
 <script>
 // ══ GRAVITY BOXES — sky/white theme ══

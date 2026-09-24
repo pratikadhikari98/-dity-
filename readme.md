@@ -63,9 +63,11 @@ news/, results/, lekh.json → पुराना template बाट बचे�
 - `data/showcase.json` — Showcase carousel (photo+text), `index.html` र `about.html` दुबैमा
 - `data/shlokas.json` — Hero (wheel को साइड) मा देखिने श्लोक + अर्थ; एकभन्दा बढी राख्नुभयो भने हरेक ५ सेकेन्डमा अर्को श्लोक देखिन्छ
 - `data/about.json` — Homepage को "हाम्रो बारेमा" card को text
-- `data/news.json` — "समाचार 1" panel (🗞️ icon → /about.html#news) — title + text + रङ (color) + featured फोटो, जति पनि समाचार थप्न मिल्छ। Text भित्र जुनसुकै ठाउँमा जति पनि फोटो राख्न मिल्छ (admin.html को "फोटो यहाँ थप्नुहोस्" बटनले cursor भएको ठाउँमा फोटो insert गर्छ)। 3-column newspaper layout (mobile/desktop दुवैमा उही size)।
-- `data/news2.json` — "समाचार 2" panel — news.json कै संरचना, समाचार 1 को ठीक तल छुट्टै panel को रूपमा देखिन्छ।
-- `data/ads.json` — समाचार 2 को अन्त्यमा देखिने विज्ञापन तस्बिर carousel — जति पनि फोटो थप्न मिल्छ, auto-swipe loop (हरेक 3.5 सेकेन्ड) + manual swipe दुवै चल्छ।
+- `data/news.json` — "समाचार 1" panel — title + text + रङ (color) + featured फोटो, जति पनि समाचार थप्न मिल्छ। 3-column newspaper layout, Khand font।
+- `data/news2.json` — "समाचार 2" panel — 1-column layout (फोटो जुनसुकै ठाउँमा, पूरा चौडाइमा)।
+- `data/ads.json` — समाचार 2 को अन्त्यमा देखिने विज्ञापन तस्बिर carousel — auto-swipe loop (हरेक 3.5 सेकेन्ड) + manual swipe।
+
+🗞️ नेभिगेसनले अब `news.html` भन्ने छुट्टै पेज खोल्छ (about.html भित्रको section होइन) — त्यसैले क्लिक गर्दा केवल समाचार 1 र 2 मात्र देखिन्छ, बारेमा/features जस्ता अरू content मिसिँदैन।
 
 यी सबै फाइल directly पनि edit गर्न मिल्छ (कुनै text editor बाट), वा admin.html बाट।
 
