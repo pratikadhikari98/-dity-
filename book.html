@@ -1,0 +1,166 @@
+<!-- Flip-book adapted from "creative_coding-flip_book" by Fabien CHAVONET (github.com/fchavonet) -->
+<!DOCTYPE html>
+<html lang="ne">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>किताब - ADITYA</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#5c2f26">
+    <link rel="apple-touch-icon" href="icon-192.svg">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="flipbook/flipbook.css">
+
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- DAISYUI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- SCRIPT -->
+    <script src="flipbook/flipbook.js" defer></script>
+
+    <style>
+        #backHomeBtn {
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.9);
+            color: #5c2f26;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 8px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" id="backHomeBtn">← ADITYA</a>
+
+    <main>
+        <!-- TOP CONTAINER -->
+        <div class="fixed top-0 left-0 w-full h-auto p-4 flex flex-row justify-end items-center">
+            <!-- Toggle mode button -->
+            <label class="swap swap-rotate">
+                <input type="checkbox" class="theme-controller" value="black" />
+                <i class="bi bi-sun-fill swap-on"></i>
+                <i class="bi bi-moon-stars-fill swap-off"></i>
+            </label>
+        </div>
+
+        <!-- FLIP BOOK -->
+        <input type="checkbox" id="cover_checkbox">
+        <input type="checkbox" id="page1_checkbox">
+        <input type="checkbox" id="page2_checkbox">
+        <input type="checkbox" id="page3_checkbox">
+        <input type="checkbox" id="page4_checkbox">
+        <input type="checkbox" id="page5_checkbox">
+
+        <div id="flip_book">
+            <div class="front_cover">
+                <label for="cover_checkbox" id="cover"></label>
+            </div>
+
+            <div class="page" id="page1">
+                <div class="front_page">
+                    <label for="page1_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
+                    <img class="front_content" src="flipbook/images/pages/page1.webp" alt="Front content">
+                </div>
+
+                <div class="back_page">
+                    <label for="page1_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
+                    <img class="back_content" src="flipbook/images/pages/page2.webp" alt="Back content">
+                </div>
+            </div>
+
+            <div class="page" id="page2">
+                <div class="front_page">
+                    <label for="page2_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
+                    <img class="front_content" src="flipbook/images/pages/page3.webp" alt="Front content">
+                </div>
+
+                <div class="back_page">
+                    <label for="page2_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
+                    <img class="back_content" src="flipbook/images/pages/page4.webp" alt="Back content">
+                </div>
+            </div>
+
+            <div class="page" id="page3">
+                <div class="front_page">
+                    <label for="page3_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
+                    <img class="front_content" src="flipbook/images/pages/page5.webp" alt="Front content">
+                </div>
+
+                <div class="back_page">
+                    <label for="page3_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
+                    <img class="back_content" src="flipbook/images/pages/page6.webp" alt="Back content">
+                </div>
+            </div>
+
+            <div class="page" id="page4">
+                <div class="front_page">
+                    <label for="page4_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
+                    <img class="front_content" src="flipbook/images/pages/page7.webp" alt="Front content">
+                </div>
+
+                <div class="back_page">
+                    <label for="page4_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
+                    <img class="back_content" src="flipbook/images/pages/page8.webp" alt="Back content">
+                </div>
+            </div>
+
+            <div class="page" id="page5">
+                <div class="front_page">
+                    <label for="page5_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
+                    <img class="front_content" src="flipbook/images/pages/page9.webp" alt="Front content">
+                </div>
+
+                <div class="back_page">
+                    <label for="page5_checkbox"></label>
+                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
+                    <img class="back_content" src="flipbook/images/pages/page10.webp" alt="Back content">
+                </div>
+            </div>
+
+            <div class="back_cover"></div>
+        </div>
+
+        <!-- RESPONSIVE WARNING -->
+        <dialog id="responsive-warning" class="modal backdrop-blur-xl">
+            <div class="modal-box max-w-xs flex flex-col justify-center items-center gap-4 text-center rounded-xl bg-base-300">
+                <i class="bi bi-aspect-ratio text-4xl"></i>
+
+                <p class="text-lg font-semibold -mt-2">
+                    This web application is designed for larger screens.
+                </p>
+
+                <p class="text-xs">
+                    A mobile-friendly version is coming soon...
+                </p>
+            </div>
+        </dialog>
+    </main>
+</body>
+
+</html>

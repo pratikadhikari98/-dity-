@@ -75,3 +75,11 @@ news/, results/, lekh.json → पुराना template बाट बचे�
 
 ⚠️ **सुरक्षा नोट**: `admin.html` लाई link नगर्नुहोस् (header/footer मा नराख्नुहोस्) — जसलाई URL थाहा छ उसैले मात्र प्रयोग गरून् भन्नका लागि। Token आफ्नै मात्र भएको browser मा राख्नुहोस्, अरूसँग share नगर्नुहोस्।
 
+
+## 📖 Flip Book (`book.html`)
+Navigation मा 🗞️ को छेउमा थपिएको 📖 icon ले `book.html` खोल्छ — एउटा interactive flip-book (पाना पल्टाउन मिल्ने किताब), CSS/HTML भरमा बनेको। Assets `flipbook/` फोल्डरमा छन् (`flipbook.css`, `flipbook.js`, `images/`)।
+
+- पानाहरूको फोटो बदल्न चाहनुभयो भने `flipbook/images/pages/page1.webp` देखि `page10.webp` सम्म replace गर्नुहोस् (उही नाम/format मा)।
+- सानो screen (mobile) मा हाल यो किताब राम्ररी काम नगर्न सक्छ भनेर एउटा सानो सूचना (dialog) देखिन सक्छ — यो original project कै behavior हो।
+
+यो feature मूलतः [creative_coding-flip_book](https://github.com/fchavonet/creative_coding-flip_book) (Fabien CHAVONET) बाट adapt गरिएको हो।
