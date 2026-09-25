@@ -43,6 +43,10 @@
             text-decoration: none;
             box-shadow: 0 4px 14px rgba(0,0,0,0.15);
         }
+        #bookScaleWrap {
+            transform-origin: center center;
+            transition: transform .15s ease;
+        }
     </style>
 </head>
 
@@ -60,7 +64,8 @@
             </label>
         </div>
 
-        <!-- FLIP BOOK -->
+        <!-- FLIP BOOK (मोबाइलमा फिट हुनका लागि scale गरिन्छ, script हेर्नुहोस्) -->
+        <div id="bookScaleWrap">
         <input type="checkbox" id="cover_checkbox">
         <input type="checkbox" id="page1_checkbox">
         <input type="checkbox" id="page2_checkbox">
@@ -145,6 +150,7 @@
 
             <div class="back_cover"></div>
         </div>
+        </div>
 
         <!-- RESPONSIVE WARNING -->
         <dialog id="responsive-warning" class="modal backdrop-blur-xl">
@@ -161,6 +167,28 @@
             </div>
         </dialog>
     </main>
+
+    <!-- खुला किताब पूरै viewport भित्र अट्ने गरी zoom-out गर्ने -->
+    <script>
+        (function () {
+            var wrap = document.getElementById('bookScaleWrap');
+            if (!wrap) return;
+            // किताब पूरा खुल्दा हुने अधिकतम चौडाइ/उचाइ (cover 298px + translateX 144px शिफ्ट, दुबैतिर)
+            var MAX_W = 620;
+            var MAX_H = 460;
+
+            function applyScale() {
+                var availW = window.innerWidth - 24;
+                var availH = window.innerHeight - 24;
+                var scale = Math.min(1, availW / MAX_W, availH / MAX_H);
+                wrap.style.transform = 'scale(' + scale + ')';
+            }
+
+            applyScale();
+            window.addEventListener('resize', applyScale);
+            window.addEventListener('orientationchange', applyScale);
+        })();
+    </script>
 </body>
 
 </html>
