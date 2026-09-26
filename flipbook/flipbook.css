@@ -144,26 +144,6 @@ input {
     z-index: -1;
 }
 
-#page1 {
-    z-index: 8;
-}
-
-#page2 {
-    z-index: 5;
-}
-
-#page3 {
-    z-index: 4;
-}
-
-#page4 {
-    z-index: 3;
-}
-
-#page5 {
-    z-index: 2;
-}
-
 #cover_checkbox:checked~#flip_book {
     transform: translateX(144px)
 }
@@ -180,27 +160,53 @@ input {
     position: absolute;
 }
 
-#page1_checkbox:checked~#flip_book #page1 {
-    transform: rotateY(-180deg);
-    z-index: 3;
+/* पाना-अनुसारको z-index (#pageN { z-index: ... } र #pageN_checkbox:checked~#flip_book #pageN { transform:...; z-index:...; })
+   book.html को JS ले content को मात्रा अनुसार गतिशील रूपमा <style> मा जोड्छ, किनभने पानाको संख्या स्थिर छैन। */
+
+/* TEXT PAGE CONTENT (फोटो/लेख भएको पाना) */
+.book-page-text {
+    width: 287px;
+    height: 398px;
+    position: absolute;
+    top: 1px;
+    background: #fdfaf5;
+    box-sizing: border-box;
+    padding: 22px 16px;
+    overflow: hidden;
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    font-size: 0.68rem;
+    line-height: 1.5;
+    text-align: justify;
+    color: #1a1a1a;
+    z-index: 97;
 }
 
-#page2_checkbox:checked~#flip_book #page2 {
-    transform: rotateY(-180deg);
-    z-index: 4;
+.book-page-text.book-front {
+    border-radius: 0 5px 5px 0;
 }
 
-#page3_checkbox:checked~#flip_book #page3 {
-    transform: rotateY(-180deg);
-    z-index: 5;
+.book-page-text.book-back {
+    left: 1px;
+    border-radius: 5px 0 0 5px;
 }
 
-#page4_checkbox:checked~#flip_book #page4 {
-    transform: rotateY(-180deg);
-    z-index: 6;
+.book-page-text img {
+    max-width: 100%;
+    border-radius: 6px;
+    display: block;
+    margin: 6px 0;
 }
 
-#page5_checkbox:checked~#flip_book #page5 {
-    transform: rotateY(-180deg);
-    z-index: 9;
+.book-page-text p {
+    margin: 0 0 0.6em;
+}
+
+.book-cover-title {
+    color: #fff;
+    font-family: 'Noto Serif Devanagari', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: center;
+    padding: 0 16px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
