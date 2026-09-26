@@ -120,7 +120,14 @@
   <h2>4b. 📖 किताब (flip-book)</h2>
   <label>किताबको शीर्षक (cover मा देखिने)</label>
   <input type="text" id="bookTitle">
-  <label>टेक्स्ट रङ</label>
+  <label>Cover रङ</label>
+  <input type="color" id="bookCoverColor" value="#dc143c" style="width:60px;height:36px;padding:2px;">
+  <label>Cover फोटो path (optional)</label>
+  <input type="text" id="bookCoverImage">
+  <img id="bookCoverImagePreview" src="" onerror="this.style.display='none'" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:8px;display:block;margin-top:8px;">
+  <label>Cover फोटो अपलोड (optional)</label>
+  <input type="file" accept="image/*" id="bookCoverImageFile">
+  <label>टेक्स्ट रङ (पानाभित्रको)</label>
   <input type="color" id="bookColor" value="#1a1a1a" style="width:60px;height:36px;padding:2px;">
   <label>विवरण (Text) — जति लेखे पनि हुन्छ, आवश्यक अनुसार पाना आफैं थपिन्छन्</label>
   <textarea id="bookTextArea" style="min-height:220px;"></textarea>
@@ -349,6 +356,22 @@ $('aboutSaveBtn').addEventListener('click', async () => {
 });
 
 // ═══════════════ BOOK (📖 flip-book) ═══════════════
+$('bookCoverImage').addEventListener('input', () => {
+  $('bookCoverImagePreview').src = $('bookCoverImage').value;
+  $('bookCoverImagePreview').style.display = '';
+});
+$('bookCoverImageFile').addEventListener('change', async () => {
+  const el = $('bookCoverImageFile');
+  if (!el.files[0]) return;
+  el.disabled = true;
+  try {
+    const path = await ghUploadImage(el.files[0]);
+    $('bookCoverImage').value = path;
+    $('bookCoverImagePreview').src = path;
+    $('bookCoverImagePreview').style.display = '';
+  } catch (err) { alert('फोटो अपलोड गर्न सकिएन: ' + err.message); }
+  finally { el.disabled = false; el.value = ''; }
+});
 $('bookInsertPhotoBtn').addEventListener('click', () => { $('bookInlineFile').click(); });
 $('bookInlineFile').addEventListener('change', async () => {
   const el = $('bookInlineFile');
@@ -398,7 +421,9 @@ $('bookSaveBtn').addEventListener('click', async () => {
     await ghPutFile('data/book.json', {
       title: $('bookTitle').value,
       text: $('bookTextArea').value,
-      color: $('bookColor').value
+      color: $('bookColor').value,
+      coverColor: $('bookCoverColor').value,
+      coverImage: $('bookCoverImage').value
     }, 'admin: update book.json');
     setStatus($('bookStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
   } catch (err) { setStatus($('bookStatus'), '✗ ' + err.message, 'err'); }
@@ -606,6 +631,9 @@ $('loadBtn').addEventListener('click', async () => {
     $('bookTitle').value = (book.json && book.json.title) || '';
     $('bookTextArea').value = (book.json && book.json.text) || '';
     $('bookColor').value = (book.json && book.json.color) || '#1a1a1a';
+    $('bookCoverColor').value = (book.json && book.json.coverColor) || '#dc143c';
+    $('bookCoverImage').value = (book.json && book.json.coverImage) || '';
+    if ($('bookCoverImage').value) { $('bookCoverImagePreview').src = $('bookCoverImage').value; $('bookCoverImagePreview').style.display = ''; }
     $('bookCard').style.display = 'block';
     newsEditor1.setItems(news.json); $('newsCard').style.display = 'block';
     newsEditor2.setItems(news2.json); $('news2Card').style.display = 'block';

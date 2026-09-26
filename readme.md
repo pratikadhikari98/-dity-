@@ -80,7 +80,7 @@ news/, results/, lekh.json → पुराना template बाट बचे�
 Navigation मा 🗞️ को छेउमा थपिएको 📖 icon ले `book.html` खोल्छ — एउटा interactive flip-book (पाना पल्टाउन मिल्ने किताब), CSS/HTML भरमा बनेको। Assets `flipbook/` फोल्डरमा छन् (`flipbook.css`, `flipbook.js`, edge-shading images)।
 
 **Content editable छ, admin.html बाटै:**
-- `data/book.json` — {title, text, color}। Text मा जति लेखे पनि हुन्छ — आवश्यक अनुसार पाना (sheets) आफैं auto-generate हुन्छन् (fixed 10 पाना होइन, कुनै upper limit छैन)।
+- `data/book.json` — {title, text, color, coverColor, coverImage}। Text मा जति लेखे पनि हुन्छ — आवश्यक अनुसार पाना (sheets) आफैं auto-generate हुन्छन् (fixed 10 पाना होइन, कुनै upper limit छैन)। Cover मा फोटो र रङ दुबै admin.html बाट editable छन्। पानाभित्रको text Khand font मा छ।
 - Text भित्र जुनसुकै ठाउँमा जति पनि फोटो राख्न मिल्छ, र कुनै पनि अंश Bold वा फरक रङ बनाउन मिल्छ — admin.html को "📷 फोटो थप्नुहोस्", "Bold बनाउनुहोस्", "🎨 रङ लगाउनुहोस्" बटनले (टेक्स्ट select गरेर वा cursor राखेर प्रयोग गर्नुहोस्, समाचार सेक्सन जस्तै)।
 - किताब खुल्दा (cover/पाना) मोबाइलमा पनि फिट हुने गरी auto zoom-out हुन्छ।
 - यो feature मूलतः [creative_coding-flip_book](https://github.com/fchavonet/creative_coding-flip_book) (Fabien CHAVONET) बाट adapt गरिएको हो — पाना-turn को CSS mechanism (checkbox-based 3D flip) मात्र लिइएको, content भने अब पूर्ण रूपमा data-driven छ।
