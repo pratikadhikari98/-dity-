@@ -116,6 +116,28 @@
   <div class="status" id="aboutStatus"></div>
 </div>
 
+<div class="card" id="bookCard" style="display:none;">
+  <h2>4b. 📖 किताब (flip-book)</h2>
+  <label>किताबको शीर्षक (cover मा देखिने)</label>
+  <input type="text" id="bookTitle">
+  <label>टेक्स्ट रङ</label>
+  <input type="color" id="bookColor" value="#1a1a1a" style="width:60px;height:36px;padding:2px;">
+  <label>विवरण (Text) — जति लेखे पनि हुन्छ, आवश्यक अनुसार पाना आफैं थपिन्छन्</label>
+  <textarea id="bookTextArea" style="min-height:220px;"></textarea>
+  <input type="file" accept="image/*" id="bookInlineFile" style="display:none;">
+  <input type="color" id="bookInlineColor" style="display:none;">
+  <div class="row" style="margin-top:8px;">
+    <button type="button" class="btn-outline" id="bookInsertPhotoBtn">📷 फोटो थप्नुहोस्</button>
+    <button type="button" class="btn-outline" id="bookBoldBtn"><b>B</b> Bold बनाउनुहोस्</button>
+    <button type="button" class="btn-outline" id="bookColorBtn">🎨 रङ लगाउनुहोस्</button>
+  </div>
+  <div class="hint">जति पनि फोटो थप्न सकिन्छ, जुनसुकै ठाउँमा। छानिएको (selected) टेक्स्टलाई मात्र Bold वा रङ लगाउन मिल्छ।</div>
+  <div class="top-actions">
+    <button class="btn-primary" id="bookSaveBtn">किताब Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="bookStatus"></div>
+</div>
+
 <div class="card" id="newsCard" style="display:none;">
   <h2>5. समाचार 1 (About page — 🗞️) <span class="badge" id="newsCount">0</span></h2>
   <div id="newsList"></div>
@@ -326,6 +348,63 @@ $('aboutSaveBtn').addEventListener('click', async () => {
   finally { $('aboutSaveBtn').disabled = false; }
 });
 
+// ═══════════════ BOOK (📖 flip-book) ═══════════════
+$('bookInsertPhotoBtn').addEventListener('click', () => { $('bookInlineFile').click(); });
+$('bookInlineFile').addEventListener('change', async () => {
+  const el = $('bookInlineFile');
+  if (!el.files[0]) return;
+  const btn = $('bookInsertPhotoBtn');
+  const original = btn.textContent;
+  btn.textContent = 'अपलोड हुँदैछ...'; btn.disabled = true;
+  try {
+    const path = await ghUploadImage(el.files[0]);
+    const ta = $('bookTextArea');
+    const start = ta.selectionStart, end = ta.selectionEnd;
+    const insertion = `\n\n<img src="${path}" alt="">\n\n`;
+    ta.value = ta.value.slice(0, start) + insertion + ta.value.slice(end);
+    const pos = start + insertion.length;
+    ta.focus(); ta.setSelectionRange(pos, pos);
+  } catch (err) { alert('फोटो अपलोड गर्न सकिएन: ' + err.message); }
+  finally { btn.textContent = original; btn.disabled = false; el.value = ''; }
+});
+$('bookBoldBtn').addEventListener('click', () => {
+  const ta = $('bookTextArea');
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि यो बटन थिच्नुहोस्।'); return; }
+  const selected = ta.value.slice(start, end);
+  const wrapped = '<b>' + selected + '</b>';
+  ta.value = ta.value.slice(0, start) + wrapped + ta.value.slice(end);
+  const pos = start + wrapped.length;
+  ta.focus(); ta.setSelectionRange(pos, pos);
+});
+$('bookColorBtn').addEventListener('click', () => {
+  const ta = $('bookTextArea');
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि यो बटन थिच्नुहोस्।'); return; }
+  const colorInput = $('bookInlineColor');
+  colorInput.onchange = () => {
+    const selected = ta.value.slice(start, end);
+    const wrapped = `<span style="color:${colorInput.value}">${selected}</span>`;
+    ta.value = ta.value.slice(0, start) + wrapped + ta.value.slice(end);
+    const pos = start + wrapped.length;
+    ta.focus(); ta.setSelectionRange(pos, pos);
+  };
+  colorInput.click();
+});
+$('bookSaveBtn').addEventListener('click', async () => {
+  setStatus($('bookStatus'), 'Saving...', '');
+  $('bookSaveBtn').disabled = true;
+  try {
+    await ghPutFile('data/book.json', {
+      title: $('bookTitle').value,
+      text: $('bookTextArea').value,
+      color: $('bookColor').value
+    }, 'admin: update book.json');
+    setStatus($('bookStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+  } catch (err) { setStatus($('bookStatus'), '✗ ' + err.message, 'err'); }
+  finally { $('bookSaveBtn').disabled = false; }
+});
+
 // ═══════════════ NEWS (generic factory — दुबै समाचार 1 र 2 का लागि) ═══════════════
 function makeNewsEditor(cfg) {
   // cfg: { items: [], listId, countId, addBtnId, saveBtnId, statusId, jsonPath, taPrefix }
@@ -512,10 +591,11 @@ $('adsSaveBtn').addEventListener('click', async () => {
 $('loadBtn').addEventListener('click', async () => {
   setStatus($('connStatus'), 'Loading...', '');
   try {
-    const [showcase, shloka, about, news, news2, ads] = await Promise.all([
+    const [showcase, shloka, about, book, news, news2, ads] = await Promise.all([
       ghGetFile('data/showcase.json'),
       ghGetFile('data/shlokas.json'),
       ghGetFile('data/about.json'),
+      ghGetFile('data/book.json'),
       ghGetFile('data/news.json'),
       ghGetFile('data/news2.json'),
       ghGetFile('data/ads.json')
@@ -523,6 +603,10 @@ $('loadBtn').addEventListener('click', async () => {
     showcaseItems = showcase.json; renderShowcase(); $('showcaseCard').style.display = 'block';
     shlokaItems = shloka.json; renderShloka(); $('shlokaCard').style.display = 'block';
     $('aboutTextArea').value = (about.json && about.json.text) || ''; $('aboutCard').style.display = 'block';
+    $('bookTitle').value = (book.json && book.json.title) || '';
+    $('bookTextArea').value = (book.json && book.json.text) || '';
+    $('bookColor').value = (book.json && book.json.color) || '#1a1a1a';
+    $('bookCard').style.display = 'block';
     newsEditor1.setItems(news.json); $('newsCard').style.display = 'block';
     newsEditor2.setItems(news2.json); $('news2Card').style.display = 'block';
     adsItems = ads.json; renderAds(); $('adsCard').style.display = 'block';

@@ -64,92 +64,9 @@
             </label>
         </div>
 
-        <!-- FLIP BOOK (मोबाइलमा फिट हुनका लागि scale गरिन्छ, script हेर्नुहोस्) -->
+        <!-- FLIP BOOK (मोबाइलमा फिट हुनका लागि scale गरिन्छ; पाना data/book.json बाट स्वतः बन्छन्) -->
         <div id="bookScaleWrap">
-        <input type="checkbox" id="cover_checkbox">
-        <input type="checkbox" id="page1_checkbox">
-        <input type="checkbox" id="page2_checkbox">
-        <input type="checkbox" id="page3_checkbox">
-        <input type="checkbox" id="page4_checkbox">
-        <input type="checkbox" id="page5_checkbox">
-
-        <div id="flip_book">
-            <div class="front_cover">
-                <label for="cover_checkbox" id="cover"></label>
-            </div>
-
-            <div class="page" id="page1">
-                <div class="front_page">
-                    <label for="page1_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
-                    <img class="front_content" src="flipbook/images/pages/page1.webp" alt="Front content">
-                </div>
-
-                <div class="back_page">
-                    <label for="page1_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
-                    <img class="back_content" src="flipbook/images/pages/page2.webp" alt="Back content">
-                </div>
-            </div>
-
-            <div class="page" id="page2">
-                <div class="front_page">
-                    <label for="page2_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
-                    <img class="front_content" src="flipbook/images/pages/page3.webp" alt="Front content">
-                </div>
-
-                <div class="back_page">
-                    <label for="page2_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
-                    <img class="back_content" src="flipbook/images/pages/page4.webp" alt="Back content">
-                </div>
-            </div>
-
-            <div class="page" id="page3">
-                <div class="front_page">
-                    <label for="page3_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
-                    <img class="front_content" src="flipbook/images/pages/page5.webp" alt="Front content">
-                </div>
-
-                <div class="back_page">
-                    <label for="page3_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
-                    <img class="back_content" src="flipbook/images/pages/page6.webp" alt="Back content">
-                </div>
-            </div>
-
-            <div class="page" id="page4">
-                <div class="front_page">
-                    <label for="page4_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
-                    <img class="front_content" src="flipbook/images/pages/page7.webp" alt="Front content">
-                </div>
-
-                <div class="back_page">
-                    <label for="page4_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
-                    <img class="back_content" src="flipbook/images/pages/page8.webp" alt="Back content">
-                </div>
-            </div>
-
-            <div class="page" id="page5">
-                <div class="front_page">
-                    <label for="page5_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="Front page edge shading">
-                    <img class="front_content" src="flipbook/images/pages/page9.webp" alt="Front content">
-                </div>
-
-                <div class="back_page">
-                    <label for="page5_checkbox"></label>
-                    <img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="Back page edge shading">
-                    <img class="back_content" src="flipbook/images/pages/page10.webp" alt="Back content">
-                </div>
-            </div>
-
-            <div class="back_cover"></div>
-        </div>
+            <div id="flipBookContainer"><!-- JS ले यहाँ भर्छ --></div>
         </div>
 
         <!-- RESPONSIVE WARNING -->
@@ -168,25 +85,110 @@
         </dialog>
     </main>
 
-    <!-- खुला किताब पूरै viewport भित्र अट्ने गरी zoom-out गर्ने -->
+    <!-- किताबका पाना data/book.json बाट बनाउने: जति चाहिन्छ त्यति (auto-pagination) -->
     <script>
         (function () {
-            var wrap = document.getElementById('bookScaleWrap');
-            if (!wrap) return;
-            // किताब पूरा खुल्दा हुने अधिकतम चौडाइ/उचाइ (cover 298px + translateX 144px शिफ्ट, दुबैतिर)
-            var MAX_W = 620;
-            var MAX_H = 460;
+            var PAGE_TARGET_HEIGHT = 398; // .book-page-text को उचाइसँग मिल्दो
+            var container = document.getElementById('flipBookContainer');
+            if (!container) return;
+
+            function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+
+            function toBlocks(raw) {
+                return String(raw || '').split(/\n\s*\n/).map(function (b) {
+                    var t = b.trim();
+                    if (!t) return '';
+                    if (/^<img\b/i.test(t)) return t;
+                    return '<p>' + t.replace(/\n/g, '<br>') + '</p>';
+                }).filter(Boolean);
+            }
+
+            function paginate(blocks) {
+                var measure = document.createElement('div');
+                measure.className = 'book-page-text book-front';
+                measure.style.position = 'fixed';
+                measure.style.left = '-9999px';
+                measure.style.top = '0';
+                measure.style.height = 'auto';
+                measure.style.visibility = 'hidden';
+                document.body.appendChild(measure);
+
+                var pages = [];
+                var current = '';
+                blocks.forEach(function (block) {
+                    var test = current + block;
+                    measure.innerHTML = test;
+                    if (current && measure.scrollHeight > PAGE_TARGET_HEIGHT) {
+                        pages.push(current);
+                        current = block;
+                    } else {
+                        current = test;
+                    }
+                });
+                if (current) pages.push(current);
+                document.body.removeChild(measure);
+                return pages;
+            }
+
+            function buildFlipBook(title, pages, colorStyle) {
+                var totalSheets = Math.max(1, Math.ceil(pages.length / 2));
+                var html = '<input type="checkbox" id="cover_checkbox">';
+                for (var i = 1; i <= totalSheets; i++) html += '<input type="checkbox" id="page' + i + '_checkbox">';
+
+                html += '<div id="flip_book">';
+                html += '<div class="front_cover"><label for="cover_checkbox" id="cover"><span class="book-cover-title">' + esc(title) + '</span></label></div>';
+
+                for (var i = 1; i <= totalSheets; i++) {
+                    var front = pages[(i - 1) * 2] || '';
+                    var back = pages[(i - 1) * 2 + 1] || '';
+                    html += '<div class="page" id="page' + i + '">' +
+                        '<div class="front_page"><label for="page' + i + '_checkbox"></label>' +
+                        '<img class="edge_shading" src="flipbook/images/front_page_edge_shading.webp" alt="">' +
+                        '<div class="book-page-text book-front" style="' + colorStyle + '">' + front + '</div></div>' +
+                        '<div class="back_page"><label for="page' + i + '_checkbox"></label>' +
+                        '<img class="edge_shading" src="flipbook/images/back_page_edge_shading.webp" alt="">' +
+                        '<div class="book-page-text book-back" style="' + colorStyle + '">' + back + '</div></div>' +
+                        '</div>';
+                }
+                html += '<div class="back_cover"></div></div>';
+                container.innerHTML = html;
+
+                // पाना-अनुसारको z-index CSS गतिशील रूपमा थप्ने
+                var rules = '';
+                for (var i = 1; i <= totalSheets; i++) {
+                    rules += '#page' + i + '{z-index:' + (totalSheets - i + 1) + ';}';
+                    rules += '#page' + i + '_checkbox:checked~#flip_book #page' + i + '{transform:rotateY(-180deg);z-index:' + (totalSheets + i) + ';}';
+                }
+                var styleTag = document.createElement('style');
+                styleTag.id = 'dynamicPageStyles';
+                styleTag.textContent = rules;
+                document.head.appendChild(styleTag);
+            }
 
             function applyScale() {
+                var wrap = document.getElementById('bookScaleWrap');
+                if (!wrap) return;
+                var MAX_W = 620, MAX_H = 460;
                 var availW = window.innerWidth - 24;
                 var availH = window.innerHeight - 24;
                 var scale = Math.min(1, availW / MAX_W, availH / MAX_H);
                 wrap.style.transform = 'scale(' + scale + ')';
             }
 
-            applyScale();
-            window.addEventListener('resize', applyScale);
-            window.addEventListener('orientationchange', applyScale);
+            fetch('data/book.json', { cache: 'no-store' })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var blocks = toBlocks(data.text);
+                    var pages = paginate(blocks);
+                    var colorStyle = data.color ? 'color:' + data.color + ';' : '';
+                    buildFlipBook(data.title || '', pages, colorStyle);
+                    applyScale();
+                    window.addEventListener('resize', applyScale);
+                    window.addEventListener('orientationchange', applyScale);
+                })
+                .catch(function () {
+                    container.innerHTML = '<p style="color:#fff;">किताब लोड गर्न सकिएन।</p>';
+                });
         })();
     </script>
 </body>
