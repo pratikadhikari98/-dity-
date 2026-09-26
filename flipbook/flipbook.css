@@ -58,6 +58,9 @@ input {
     transform-origin: center left;
     transition: transform 0.5s;
     z-index: 99;
+    backface-visibility: hidden;
+    background-size: cover;
+    background-position: center;
 }
 
 .front_cover label {
@@ -173,9 +176,9 @@ input {
     box-sizing: border-box;
     padding: 22px 16px;
     overflow: hidden;
-    font-family: 'Noto Sans Devanagari', sans-serif;
-    font-size: 0.68rem;
-    line-height: 1.5;
+    font-family: 'Khand', 'Noto Sans Devanagari', sans-serif;
+    font-size: 0.56rem;
+    line-height: 1.4;
     text-align: justify;
     color: #1a1a1a;
     z-index: 97;
