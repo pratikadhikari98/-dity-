@@ -145,7 +145,10 @@
                 for (var i = 1; i <= totalSheets; i++) html += '<input type="checkbox" id="page' + i + '_checkbox">';
 
                 html += '<div id="flip_book">';
-                html += '<div class="front_cover" style="' + coverStyle + '"><label for="cover_checkbox" id="cover"><span class="book-cover-title">' + esc(title) + '</span></label></div>';
+                html += '<div class="front_cover">' +
+                    '<label for="cover_checkbox" id="cover" class="cover_outside" style="' + coverStyle + '"><span class="book-cover-title">' + esc(title) + '</span></label>' +
+                    '<div class="cover_inside"></div>' +
+                    '</div>';
 
                 for (var i = 1; i <= totalSheets; i++) {
                     var front = pages[(i - 1) * 2] || '';
