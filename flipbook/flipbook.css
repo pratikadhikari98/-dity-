@@ -52,11 +52,14 @@ input {
     box-shadow: 0 0 5px 0 rgb(25, 25, 25, 0.25);
 }
 
+/* मूल creative_coding-flip_book रिपोको जस्तै: एउटै सिंगो प्लेन, कुनै blur/preserve-3d/backface split छैन।
+   कभर-आर्ट (भए) र edge-shading grafic लाई एउटै background मा तह लगाइन्छ (JS ले coverStyle मार्फत),
+   ताकि रातो + edge shading सधैं देखियोस्, अनि फ्लिप animation रिपो जस्तै रहोस्। */
 .front_cover {
     position: absolute;
     cursor: pointer;
     transform-origin: center left;
-    transition: transform 0.5s, filter 0.6s;
+    transition: transform 0.5s;
     z-index: 99;
 }
 
@@ -117,6 +120,8 @@ input {
     width: 288px;
     height: 400px;
     position: absolute;
+    top: 0;
+    left: 0;
     z-index: 98;
 }
 
@@ -125,6 +130,7 @@ input {
     height: 398px;
     position: absolute;
     top: 1px;
+    left: 0;
     border-radius: 0 5px 5px 0;
     z-index: 97;
 }
@@ -150,11 +156,9 @@ input {
 
 #cover_checkbox:checked~#flip_book .front_cover {
     transform: rotateY(-180deg);
-    transition: transform 1.5s, z-index 0.5s 0.5s, filter 1s 0.4s;
+    transition: transform 1.5s, z-index 0.5s 0.5s;
     z-index: 1;
-    filter: blur(6px);
 }
-
 #cover_checkbox:checked~#flip_book #cover {
     width: 80%;
     height: 80%;
@@ -170,6 +174,7 @@ input {
     height: 398px;
     position: absolute;
     top: 1px;
+    left: 0;
     background: #fdfaf5;
     box-sizing: border-box;
     padding: 22px 16px;
