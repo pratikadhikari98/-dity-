@@ -430,17 +430,19 @@ async function ghPutFile(path, jsonValue, message) {
   if (out && out.commit && out.commit.sha) lastCommitSha = out.commit.sha;
   return out;
 }
-// फोटो अपलोड अघि सानो बनाउने (अधिकतम १६००px, WebP) — ठूला फोटोले साइट/किताब ढिलो बनाउँथ्यो
+// फोटो अपलोड अघि सधैं WebP मा बदल्ने (PNG/JPG/JPEG/BMP → .webp) र अधिकतम १६००px मा सानो बनाउने।
+// GIF (एनिमेसन) र SVG जस्ताको तस्तै जान्छन्।
 async function compressImage(file) {
-  if (!/^image\/(png|jpe?g|webp)$/i.test(file.type) || file.size < 150 * 1024) return file;
+  if (!/^image\/(png|jpe?g|webp|bmp)$/i.test(file.type)) return file;
   try {
     const bmp = await createImageBitmap(file);
     const scale = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+    if (file.type === 'image/webp' && scale === 1) return file; // पहिल्यै WebP र सानो छ
     const w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
     const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
     canvas.getContext('2d').drawImage(bmp, 0, 0, w, h);
     const blob = await new Promise(r => canvas.toBlob(r, 'image/webp', 0.85));
-    if (!blob || blob.type !== 'image/webp' || blob.size >= file.size) return file;
+    if (!blob || blob.type !== 'image/webp') return file; // ब्राउजरले WebP बनाउन सकेन
     return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.webp', { type: 'image/webp' });
   } catch (e) { return file; }
 }
