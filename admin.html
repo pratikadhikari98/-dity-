@@ -43,7 +43,10 @@
   body[data-theme="dark"] .btn-outline { background: transparent; }
   body[data-theme="dark"] .badge { background: #3a2b24; }
   body[data-theme="dark"] .slide-card { border-color: var(--border); }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  button, .acc-header, .sidebar-theme, .deploy-btn-area, .deploy-btn-area * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: manipulation; }
+  button:focus, button:focus-visible, .acc-header:focus, .sidebar-theme:focus { outline: none; }
+  ::selection { background: rgba(147,84,71,0.25); }
   body { margin:0; font-family:'Noto Sans Devanagari', sans-serif; background:var(--sky-pale); color:var(--text); padding: 20px 16px 80px; transition: background .2s linear, color .2s linear; }
   h1 { font-size:1.3rem; color:var(--blue-dark); margin: 0 0 4px; }
   .sub { color:var(--text-light); font-size:0.85rem; margin-bottom: 20px; }
@@ -400,6 +403,7 @@ function setStatus(el, msg, type) {
   el.className = 'status' + (type ? ' ' + type : '');
 }
 
+let lastCommitSha = null; // पछिल्लो commit — यसैको Pages deploy हेर्न
 // ── Generic GitHub Contents helpers ──
 async function ghGetFile(path) {
   const res = await fetch(`${apiBase()}/contents/${path}?ref=${branch()}`, { headers: headers() });
@@ -422,7 +426,9 @@ async function ghPutFile(path, jsonValue, message) {
     method: 'PUT', headers: headers(), body: JSON.stringify(body)
   });
   if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  const out = await res.json();
+  if (out && out.commit && out.commit.sha) lastCommitSha = out.commit.sha;
+  return out;
 }
 async function ghUploadImage(file) {
   const safeName = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '');
@@ -433,6 +439,7 @@ async function ghUploadImage(file) {
     body: JSON.stringify({ message: 'admin: upload ' + safeName, content: base64, branch: branch() })
   });
   if (!res.ok) throw new Error('फोटो अपलोड गर्न सकिएन: ' + await res.text());
+  try { const out = await res.json(); if (out && out.commit && out.commit.sha) lastCommitSha = out.commit.sha; } catch (e) {}
   return path;
 }
 
@@ -448,10 +455,10 @@ const deployProgress = (function () {
   const spinIcon = area.querySelector('.spin-icon');
   const tick1 = area.querySelector('.tick-1');
   const FRAME_LEN = 551;
-  let total = 0, done = 0, resetTimer = null;
+  let total = 0, done = 0, resetTimer = null, cap = 100, manualPct = null;
 
   function render() {
-    const pct = total ? Math.round((done / total) * 100) : 0;
+    const pct = manualPct !== null ? manualPct : (total ? Math.round((done / total) * cap) : 0);
     pctSpan.textContent = pct + '%';
     frameRect.style.strokeDashoffset = FRAME_LEN - (FRAME_LEN * pct / 100);
   }
@@ -468,9 +475,9 @@ const deployProgress = (function () {
   reset();
 
   return {
-    start(t, label) {
+    start(t, label, capPct) {
       clearTimeout(resetTimer);
-      total = Math.max(1, t); done = 0;
+      total = Math.max(1, t); done = 0; cap = capPct || 100; manualPct = null;
       area.classList.add('active'); area.classList.remove('done', 'error');
       spinIcon.classList.add('spin');
       progressArea.style.display = 'flex';
@@ -479,12 +486,18 @@ const deployProgress = (function () {
       labelSpan.textContent = label || 'GitHub मा पठाउँदै…';
       render();
     },
+    setProgress(pct, label) {
+      manualPct = Math.max(0, Math.min(100, Math.round(pct)));
+      if (label) labelSpan.textContent = label;
+      render();
+    },
     step(label) {
       done = Math.min(done + 1, total);
       if (label) labelSpan.textContent = label;
       render();
     },
     done(label) {
+      manualPct = 100; render();
       spinIcon.classList.remove('spin');
       area.classList.add('done');
       progressArea.style.display = 'none';
@@ -507,15 +520,60 @@ const deployProgress = (function () {
   };
 })();
 
+// GitHub Actions को "pages build and deployment" ले हरियो (success) नदेखाउञ्जेल पर्खने
+async function watchPagesDeploy(sha) {
+  const started = Date.now();
+  const MAX_MS = 6 * 60 * 1000;
+  let seenRun = false;
+  while (Date.now() - started < MAX_MS) {
+    const secs = Math.round((Date.now() - started) / 1000);
+    let res;
+    try {
+      res = await fetch(`${apiBase()}/actions/runs?head_sha=${sha}&per_page=20`, { headers: headers(), cache: 'no-store' });
+    } catch (e) { res = null; }
+    if (res && (res.status === 403 || res.status === 404)) {
+      return { skipped: true, reason: 'Actions पढ्ने अनुमति छैन' };
+    }
+    if (res && res.ok) {
+      const data = await res.json();
+      const runs = (data.workflow_runs || []).filter(r => /pages build/i.test(r.name || '') || r.path === 'dynamic/pages/pages-build-deployment');
+      const run = runs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+      if (run) {
+        seenRun = true;
+        if (run.status === 'completed') {
+          if (run.conclusion === 'success') return { ok: true };
+          throw new Error('Pages deploy असफल (' + run.conclusion + ')');
+        }
+        if (run.status === 'in_progress') deployProgress.setProgress(Math.min(97, 88 + secs / 8), 'Deploy हुँदै ' + secs + 's');
+        else deployProgress.setProgress(84, 'Queue मा ' + secs + 's');
+      } else if (!seenRun) {
+        deployProgress.setProgress(82, 'Workflow पर्खँदै ' + secs + 's');
+        if (secs > 90) return { skipped: true, reason: 'Pages workflow भेटिएन' };
+      }
+    }
+    await new Promise(r => setTimeout(r, 3000));
+  }
+  throw new Error('Deploy मा धेरै समय लाग्यो — GitHub Actions हेर्नुहोस्');
+}
+
 // steps: array of async functions, each = one real GitHub API call
-async function runGithubTask(steps, startLabel, doneLabel) {
-  deployProgress.start(steps.length, startLabel);
+// opts.watch=false भए Pages deploy पर्खिँदैन (जस्तै फोटो मात्र अपलोड गर्दा)
+async function runGithubTask(steps, startLabel, doneLabel, opts) {
+  const watch = !(opts && opts.watch === false);
+  deployProgress.start(steps.length, startLabel, watch ? 80 : 100);
+  lastCommitSha = null;
   try {
     for (const step of steps) {
       await step();
       deployProgress.step();
     }
-    deployProgress.done(doneLabel);
+    if (watch && lastCommitSha) {
+      deployProgress.setProgress(82, 'Pages Build पर्खँदै…');
+      const r = await watchPagesDeploy(lastCommitSha);
+      deployProgress.done(r.skipped ? 'Commit भयो (' + r.reason + ')' : doneLabel);
+    } else {
+      deployProgress.done(doneLabel);
+    }
   } catch (err) {
     deployProgress.error(err.message);
     throw err;
@@ -647,7 +705,7 @@ $('bookCoverImageFile').addEventListener('change', async () => {
     let path;
     await runGithubTask([
       async () => { path = await ghUploadImage(el.files[0]); }
-    ], 'कभर फोटो अपलोड हुँदै…', 'कभर फोटो अपलोड भयो');
+    ], 'कभर फोटो अपलोड हुँदै…', 'कभर फोटो अपलोड भयो', { watch: false });
     $('bookCoverImage').value = path;
     $('bookCoverImagePreview').src = path;
     $('bookCoverImagePreview').style.display = '';
@@ -665,7 +723,7 @@ $('bookInlineFile').addEventListener('change', async () => {
     let path;
     await runGithubTask([
       async () => { path = await ghUploadImage(el.files[0]); }
-    ], 'भित्री फोटो अपलोड हुँदै…', 'भित्री फोटो अपलोड भयो');
+    ], 'भित्री फोटो अपलोड हुँदै…', 'भित्री फोटो अपलोड भयो', { watch: false });
     const ta = $('bookTextArea');
     const start = ta.selectionStart, end = ta.selectionEnd;
     const insertion = `\n\n<img src="${path}" alt="">\n\n`;
@@ -817,7 +875,7 @@ function makeNewsEditor(cfg) {
           let path;
           await runGithubTask([
             async () => { path = await ghUploadImage(el.files[0]); }
-          ], 'भित्री फोटो अपलोड हुँदै…', 'भित्री फोटो अपलोड भयो');
+          ], 'भित्री फोटो अपलोड हुँदै…', 'भित्री फोटो अपलोड भयो', { watch: false });
           const ta = document.getElementById(cfg.taPrefix + idx);
           const start = ta.selectionStart, end = ta.selectionEnd;
           const insertion = `\n\n<img src="${path}" alt="">\n\n`;
