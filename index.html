@@ -13,14 +13,28 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20260922" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20260928" id="themeStylesheet">
 </head>
 <body>
 
 <!-- HEADER -->
 <header id="siteHeader">
   <div class="logo-area">
-    <img src="photos/aditya-logo.png" alt="ADITYA" class="aditya-logo-img" id="adityaLogoImg">
+    <div class="aditya-access-icon" id="adityaAccessIcon" role="img" aria-label="ADITYA" tabindex="0">
+      <svg fill="none" width="72" height="72" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <circle class="ac-circle" cx="16" cy="4" r="1"/>
+        <g class="ac-primary">
+          <path d="m18 19 1-7-6 1"/>
+          <path d="M8,5l5.5,3-2.4,3.5"/>
+          <path class="ac-path" d="M8 5 L5 8"/>
+        </g>
+        <g class="ac-secondary">
+          <path d="M4.2,14.5c-.8,2.6.7,5.4,3.3,6.2,1.2.4,2.4.3,3.6-.2"/>
+          <path d="M13.8,17.5c.8-2.6-.7-5.4-3.3-6.2-1.2-.4-2.4-.3-3.6.2"/>
+          <path d="M13,13.1c-.5-.7-1.1-1.2-1.9-1.6"/>
+        </g>
+      </svg>
+    </div>
   </div>
   <div class="header-menu">
     <button class="menu-dots-btn" id="menuDotsBtn" onclick="toggleHeaderMenu()" aria-label="मेनु" aria-haspopup="true" aria-expanded="false">☰</button>
@@ -768,5 +782,29 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+
+<script>
+// एक्सेसिबिलिटी आइकन एनिमेसन (accessibility.zip को motion component बाट रूपान्तरित)
+(function(){
+  var box = document.getElementById('adityaAccessIcon');
+  if (!box || !box.animate) return;
+  var circle = box.querySelector('.ac-circle'), prim = box.querySelector('.ac-primary'),
+      path = box.querySelector('.ac-path'), sec = box.querySelector('.ac-secondary');
+  var running = false;
+  function play() {
+    if (running) return; running = true;
+    var o = {easing:'ease-in-out', fill:'none'};
+    circle.animate([{transform:'translate(0,0)'},{transform:'translate(1px,1px)'},{transform:'translate(-1px,-1px)'},{transform:'translate(0,0)'}], Object.assign({duration:800}, o));
+    prim.animate([{transform:'rotate(0deg)'},{transform:'rotate(5deg)'},{transform:'rotate(-5deg)'},{transform:'rotate(0deg)'}], Object.assign({duration:800}, o));
+    path.animate([{transform:'rotate(0deg)'},{transform:'rotate(-60deg)'},{transform:'rotate(0deg)'}], Object.assign({duration:400, delay:200}, o));
+    var last = sec.animate([{transform:'rotate(0deg)'},{transform:'rotate(-360deg)'}], Object.assign({duration:1000, delay:400}, o));
+    last.onfinish = function(){ running = false; };
+  }
+  box.addEventListener('mouseenter', play);
+  box.addEventListener('click', play);
+  box.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') play(); });
+  setTimeout(play, 600);
+})();
+</script>
 </body>
 </html>

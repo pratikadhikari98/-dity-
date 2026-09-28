@@ -33,6 +33,9 @@
   .header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .logo-area { display: flex; align-items: center; gap: 9px; }
   .aditya-logo-img { height: 90px; width: 160px; object-fit: contain; display: block; }
+  .aditya-access-icon { color: var(--blue-mid); display: flex; align-items: center; justify-content: center; width: 72px; height: 72px; cursor: pointer; outline: none; -webkit-tap-highlight-color: transparent; }
+  .aditya-access-icon svg * { transform-box: fill-box; transform-origin: center; }
+  .aditya-access-icon .ac-path { transform-origin: top right; }
   nav { display: flex; gap: 2px; flex-wrap: wrap; }
   nav a { color: var(--blue-dark); text-decoration: none; font-size: 0.9rem; font-weight: 600; padding: 8px 14px; border-radius: 8px; transition: background .25s ease, color .25s ease, transform .15s ease; }
   nav a:hover { transform: translateY(-1px); }
