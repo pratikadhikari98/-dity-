@@ -12,7 +12,9 @@
     <link rel="apple-touch-icon" href="icon-192.svg">
 
     <!-- FONTS -->
-    <link href="https://fonts.googleapis.com/css2?family=Khand:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Khand:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="flipbook/flipbook.css">
@@ -195,13 +197,22 @@
                 wrap.style.transform = 'scale(' + scale + ')';
             }
 
-            var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
-            Promise.all([
-                fetch('data/book.json', { cache: 'no-store' }).then(function (r) { return r.json(); }),
-                fontsReady
-            ])
-                .then(function (results) {
-                    var data = results[0];
+            var withTimeout = function (p, ms) { return Promise.race([p, new Promise(function (r) { setTimeout(r, ms); })]); };
+                // book.json तुरुन्तै तान्ने; फन्ट (यही टेक्स्टको अक्षर मात्र) र भित्री फोटो समानान्तर लोड गरेर
+                // अधिकतम १.५ सेकेन्ड मात्र पर्खने — सबै फन्ट (document.fonts.ready) को लागि होइन।
+                Promise.resolve(fetch('data/book.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }))
+                    .then(function (data) {
+                        var txt = String(data.text || '');
+                        var sample = txt.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 300) || 'अ';
+                        var fontP = (document.fonts && document.fonts.load)
+                            ? document.fonts.load('400 9px Khand', sample).catch(function () {}) : Promise.resolve();
+                        var srcs = []; txt.replace(/<img[^>]+src="([^"]+)"/g, function (m, s) { srcs.push(s); return m; });
+                        var imgP = Promise.all(srcs.map(function (s) {
+                            return new Promise(function (res) { var im = new Image(); im.onload = im.onerror = res; im.src = s; });
+                        }));
+                        return withTimeout(Promise.all([fontP, imgP]), 1500).then(function () { return data; });
+                    })
+                    .then(function (data) {
                     var blocks = toBlocks(data.text);
                     var pages = paginate(blocks);
                     var colorStyle = data.color ? 'color:' + data.color + ';' : '';
