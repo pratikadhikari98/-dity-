@@ -21,8 +21,8 @@
   /* ══ FLIP BOOK (समाचार १ को तल, किताब पृष्ठबाट सारिएको) — स्कोप गरिएको स्टाइल ══ */
   /* .news-feed-section बाट text-align:center inherit हुँदा भित्री position:absolute img हरू
      (जस्तै edge_shading) बीचमा सर्ने bug आउँथ्यो — यहाँ त्यो inheritance रोकिएको छ। */
-  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 6px 0 30px; overflow: visible; text-align: left; }
-  #bookEmbedWrap #bookScaleWrap { transform-origin: top center; transition: transform .6s ease; }
+  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 6px 0 30px; overflow: visible; text-align: left; transition: height 1s ease; }
+  #bookEmbedWrap #bookScaleWrap { transform-origin: top center; transition: transform 1s ease; }
 
   #bookEmbedWrap #flip_book { width: 298px; height: 420px; position: relative; transition-duration: 1s; perspective: 2000px; }
 
