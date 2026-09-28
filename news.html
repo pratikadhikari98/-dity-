@@ -17,11 +17,12 @@
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
+  #bookEmbedSection.news-feed-section { padding-bottom: 0; }
 
   /* ══ FLIP BOOK (समाचार १ को तल, किताब पृष्ठबाट सारिएको) — स्कोप गरिएको स्टाइल ══ */
   /* .news-feed-section बाट text-align:center inherit हुँदा भित्री position:absolute img हरू
      (जस्तै edge_shading) बीचमा सर्ने bug आउँथ्यो — यहाँ त्यो inheritance रोकिएको छ। */
-  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 6px 0 30px; overflow: visible; text-align: left; transition: height 1s ease; }
+  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 0; overflow: visible; text-align: left; transition: height 1s ease; }
   #bookEmbedWrap #bookScaleWrap { transform-origin: top center; transition: transform 1s ease; }
 
   #bookEmbedWrap #flip_book { width: 298px; height: 420px; position: relative; transition-duration: 1s; perspective: 2000px; }
@@ -256,7 +257,7 @@
         var scale = availW / TARGET_W;
         if (!isOpen) scale = Math.min(scale, 1.6); // कभर अवस्थामा अत्यधिक ठूलो नहोस्
         wrap.style.transform = 'scale(' + scale + ')';
-        host.style.height = Math.round(460 * scale) + 'px';
+        host.style.height = Math.round(420 * scale) + 'px';
     }
 
     var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
