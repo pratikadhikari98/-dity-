@@ -1,7 +1,7 @@
 {
-  "name": "कालिका मानवज्ञान माध्यमिक विद्यालय",
-  "short_name": "कालिका विद्यालय",
-  "description": "कालिका मानवज्ञान माध्यमिक विद्यालयको आधिकारिक वेबसाइट",
+  "name": "Ādityā",
+  "short_name": "Ādityā",
+  "description": "Ādityā को आधिकारिक वेबसाइट",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#eaf5fb",
