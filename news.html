@@ -78,6 +78,78 @@
 </head>
 <body>
 
+<!-- HEADER (identical to Home: icon + ☰ dropdown, never changes on mobile) -->
+<header id="siteHeader">
+  <div class="logo-area">
+    <div class="aditya-access-icon" role="img" aria-label="ADITYA">
+      <svg fill="none" width="72" height="72" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <circle class="ac-circle" cx="16" cy="4" r="1"/>
+        <g class="ac-primary">
+          <path d="m18 19 1-7-6 1"/>
+          <path d="M8,5l5.5,3-2.4,3.5"/>
+          <path class="ac-path" d="M8 5 L5 8"/>
+        </g>
+        <g class="ac-secondary">
+          <path d="M4.2,14.5c-.8,2.6.7,5.4,3.3,6.2,1.2.4,2.4.3,3.6-.2"/>
+          <path d="M13.8,17.5c.8-2.6-.7-5.4-3.3-6.2-1.2-.4-2.4-.3-3.6.2"/>
+          <path d="M13,13.1c-.5-.7-1.1-1.2-1.9-1.6"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="header-menu">
+    <button class="menu-dots-btn" id="menuDotsBtn" onclick="toggleHeaderMenu()" aria-label="मेनु" aria-haspopup="true" aria-expanded="false">☰</button>
+    <div class="header-dropdown" id="headerDropdown">
+      <a href="index.html" class="menu-admin-link">🏠 <span>गृहपृष्ठ</span></a>
+      <a href="about.html" class="menu-admin-link">ℹ️ <span>बारेमा</span></a>
+      <a href="news.html" class="menu-admin-link">🗞️ <span>समाचार</span></a>
+      <a href="about.html#contact" class="menu-admin-link">📞 <span>सम्पर्क</span></a>
+      <a href="about.html#admission" class="menu-admin-link" style="color:var(--red);font-weight:700;">🔖 <span>भर्ना खुला</span></a>
+    </div>
+  </div>
+</header>
+<div id="headerSpacer"></div>
+<script>
+(function(){
+  function scaleSiteHeader() {
+    const header = document.getElementById('siteHeader');
+    const spacer = document.getElementById('headerSpacer');
+    if (!header) return;
+    if (window.innerWidth < 1080) {
+      const scale = window.innerWidth / 1080;
+      header.style.transform = 'scale(' + scale + ')';
+      if (spacer) spacer.style.height = (header.offsetHeight * scale) + 'px';
+    } else {
+      header.style.transform = '';
+      if (spacer) spacer.style.height = '';
+    }
+    header.classList.add('top-ready');
+  }
+  scaleSiteHeader();
+  window.addEventListener('load', scaleSiteHeader);
+  window.addEventListener('resize', scaleSiteHeader);
+  window.addEventListener('orientationchange', scaleSiteHeader);
+})();
+</script>
+<script>
+function toggleHeaderMenu() {
+  const dropdown = document.getElementById('headerDropdown');
+  const btn = document.getElementById('menuDotsBtn');
+  if (!dropdown) return;
+  const willOpen = !dropdown.classList.contains('open');
+  dropdown.classList.toggle('open', willOpen);
+  if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+}
+document.addEventListener('click', function(e){
+  const dropdown = document.getElementById('headerDropdown');
+  const btn = document.getElementById('menuDotsBtn');
+  if (!dropdown || !dropdown.classList.contains('open')) return;
+  if (dropdown.contains(e.target) || (btn && btn.contains(e.target))) return;
+  dropdown.classList.remove('open');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+});
+</script>
+
 <div class="news-page-inner">
 
   <!-- NEWS SECTION (Newspaper 1 + Newspaper 2) -->
