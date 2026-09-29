@@ -171,7 +171,6 @@ document.addEventListener('click', function(e){
       <div class="news-feed-list news-feed-list-single" id="newsFeedList2" data-source="data/news2.json"></div>
       <div class="ad-carousel" id="adCarousel" data-source="data/ads.json">
         <div class="ad-carousel-track" id="adCarouselTrack"></div>
-        <div class="ad-carousel-dots" id="adCarouselDots"></div>
       </div>
     </section>
   </div>
@@ -366,13 +365,12 @@ document.addEventListener('click', function(e){
 })();
 </script>
 
-<!-- AD CAROUSEL — data/ads.json बाट, auto + manual swipe, loop -->
+<!-- AD CAROUSEL — data/ads.json बाट, auto-only crossfade (no manual swipe, no dots) -->
 <script>
 (function(){
   var wrap = document.getElementById('adCarousel');
   if (!wrap) return;
   var track = document.getElementById('adCarouselTrack');
-  var dotsWrap = document.getElementById('adCarouselDots');
   var src = wrap.dataset.source;
 
   fetch(src, { cache: 'no-store' })
@@ -383,33 +381,15 @@ document.addEventListener('click', function(e){
         return '<div class="ad-slide"><img src="' + item.image + '" alt="विज्ञापन"></div>';
       }).join('');
       var slides = track.children;
-      dotsWrap.innerHTML = '';
-      for (var i = 0; i < slides.length; i++) {
-        var d = document.createElement('span');
-        d.dataset.index = i;
-        if (i === 0) d.classList.add('active');
-        d.addEventListener('click', function(){
-          track.scrollTo({ left: track.clientWidth * (+this.dataset.index), behavior: 'smooth' });
-        });
-        dotsWrap.appendChild(d);
-      }
-      var dots = dotsWrap.children;
-      function currentIndex(){ return Math.round(track.scrollLeft / track.clientWidth); }
-      function setActive(idx){ for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === idx); }
-      track.addEventListener('scroll', function(){ setActive(currentIndex()); }, { passive: true });
+      if (slides.length) slides[0].classList.add('active');
 
       if (slides.length > 1) {
-        var autoTimer = null;
-        function nextSlide(){
-          var next = (currentIndex() + 1) % slides.length;
-          track.scrollTo({ left: track.clientWidth * next, behavior: 'smooth' });
-        }
-        function startAuto(){ stopAuto(); autoTimer = setInterval(nextSlide, 3500); }
-        function stopAuto(){ if (autoTimer) clearInterval(autoTimer); }
-        startAuto();
-        track.addEventListener('pointerdown', stopAuto);
-        track.addEventListener('pointerup', function(){ setTimeout(startAuto, 1800); });
-        track.addEventListener('mouseleave', function(){ setTimeout(startAuto, 1800); });
+        var idx = 0;
+        setInterval(function(){
+          slides[idx].classList.remove('active');
+          idx = (idx + 1) % slides.length;
+          slides[idx].classList.add('active');
+        }, 3500);
       }
     })
     .catch(function(){ wrap.style.display = 'none'; });

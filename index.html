@@ -677,6 +677,15 @@ function closeLekh() {
     }).join('');
 
     var slides = track.children;
+    if (slides.length) slides[0].classList.add('active');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          entry.target.classList.toggle('active', entry.intersectionRatio > 0.6);
+        });
+      }, { root: track, threshold: [0, 0.6, 1] });
+      for (var s = 0; s < slides.length; s++) io.observe(slides[s]);
+    }
     dotsWrap.innerHTML = '';
     for (var i = 0; i < slides.length; i++) {
       var d = document.createElement('span');

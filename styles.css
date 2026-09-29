@@ -176,9 +176,10 @@
   /* SHOWCASE — photo/text pair, YouTube row, social icons */
   .showcase-section { background: #fdf1ec; padding: 20px 5% 70px; }
   .showcase-slider { max-width: 1080px; margin: 0 auto; }
-  .showcase-slides { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
+  .showcase-slides { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-snap-stop: always; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
   .showcase-slides::-webkit-scrollbar { display: none; }
-  .showcase-slide { flex: 0 0 100%; scroll-snap-align: start; }
+  .showcase-slide { flex: 0 0 100%; scroll-snap-align: start; opacity: .5; transform: scale(.95); transition: opacity .4s ease, transform .4s ease; will-change: opacity, transform; }
+  .showcase-slide.active { opacity: 1; transform: scale(1); }
   .showcase-top { display: flex; gap: 24px; align-items: stretch; }
   .showcase-text { flex: 0 0 240px; max-width: 240px; background: var(--sky); border-radius: 18px; display: flex; align-items: center; justify-content: center; padding: 26px; }
   .showcase-text p { font-family: 'Khand', 'Noto Sans Devanagari', sans-serif; font-weight: 600; text-align: center; color: var(--blue-dark); font-size: 1rem; line-height: 1.65; margin: 0; }
@@ -258,13 +259,10 @@
 
   /* AD CAROUSEL — auto + manual swipe loop */
   .ad-carousel { max-width: 1080px; margin: 28px auto 0; }
-  .ad-carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; border-radius: 16px; }
-  .ad-carousel-track::-webkit-scrollbar { display: none; }
-  .ad-slide { flex: 0 0 100%; scroll-snap-align: start; }
-  .ad-slide img { width: 100%; max-height: 360px; object-fit: cover; display: block; }
-  .ad-carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
-  .ad-carousel-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--blue-light); opacity: .35; transition: opacity .2s, transform .2s; cursor: pointer; }
-  .ad-carousel-dots span.active { opacity: 1; transform: scale(1.2); }
+  .ad-carousel-track { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 360px; border-radius: 16px; overflow: hidden; background: var(--sky-pale); touch-action: pan-y; }
+  .ad-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1s ease; pointer-events: none; }
+  .ad-slide.active { opacity: 1; }
+  .ad-slide img { width: 100%; height: 100%; object-fit: cover; display: block; -webkit-user-drag: none; user-select: none; }
 
   /* ══ AUTH BOX (HEADER) ══ */
   .auth-box { display: flex; align-items: center; gap: 6px; }
