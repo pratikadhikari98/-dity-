@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   :root {
     --blue-dark: #5c2f26;
@@ -139,6 +140,27 @@
   .deploy-btn-area.error .error-area span { color: var(--err); }
   .deploy-btn-area.error .frame-btn rect { stroke: var(--err); }
   .deploy-btn-area.error .main-btn rect { stroke: var(--err); }
+
+  /* ══ ZIP UPDATE (Commit अघि परिवर्तन हेर्ने) ══ */
+  .zchips { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .zchip { border:1px solid var(--border); background: var(--sky-pale); color: var(--text); border-radius:999px; padding:6px 13px; font-size:13px; cursor:pointer; font-family:'Noto Sans Devanagari',sans-serif; }
+  .zchip.on { background: var(--blue-mid); color:#fff; border-color: var(--blue-mid); }
+  .zrow { border:1px solid var(--border); border-radius:12px; margin:8px 0; overflow:hidden; background: var(--card-bg); }
+  .zhead { display:flex; align-items:center; gap:8px; padding:9px 12px; flex-wrap:wrap; }
+  .zhead input[type=checkbox] { width:18px; height:18px; flex:none; }
+  .zpath { font-family:monospace; font-size:13px; word-break:break-all; flex:1; min-width:150px; cursor:pointer; color: var(--text); }
+  .zmeta { font-size:12px; color: var(--text-light); cursor:pointer; }
+  .zhead .zview { padding:5px 12px; font-size:12px; }
+  .zbadge { font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px; color:#fff; flex:none; }
+  .zbadge.added { background:#2e7d32; } .zbadge.modified { background:#b7791f; } .zbadge.deleted { background:#b91c1c; } .zbadge.same { background:#888; }
+  .zbody { border-top:1px solid var(--border); padding:10px; background: var(--sky-pale); overflow-x:auto; }
+  .zdiff { font-family:monospace; font-size:12px; line-height:1.55; min-width:max-content; }
+  .zl { display:flex; white-space:pre; }
+  .zl .n { width:46px; text-align:right; padding-right:10px; color: var(--text-light); flex:none; user-select:none; }
+  .zl.add { background: rgba(46,125,50,.20); } .zl.del { background: rgba(185,28,28,.20); }
+  .zl.gap { color: var(--text-light); justify-content:center; padding:2px 0; }
+  .zimgs { display:flex; gap:12px; flex-wrap:wrap; } .zimgs figure { margin:0; flex:1; min-width:140px; }
+  .zimgs img { max-width:100%; max-height:260px; border-radius:8px; border:1px solid var(--border); background:#fff; }
 </style>
 </head>
 <body>
@@ -230,6 +252,39 @@
     <button class="btn-primary" id="loadBtn">सबै Load गर्नुहोस्</button>
   </div>
   <div class="status" id="connStatus"></div>
+</div>
+
+<div class="acc-header" data-target="zipCard">
+  <div class="sidebar-item_icon"><span class="material-symbols-rounded">folder_zip</span></div>
+  <div class="sidebar-item_text">Zip बाट Website Update (Commit अघि हेर्ने)</div>
+  <span class="acc-chevron material-symbols-rounded">expand_more</span>
+</div>
+<div class="card acc-panel" id="zipCard" style="display:none;">
+  <h2>Zip बाट Website Update</h2>
+  <div class="hint">अपडेट गरिएको website को zip यहाँ छान्नुहोस्। यसले GitHub को अहिलेको फाइलसँग तुलना गरी <b>कुन फाइल नयाँ / परिवर्तन / हटाइने</b> हो देखाउँछ — Commit तपाईंले छानेपछि मात्र हुन्छ। GitHub को "repo-main.zip" को माथिल्लो folder आफैं हटाइन्छ।</div>
+  <div class="row"><div>
+    <label>Website को zip फाइल</label>
+    <input type="file" id="zipFile" accept=".zip,application/zip">
+  </div></div>
+  <div class="top-actions">
+    <button class="btn-primary" id="zipAnalyzeBtn">Zip जाँच्नुहोस् — परिवर्तन हेर्नुहोस्</button>
+  </div>
+  <div class="status" id="zipStatus"></div>
+  <div id="zipResult" style="display:none;">
+    <div class="hint" id="zipHeadInfo"></div>
+    <div class="zchips" id="zipChips"></div>
+    <div class="hint">⚠ चिन्ह भएका फाइल (zip मा नभएका, वा Admin बाट बदलिने <code>data/</code> / <code>news/</code> का परिवर्तन) सुरुमा छानिएका हुँदैनन् — "हेर्नुहोस्" थिचेर फरक हेरेर मात्र छान्नुहोस्।</div>
+    <div class="top-actions">
+      <button class="btn-outline" id="zipSelAll" type="button">देखिएका सबै छान्नुहोस्</button>
+      <button class="btn-outline" id="zipSelNone" type="button">कुनै पनि नछान्नुहोस्</button>
+    </div>
+    <div id="zipList"></div>
+    <label>Commit सन्देश</label>
+    <input type="text" id="zipMsg" placeholder="Update website from zip">
+    <div class="top-actions">
+      <button class="btn-primary" id="zipCommitBtn" disabled>Commit गर्न फाइल छानिएको छैन</button>
+    </div>
+  </div>
 </div>
 
 <div class="acc-header" data-target="showcaseCard">
@@ -988,8 +1043,332 @@ $('adsSaveBtn').addEventListener('click', async () => {
   finally { $('adsSaveBtn').disabled = false; }
 });
 
+// ═══════════════ ZIP UPDATE — Commit अघि परिवर्तन हेर्ने ═══════════════
+const zipState = { zip: null, rows: [], headSha: null, filter: 'all' };
+const TEXT_EXT = ['html','htm','css','js','mjs','json','md','txt','svg','xml','webmanifest','yml','yaml','csv'];
+const IMG_MIME = { png:'image/png', jpg:'image/jpeg', jpeg:'image/jpeg', webp:'image/webp', gif:'image/gif', svg:'image/svg+xml', ico:'image/x-icon' };
+const TEXT_DIFF_MAX = 1500000; // यसभन्दा ठूलो text फाइलको line-diff देखाइँदैन
+const ZIP_STATUS_LABEL = { added: 'नयाँ', modified: 'परिवर्तन', deleted: 'हटाइने', same: 'अपरिवर्तित' };
+
+function extOf(p) { const m = /\.([a-z0-9]+)$/i.exec(p); return m ? m[1].toLowerCase() : ''; }
+function fmtSize(n) {
+  if (n == null) return '';
+  if (n < 1024) return n + ' B';
+  if (n < 1048576) return (n / 1024).toFixed(1) + ' KB';
+  return (n / 1048576).toFixed(2) + ' MB';
+}
+function b64ToU8(b64) {
+  const bin = atob(b64.replace(/\n/g, ''));
+  const u = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+  return u;
+}
+// Git ले फाइलको जुन SHA-1 बनाउँछ (blob <size>\0<content>) — यसैले GitHub को फाइलसँग ठ्याक्कै तुलना हुन्छ
+async function gitBlobSha(u8) {
+  const head = new TextEncoder().encode('blob ' + u8.length + '\0');
+  const buf = new Uint8Array(head.length + u8.length);
+  buf.set(head, 0); buf.set(u8, head.length);
+  const d = await crypto.subtle.digest('SHA-1', buf);
+  return Array.from(new Uint8Array(d)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function ghJson(url, opts) {
+  const res = await fetch(url, Object.assign({ headers: headers(), cache: 'no-store' }, opts || {}));
+  if (!res.ok) {
+    let t = ''; try { t = await res.text(); } catch (e) {}
+    throw new Error('GitHub (' + res.status + '): ' + t.slice(0, 180));
+  }
+  return res.json();
+}
+function zipIgnored(n) {
+  return /(^|\/)(__MACOSX|\.git)\//.test(n) || /(^|\/)(\.DS_Store|Thumbs\.db)$/.test(n);
+}
+function lineDiff(a, b) {
+  let s = 0;
+  while (s < a.length && s < b.length && a[s] === b[s]) s++;
+  let ea = a.length, eb = b.length;
+  while (ea > s && eb > s && a[ea - 1] === b[eb - 1]) { ea--; eb--; }
+  const A = a.slice(s, ea), B = b.slice(s, eb), ops = [];
+  for (let i = 0; i < s; i++) ops.push({ t: ' ', s: a[i] });
+  const n = A.length, m = B.length;
+  if (n * m > 4e6) {
+    A.forEach(x => ops.push({ t: '-', s: x }));
+    B.forEach(x => ops.push({ t: '+', s: x }));
+  } else {
+    const w = m + 1, dp = new Uint32Array((n + 1) * w);
+    for (let i = n - 1; i >= 0; i--)
+      for (let j = m - 1; j >= 0; j--)
+        dp[i * w + j] = A[i] === B[j] ? dp[(i + 1) * w + j + 1] + 1 : Math.max(dp[(i + 1) * w + j], dp[i * w + j + 1]);
+    let i = 0, j = 0;
+    while (i < n && j < m) {
+      if (A[i] === B[j]) { ops.push({ t: ' ', s: A[i] }); i++; j++; }
+      else if (dp[(i + 1) * w + j] >= dp[i * w + j + 1]) { ops.push({ t: '-', s: A[i] }); i++; }
+      else { ops.push({ t: '+', s: B[j] }); j++; }
+    }
+    while (i < n) ops.push({ t: '-', s: A[i++] });
+    while (j < m) ops.push({ t: '+', s: B[j++] });
+  }
+  for (let i = ea; i < a.length; i++) ops.push({ t: ' ', s: a[i] });
+  return ops;
+}
+function renderDiffHtml(ops) {
+  const CTX = 3, MAXLINES = 700;
+  const show = new Array(ops.length).fill(false);
+  ops.forEach((o, i) => {
+    if (o.t !== ' ') for (let k = Math.max(0, i - CTX); k <= Math.min(ops.length - 1, i + CTX); k++) show[k] = true;
+  });
+  let html = '', oldN = 0, newN = 0, shown = 0, gap = false, cut = false;
+  for (let i = 0; i < ops.length; i++) {
+    const o = ops[i];
+    if (o.t !== '+') oldN++;
+    if (o.t !== '-') newN++;
+    if (!show[i]) { gap = true; continue; }
+    if (shown >= MAXLINES) { cut = true; break; }
+    if (gap) { html += '<div class="zl gap">⋯</div>'; gap = false; }
+    const cls = o.t === '+' ? 'add' : (o.t === '-' ? 'del' : '');
+    const num = o.t === '+' ? newN : oldN;
+    html += '<div class="zl ' + cls + '"><span class="n">' + num + '</span><span>' + (o.t === ' ' ? '  ' : o.t + ' ') + escapeHtml(o.s) + '</span></div>';
+    shown++;
+  }
+  if (cut) html += '<div class="zl gap">… बाँकी परिवर्तन यहाँ देखाइएन (धेरै लामो)</div>';
+  if (!html) html = '<div class="hint">देखाउने line परिवर्तन छैन (खाली ठाउँ / line-ending मात्र फरक हुन सक्छ)।</div>';
+  return '<div class="zdiff">' + html + '</div>';
+}
+async function zipPool(items, limit, worker) {
+  let idx = 0;
+  const runners = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (idx < items.length) { const it = items[idx++]; await worker(it); }
+  });
+  await Promise.all(runners);
+}
+async function zipOldU8(r) {
+  const out = await ghJson(apiBase() + '/git/blobs/' + r.oldSha);
+  return b64ToU8(out.content);
+}
+async function zipNewU8(r) { return zipState.zip.file(r.zipName).async('uint8array'); }
+
+async function zipComputeDiff(r) {
+  const dec = new TextDecoder('utf-8');
+  const oldText = r.status === 'added' ? '' : dec.decode(await zipOldU8(r));
+  const newText = r.status === 'deleted' ? '' : dec.decode(await zipNewU8(r));
+  const split = t => t === '' ? [] : t.split(/\r?\n/);
+  r.ops = lineDiff(split(oldText), split(newText));
+  r.add = r.ops.filter(o => o.t === '+').length;
+  r.del = r.ops.filter(o => o.t === '-').length;
+}
+function zipCanTextDiff(r) {
+  const ext = extOf(r.path);
+  if (!TEXT_EXT.includes(ext) || IMG_MIME[ext] && ext !== 'svg') return false;
+  return (r.size || 0) <= TEXT_DIFF_MAX && (r.oldSize || 0) <= TEXT_DIFF_MAX;
+}
+
+async function zipAnalyze() {
+  const st = $('zipStatus');
+  const file = $('zipFile').files[0];
+  if (!file) return setStatus(st, '✗ पहिले zip फाइल छान्नुहोस्।', 'err');
+  if (!$('token').value.trim() || !$('owner').value.trim() || !$('repo').value.trim())
+    return setStatus(st, '✗ माथिको "GitHub जडान" मा Token, Owner र Repo भर्नुहोस्।', 'err');
+  if (!window.JSZip) return setStatus(st, '✗ JSZip लोड भएन — इन्टरनेट जाँचेर पेज रिफ्रेस गर्नुहोस्।', 'err');
+  if (!(window.crypto && crypto.subtle)) return setStatus(st, '✗ यो browser/पेज (https चाहिन्छ) मा SHA-1 जाँच चल्दैन।', 'err');
+  $('zipAnalyzeBtn').disabled = true;
+  $('zipResult').style.display = 'none';
+  try {
+    setStatus(st, 'Zip खोल्दै…', '');
+    const zip = await JSZip.loadAsync(file);
+    let names = Object.keys(zip.files).filter(n => !zip.files[n].dir && !zipIgnored(n));
+    if (!names.length) throw new Error('Zip खाली छ।');
+    // GitHub को "repo-main.zip" को माथिल्लो folder आफैं हटाउने
+    const firstSegs = new Set(names.map(n => n.split('/')[0]));
+    const prefix = (firstSegs.size === 1 && names.every(n => n.includes('/'))) ? [...firstSegs][0] + '/' : '';
+
+    setStatus(st, 'GitHub को अहिलेको अवस्था तान्दै…', '');
+    const ref = await ghJson(apiBase() + '/git/ref/heads/' + branch());
+    const headSha = ref.object.sha;
+    const commit = await ghJson(apiBase() + '/git/commits/' + headSha);
+    const treeRes = await ghJson(apiBase() + '/git/trees/' + commit.tree.sha + '?recursive=1');
+    if (treeRes.truncated) throw new Error('Repo धेरै ठूलो भएकाले पूरै फाइल सूची आएन।');
+    const remote = new Map();
+    treeRes.tree.filter(t => t.type === 'blob').forEach(t => remote.set(t.path, t));
+
+    const rows = [];
+    const seen = new Set();
+    for (let i = 0; i < names.length; i++) {
+      const zipName = names[i];
+      const path = prefix ? zipName.slice(prefix.length) : zipName;
+      if (!path) continue;
+      setStatus(st, 'फाइल तुलना गर्दै… (' + (i + 1) + '/' + names.length + ')', '');
+      const u8 = await zip.file(zipName).async('uint8array');
+      const newSha = await gitBlobSha(u8);
+      const old = remote.get(path);
+      seen.add(path);
+      const row = { path, zipName, size: u8.length, newSha, oldSha: old ? old.sha : null, oldSize: old ? old.size : null, mode: old ? old.mode : '100644', open: false };
+      row.status = !old ? 'added' : (old.sha === newSha ? 'same' : 'modified');
+      rows.push(row);
+    }
+    remote.forEach((t, path) => {
+      if (!seen.has(path)) rows.push({ path, zipName: null, size: null, newSha: null, oldSha: t.sha, oldSize: t.size, mode: t.mode, status: 'deleted', open: false });
+    });
+    rows.forEach(r => {
+      // नयाँ/परिवर्तन मात्र पूर्वनिर्धारित छानिन्छ; हटाउने, admin ले बदल्ने data/, र workflow फाइल होइन
+      const risky = r.status === 'deleted' || /^\.github\/workflows\//.test(r.path) || (/^(data|news)\//.test(r.path) && r.status === 'modified');
+      r.selected = (r.status === 'added' || r.status === 'modified') && !risky;
+    });
+    rows.sort((a, b) => a.path.localeCompare(b.path));
+    zipState.zip = zip; zipState.rows = rows; zipState.headSha = headSha; zipState.filter = 'all';
+
+    // text फाइलको line-diff अघिल्लै गणना (+/− संख्या देखाउन)
+    const toDiff = rows.filter(r => r.status === 'modified' && zipCanTextDiff(r));
+    let done = 0;
+    await zipPool(toDiff, 4, async r => {
+      try { await zipComputeDiff(r); } catch (e) { r.diffErr = e.message; }
+      setStatus(st, 'फरक गणना गर्दै… (' + (++done) + '/' + toDiff.length + ')', '');
+    });
+    $('zipResult').style.display = 'block';
+    $('zipHeadInfo').textContent = 'Branch "' + branch() + '" · अहिलेको commit ' + headSha.slice(0, 7) + ' · Zip: ' + names.length + ' फाइल';
+    zipRenderList();
+    const ch = rows.filter(r => r.status !== 'same').length;
+    setStatus(st, ch ? '✓ जाँच सकियो — ' + ch + ' फाइलमा फरक भेटियो। तल हेरेर छान्नुहोस्।' : '✓ GitHub र zip ठ्याक्कै एउटै छन् — कुनै परिवर्तन छैन।', 'ok');
+  } catch (err) {
+    setStatus(st, '✗ ' + err.message, 'err');
+  } finally {
+    $('zipAnalyzeBtn').disabled = false;
+  }
+}
+
+function zipUpdateCommitBtn() {
+  const n = zipState.rows.filter(r => r.selected && r.status !== 'same').length;
+  const b = $('zipCommitBtn');
+  b.textContent = n ? 'छानिएका ' + n + ' फाइल GitHub मा Commit गर्नुहोस्' : 'Commit गर्न फाइल छानिएको छैन';
+  b.disabled = n === 0;
+}
+function zipRenderList() {
+  const rows = zipState.rows, f = zipState.filter;
+  rows.forEach(r => { r.rendered = false; });
+  const counts = { added: 0, modified: 0, deleted: 0, same: 0 };
+  rows.forEach(r => counts[r.status]++);
+  const chip = (key, label, n) => '<button type="button" class="zchip' + (f === key ? ' on' : '') + '" data-f="' + key + '">' + label + ' ' + n + '</button>';
+  $('zipChips').innerHTML = chip('all', 'सबै फरक', counts.added + counts.modified + counts.deleted)
+    + chip('modified', 'परिवर्तन', counts.modified) + chip('added', 'नयाँ', counts.added)
+    + chip('deleted', 'हटाइने', counts.deleted) + chip('same', 'अपरिवर्तित', counts.same);
+  const vis = rows.filter(r => f === 'all' ? r.status !== 'same' : r.status === f);
+  const list = $('zipList');
+  if (!vis.length) { list.innerHTML = '<div class="hint">यो वर्गमा कुनै फाइल छैन।</div>'; zipUpdateCommitBtn(); return; }
+  list.innerHTML = vis.map(r => {
+    const idx = rows.indexOf(r);
+    let meta = '';
+    if (r.add != null) meta += (r.add || r.del) ? '<b style="color:var(--ok)">+' + r.add + '</b> <b style="color:var(--err)">−' + r.del + '</b> · ' : 'line फरक छैन (खाली ठाउँ मात्र) · ';
+    meta += r.status === 'modified' ? fmtSize(r.oldSize) + ' → ' + fmtSize(r.size) : fmtSize(r.status === 'deleted' ? r.oldSize : r.size);
+    const warn = (r.status === 'deleted') ? ' <span title="Admin बाट थपिएको फाइल पनि हुन सक्छ">⚠</span>'
+      : ((/^(data|news)\//.test(r.path) && r.status === 'modified') ? ' <span title="Admin panel बाट बदलिएको data हुन सक्छ — diff हेरेर मात्र छान्नुहोस्">⚠</span>' : '');
+    return '<div class="zrow" data-i="' + idx + '"><div class="zhead">'
+      + '<input type="checkbox" class="zchk"' + (r.selected ? ' checked' : '') + '>'
+      + '<span class="zbadge ' + r.status + '">' + ZIP_STATUS_LABEL[r.status] + '</span>'
+      + '<span class="zpath">' + escapeHtml(r.path) + warn + '</span>'
+      + '<span class="zmeta">' + meta + '</span>'
+      + '<button type="button" class="btn-outline zview">हेर्नुहोस्</button></div>'
+      + '<div class="zbody" style="display:none"></div></div>';
+  }).join('');
+  zipUpdateCommitBtn();
+}
+async function zipRenderBody(r, body) {
+  body.innerHTML = '<div class="hint">Load हुँदैछ…</div>';
+  try {
+    const ext = extOf(r.path);
+    if (IMG_MIME[ext] && ext !== 'svg') {
+      let oldSrc = null, newSrc = null;
+      if (r.status !== 'added') oldSrc = 'data:' + IMG_MIME[ext] + ';base64,' + (await ghJson(apiBase() + '/git/blobs/' + r.oldSha)).content.replace(/\n/g, '');
+      if (r.status !== 'deleted') newSrc = URL.createObjectURL(new Blob([await zipNewU8(r)], { type: IMG_MIME[ext] }));
+      body.innerHTML = '<div class="zimgs">'
+        + (oldSrc ? '<figure><figcaption class="hint">पुरानो (' + fmtSize(r.oldSize) + ')</figcaption><img src="' + oldSrc + '"></figure>' : '')
+        + (newSrc ? '<figure><figcaption class="hint">नयाँ (' + fmtSize(r.size) + ')</figcaption><img src="' + newSrc + '"></figure>' : '')
+        + '</div>';
+    } else if (zipCanTextDiff(r)) {
+      if (!r.ops) await zipComputeDiff(r);
+      body.innerHTML = renderDiffHtml(r.ops);
+    } else {
+      body.innerHTML = '<div class="hint">Binary वा धेरै ठूलो फाइल — पुरानो ' + fmtSize(r.oldSize) + ' → नयाँ ' + fmtSize(r.size) + '। सामग्री तुलना देखाउन सकिएन।</div>';
+    }
+  } catch (e) {
+    body.innerHTML = '<div class="status err">' + escapeHtml(e.message) + '</div>';
+  }
+}
+
+async function zipCommit() {
+  const st = $('zipStatus');
+  const sel = zipState.rows.filter(r => r.selected && r.status !== 'same');
+  if (!sel.length) return setStatus(st, '✗ कुनै फाइल छानिएको छैन।', 'err');
+  const dels = sel.filter(r => r.status === 'deleted');
+  const ups = sel.filter(r => r.status !== 'deleted');
+  if (dels.length && !confirm(dels.length + ' फाइल GitHub बाट हटाइनेछ। पक्का हुनुहुन्छ?')) return;
+  const message = $('zipMsg').value.trim() || 'Update website from zip';
+  let parentSha, baseTree, newTree, newCommit;
+  const treeItems = [];
+  const steps = [];
+  steps.push(async () => {
+    const ref = await ghJson(apiBase() + '/git/ref/heads/' + branch());
+    parentSha = ref.object.sha;
+    if (zipState.headSha && parentSha !== zipState.headSha)
+      throw new Error('जाँच गरेपछि GitHub मा अरू परिवर्तन भयो — zip फेरि जाँच्नुहोस्।');
+    baseTree = (await ghJson(apiBase() + '/git/commits/' + parentSha)).tree.sha;
+  });
+  ups.forEach(r => steps.push(async () => {
+    const content = await zipState.zip.file(r.zipName).async('base64');
+    const out = await ghJson(apiBase() + '/git/blobs', { method: 'POST', body: JSON.stringify({ content, encoding: 'base64' }) });
+    treeItems.push({ path: r.path, mode: r.mode || '100644', type: 'blob', sha: out.sha });
+  }));
+  steps.push(async () => {
+    dels.forEach(r => treeItems.push({ path: r.path, mode: r.mode || '100644', type: 'blob', sha: null }));
+    newTree = (await ghJson(apiBase() + '/git/trees', { method: 'POST', body: JSON.stringify({ base_tree: baseTree, tree: treeItems }) })).sha;
+  });
+  steps.push(async () => {
+    newCommit = (await ghJson(apiBase() + '/git/commits', { method: 'POST', body: JSON.stringify({ message, tree: newTree, parents: [parentSha] }) })).sha;
+  });
+  steps.push(async () => {
+    await ghJson(apiBase() + '/git/refs/heads/' + branch(), { method: 'PATCH', body: JSON.stringify({ sha: newCommit }) });
+    lastCommitSha = newCommit;
+  });
+  $('zipCommitBtn').disabled = true;
+  try {
+    await runGithubTask(steps, 'Zip बाट Commit गर्दै…', 'Commit भयो ✓');
+    ups.forEach(r => { r.status = 'same'; r.oldSha = r.newSha; r.oldSize = r.size; r.ops = null; r.add = r.del = null; r.selected = false; });
+    zipState.rows = zipState.rows.filter(r => !(dels.includes(r)));
+    zipState.headSha = newCommit;
+    zipRenderList();
+    setStatus(st, '✓ ' + sel.length + ' फाइल Commit भयो (' + newCommit.slice(0, 7) + ')। केही मिनेटमा वेबसाइटमा देखिन्छ।', 'ok');
+  } catch (err) {
+    setStatus(st, '✗ ' + err.message, 'err');
+    zipUpdateCommitBtn();
+  }
+}
+
+$('zipAnalyzeBtn').addEventListener('click', zipAnalyze);
+$('zipCommitBtn').addEventListener('click', zipCommit);
+$('zipChips').addEventListener('click', e => {
+  const b = e.target.closest('.zchip'); if (!b) return;
+  zipState.filter = b.dataset.f; zipRenderList();
+});
+$('zipSelAll').addEventListener('click', () => {
+  document.querySelectorAll('#zipList .zrow').forEach(el => { zipState.rows[+el.dataset.i].selected = true; el.querySelector('.zchk').checked = true; });
+  zipUpdateCommitBtn();
+});
+$('zipSelNone').addEventListener('click', () => {
+  document.querySelectorAll('#zipList .zrow').forEach(el => { zipState.rows[+el.dataset.i].selected = false; el.querySelector('.zchk').checked = false; });
+  zipUpdateCommitBtn();
+});
+$('zipList').addEventListener('click', e => {
+  const rowEl = e.target.closest('.zrow'); if (!rowEl) return;
+  const r = zipState.rows[+rowEl.dataset.i];
+  if (e.target.classList.contains('zchk')) { r.selected = e.target.checked; zipUpdateCommitBtn(); return; }
+  if (e.target.classList.contains('zview') || e.target.classList.contains('zpath') || e.target.classList.contains('zmeta')) {
+    const body = rowEl.querySelector('.zbody');
+    const open = body.style.display === 'none';
+    body.style.display = open ? 'block' : 'none';
+    if (open && !r.rendered) { r.rendered = true; zipRenderBody(r, body); }
+  }
+});
+
+
 // ═══════════════ ACCORDION (थिचेको ठाउँको ठ्याक्कै तल खुल्ने) + THEME ═══════════════
-const CARD_IDS = ['githubCard','showcaseCard','shlokaCard','aboutCard','bookCard','newsCard','news2Card','adsCard'];
+const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','aboutCard','bookCard','newsCard','news2Card','adsCard'];
 const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','news2SaveBtn','adsSaveBtn'];
 SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = true; }); // Load नगरी Save गर्दा खाली डेटाले ओभरराइट हुनबाट बचाउन
 
