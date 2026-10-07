@@ -888,10 +888,3 @@
     #desktopTopInner { width: 100%; transform: none !important; }
     #desktopTopWrap { overflow: visible; height: auto !important; }
   }
-  /* ══ BOTTOM APP BAR (Google apps-tray style) ══ */
-  .bottom-app-bar { position: fixed; left: 0; right: 0; bottom: 14px; display: flex; justify-content: center; z-index: 200; pointer-events: none; }
-  .bottom-app-bar-inner { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.98); border-radius: 26px; padding: 8px 10px; box-shadow: 0 6px 24px rgba(20,40,80,0.22), 0 1px 3px rgba(0,0,0,0.08); pointer-events: auto; }
-  .app-icon-btn { width: 46px; height: 46px; border-radius: 12px; background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform .15s, box-shadow .15s; flex-shrink: 0; }
-  .app-icon-btn span { font-size: 1.3rem; line-height: 1; }
-  .app-icon-btn:hover, .app-icon-btn:active { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-  body { padding-bottom: 78px; }

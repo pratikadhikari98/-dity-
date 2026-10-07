@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20260928" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261007" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -72,6 +72,20 @@
     text-align: center; padding: 0 16px; text-shadow: 0 2px 6px rgba(0,0,0,0.4);
   }
   #bookEmbedWrap input { display: none; }
+
+  /* swipe card+text र समाचार १ बीचको खाली ठाउँ घटाइएको; dots हटाइयो */
+  .showcase-section { padding-bottom: 6px; }
+  .showcase-dots { display: none; }
+  .news-page-inner { padding-top: 0; }
+  #news > .news-feed-section:first-child { padding-top: 0; }
+
+  /* समाचार १ र २ — स्क्रिनको दुवै छेउ छुने (full-width) */
+  @media (max-width: 1080px) {
+    #news > .news-feed-section:not(#bookEmbedSection) { padding-left: 0; padding-right: 0; }
+    #news .news-feed-list { max-width: none; }
+    #news .news-feed-card { border-radius: 0; }
+    #news .ad-carousel { margin-left: 5%; margin-right: 5%; }
+  }
 </style>
 </head>
 <body>
@@ -325,7 +339,6 @@ document.addEventListener('click', function(e){
 <section class="showcase-section" id="showcase">
   <div class="showcase-slider" data-source="data/showcase.json">
     <div class="showcase-slides" id="showcaseSlides"></div>
-    <div class="showcase-dots" id="showcaseDots"></div>
   </div>
 </section>
 
@@ -574,16 +587,6 @@ document.addEventListener('click', function(e){
 
 
 
-<!-- BOTTOM APP BAR -->
-<div class="bottom-app-bar">
-  <div class="bottom-app-bar-inner">
-    <a href="#home" class="app-icon-btn" title="गृहपृष्ठ"><span>🏠</span></a>
-    <a href="news.html" class="app-icon-btn" title="समाचार"><span>🗞️</span></a>
-    <a href="#bookEmbedSection" class="app-icon-btn" title="किताब"><span>📖</span></a>
-    <a href="about.html#gallery" class="app-icon-btn" title="ग्यालरी"><span>🖼️</span></a>
-    <a href="about.html#contact" class="app-icon-btn" title="सम्पर्क"><span>☎️</span></a>
-  </div>
-</div>
 
 
 <script>
@@ -961,7 +964,6 @@ function closeLekh() {
 
   function initSlider(slider, items){
     var track = slider.querySelector('.showcase-slides');
-    var dotsWrap = slider.querySelector('.showcase-dots');
     if (!track || !items || !items.length) return;
 
     track.innerHTML = items.map(function(item){
@@ -971,8 +973,14 @@ function closeLekh() {
              '</div>';
     }).join('');
 
+    var n = track.children.length;
+    // अनन्त loop: [अन्तिमको प्रति] + असली स्लाइडहरू + [पहिलोको प्रति]
+    if (n > 1) {
+      track.insertBefore(track.children[n - 1].cloneNode(true), track.firstChild);
+      track.appendChild(track.children[1].cloneNode(true));
+    }
     var slides = track.children;
-    if (slides.length) slides[0].classList.add('active');
+    if (slides.length) slides[n > 1 ? 1 : 0].classList.add('active');
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function(entries){
         entries.forEach(function(entry){
@@ -981,40 +989,50 @@ function closeLekh() {
       }, { root: track, threshold: [0, 0.6, 1] });
       for (var s = 0; s < slides.length; s++) io.observe(slides[s]);
     }
-    dotsWrap.innerHTML = '';
-    for (var i = 0; i < slides.length; i++) {
-      var d = document.createElement('span');
-      d.dataset.index = i;
-      if (i === 0) d.classList.add('active');
-      d.addEventListener('click', function(){
-        var idx = +this.dataset.index;
-        track.scrollTo({ left: track.clientWidth * idx, behavior: 'smooth' });
-      });
-      dotsWrap.appendChild(d);
-    }
-    var dots = dotsWrap.children;
+    if (n < 2) return;
 
-    function currentIndex(){
-      return Math.round(track.scrollLeft / track.clientWidth);
+    function jump(left){
+      track.style.scrollBehavior = 'auto';
+      track.scrollLeft = left;
+      track.style.scrollBehavior = '';
     }
-    function setActive(idx){
-      for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === idx);
-    }
-    track.addEventListener('scroll', function(){ setActive(currentIndex()); }, { passive: true });
+    jump(track.clientWidth); // पहिलो असली स्लाइडबाट सुरु
 
-    if (slides.length > 1) {
-      var autoTimer = null;
-      function nextSlide(){
-        var next = (currentIndex() + 1) % slides.length;
-        track.scrollTo({ left: track.clientWidth * next, behavior: 'smooth' });
-      }
-      function startAuto(){ stopAuto(); autoTimer = setInterval(nextSlide, 4500); }
-      function stopAuto(){ if (autoTimer) clearInterval(autoTimer); }
-      startAuto();
-      track.addEventListener('pointerdown', stopAuto);
-      track.addEventListener('pointerup', function(){ setTimeout(startAuto, 1800); });
-      track.addEventListener('mouseleave', function(){ setTimeout(startAuto, 1800); });
+    function currentIndex(){ return Math.round(track.scrollLeft / track.clientWidth); }
+    // स्क्रोल रोकिएपछि प्रतिमा पुगेको भए बिना झट्का असली स्लाइडमा सार्ने (देखिने दृश्य उही रहन्छ)
+    var settleTimer = null;
+    function fixLoop(){
+      var w = track.clientWidth; if (!w) return;
+      var x = track.scrollLeft;
+      if (x <= w * 0.5) jump(x + n * w);
+      else if (x >= w * (n + 0.5)) jump(x - n * w);
     }
+    track.addEventListener('scroll', function(){
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(fixLoop, 90);
+    }, { passive: true });
+
+    var lastW = track.clientWidth;
+    window.addEventListener('resize', function(){
+      var w = track.clientWidth;
+      if (w && lastW) jump(track.scrollLeft * (w / lastW));
+      lastW = w;
+    });
+
+    // auto — सधैं अगाडि, अन्तिमपछि पहिलो (loop)
+    var autoTimer = null, touching = false;
+    function nextSlide(){
+      if (touching) return;
+      track.scrollTo({ left: track.clientWidth * (currentIndex() + 1), behavior: 'smooth' });
+    }
+    function stopAuto(){ if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
+    function startAuto(){ stopAuto(); autoTimer = setInterval(nextSlide, 4500); }
+    function release(){ touching = false; setTimeout(function(){ if (!touching) startAuto(); }, 1800); }
+    startAuto();
+    track.addEventListener('pointerdown', function(){ touching = true; stopAuto(); });
+    ['pointerup', 'pointercancel', 'touchend', 'touchcancel', 'mouseleave'].forEach(function(ev){
+      track.addEventListener(ev, release, { passive: true });
+    });
   }
 
   document.querySelectorAll('.showcase-slider').forEach(function(slider){
