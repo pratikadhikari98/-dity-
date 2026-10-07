@@ -434,15 +434,18 @@ document.addEventListener('click', function(e){
         var matras = [];
         while (i < n && PT_MATRA[s.charAt(i)] || s.charAt(i) === 'ि') { matras.push(s.charAt(i)); i++; }
         var hasI = matras.indexOf('ि') >= 0;
+        // रु / रू — Preeti मा छुट्टै अक्षर '?' हुन्छ (र + ु/ू को सट्टा)
+        var ru = (units.length === 1 && units[0] === 'र' && !reph && !rakar && !trailing && (matras.indexOf('ु') >= 0 || matras.indexOf('ू') >= 0));
         if (hasI) out += 'l';                                  // ि व्यञ्जनभन्दा अगाडि लेखिन्छ
-        for (var k = 0; k < units.length; k++) {
+        if (ru) out += '?';
+        for (var k = 0; !ru && k < units.length; k++) {
           var un = units[k], last = (k === units.length - 1);
           if (!last) out += PT_HALF[un] || (PT_FULL[un] + '\\');
           else if (trailing) out += PT_HALF[un] || (PT_FULL[un] + '\\');
           else out += PT_FULL[un] + (rakar ? '|' : '');
         }
         if (reph) out += '{';                                  // रेफ अन्तिम अक्षरको माथि
-        matras.forEach(function(m){ if (m !== 'ि') out += PT_MATRA[m]; });
+        matras.forEach(function(m){ if (m !== 'ि' && !(ru && (m === 'ु' || m === 'ू'))) out += PT_MATRA[m]; });
         continue;
       }
       if (PT_VOWEL[c]) { out += PT_VOWEL[c]; i++; continue; }
