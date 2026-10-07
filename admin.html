@@ -361,7 +361,7 @@
     <button type="button" class="btn-outline" id="bookBoldBtn"><b>B</b> Bold बनाउनुहोस्</button>
     <button type="button" class="btn-outline" id="bookColorBtn">🎨 रङ लगाउनुहोस्</button>
   </div>
-  <div class="hint">जति पनि फोटो थप्न सकिन्छ, जुनसुकै ठाउँमा। छानिएको (selected) टेक्स्टलाई मात्र Bold वा रङ लगाउन मिल्छ।</div>
+  <div class="hint">जति पनि फोटो थप्न सकिन्छ, जुनसुकै ठाउँमा। छानिएको (selected) टेक्स्टलाई मात्र Bold वा रङ लगाउन मिल्छ। एलाइन बटन (बायाँ / बीचमा / दायाँ) ले छानिएको अंशलाई छुट्टै अनुच्छेद बनाएर त्यसतर्फ सार्छ; "सामान्य" ले पहिलेकै जस्तो फर्काउँछ।</div>
   <div class="ratio-hint"><span class="material-symbols-rounded">aspect_ratio</span>भित्री फोटो: कुनै पनि अनुपात चल्छ (चौडाइ अनुसार आफै ठीक हुन्छ)</div>
   <div class="top-actions">
     <button class="btn-primary" id="bookSaveBtn">किताब Save गर्नुहोस्</button>
@@ -879,6 +879,12 @@ function makeNewsEditor(cfg) {
           <button type="button" class="btn-outline" data-idx="${i}" data-action="make-bold"><b>B</b> Bold बनाउनुहोस्</button>
           <button type="button" class="btn-outline" data-idx="${i}" data-action="make-color">🎨 रङ लगाउनुहोस्</button>
         </div>
+        <div class="row" style="margin-top:8px;">
+          <button type="button" class="btn-outline" data-idx="${i}" data-action="align-left">⬅ बायाँ</button>
+          <button type="button" class="btn-outline" data-idx="${i}" data-action="align-center">↔ बीचमा</button>
+          <button type="button" class="btn-outline" data-idx="${i}" data-action="align-right">➡ दायाँ</button>
+          <button type="button" class="btn-outline" data-idx="${i}" data-action="align-justify">☰ सामान्य</button>
+        </div>
         <div class="hint">जति पनि फोटो थप्न सकिन्छ, जुनसुकै ठाउँमा। छानिएको (selected) टेक्स्टलाई मात्र Bold वा रङ लगाउन मिल्छ।</div>
         <div class="ratio-hint"><span class="material-symbols-rounded">aspect_ratio</span>भित्री फोटो: कुनै पनि अनुपात चल्छ</div>
         <div class="slide-actions">
@@ -934,6 +940,39 @@ function makeNewsEditor(cfg) {
           ta.focus(); ta.setSelectionRange(pos, pos);
         };
         colorInput.click();
+      });
+    });
+    list.querySelectorAll('button[data-action^="align-"]').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = +el.dataset.idx;
+        const dir = el.dataset.action.replace('align-', '');
+        const ta = document.getElementById(cfg.taPrefix + idx);
+        const start = ta.selectionStart, end = ta.selectionEnd;
+        if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि एलाइन बटन थिच्नुहोस्।'); return; }
+        const v = ta.value;
+        // छानिएको अंश रहेको अनुच्छेद (खाली लाइनले छुट्याइएको) खोज्ने
+        let bs = start > 0 ? v.lastIndexOf('\n\n', start - 1) : -1; bs = bs < 0 ? 0 : bs + 2;
+        let be = v.indexOf('\n\n', end); if (be < 0) be = v.length;
+        const block = v.slice(bs, be).trim();
+        const m = /^<p style="text-align:(left|center|right|justify)">([\s\S]*)<\/p>$/.exec(block);
+        let out, from, to;
+        if (m) {                       // पहिले नै एलाइन गरिएको अनुच्छेद — दिशा मात्र बदल्ने
+          from = bs; to = be;
+          out = dir === 'justify' ? m[2] : '<p style="text-align:' + dir + '">' + m[2] + '</p>';
+        } else {                       // नयाँ — छानिएको अंश छुट्टै अनुच्छेद बनाउने
+          from = start; to = end;
+          const parts = v.slice(start, end).split(/\n\s*\n/).map(t => t.trim()).filter(Boolean);
+          out = dir === 'justify' ? parts.join('\n\n')
+              : parts.map(t => /^<img\b/i.test(t) ? t : '<p style="text-align:' + dir + '">' + t + '</p>').join('\n\n');
+          const before = v.slice(0, from), after = v.slice(to);
+          const sepB = from > 0 ? (/\n\n$/.test(before) ? '' : (/\n$/.test(before) ? '\n' : '\n\n')) : '';
+          const sepA = to < v.length ? (/^\n\n/.test(after) ? '' : (/^\n/.test(after) ? '\n' : '\n\n')) : '';
+          out = sepB + out + sepA;
+        }
+        ta.value = v.slice(0, from) + out + v.slice(to);
+        items[idx].text = ta.value;
+        const pos = from + out.length;
+        ta.focus(); ta.setSelectionRange(pos, pos);
       });
     });
     list.querySelectorAll('input[data-field="inline-file"]').forEach(el => {
