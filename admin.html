@@ -161,6 +161,27 @@
   .zl.gap { color: var(--text-light); justify-content:center; padding:2px 0; }
   .zimgs { display:flex; gap:12px; flex-wrap:wrap; } .zimgs figure { margin:0; flex:1; min-width:140px; }
   .zimgs img { max-width:100%; max-height:260px; border-radius:8px; border:1px solid var(--border); background:#fff; }
+  /* ── Rich editor (WYSIWYG) ── */
+  .re-wrap { border:1.5px solid var(--border); border-radius:12px; background:#fff; margin-top:6px; }
+  .re-toolbar { display:flex; flex-wrap:wrap; gap:6px; padding:8px; background:var(--sky-pale); border-bottom:1px solid var(--border); border-radius:12px 12px 0 0; align-items:center; }
+  .re-toolbar button { padding:7px 11px; font-size:.85rem; border-radius:8px; background:#fff; border:1px solid var(--blue-mid); color:var(--blue-mid); min-width:38px; }
+  .re-toolbar button.on { background:var(--blue-mid); color:#fff; }
+  .re-toolbar button:disabled { opacity:.5; }
+  .re-sep { width:1px; align-self:stretch; background:var(--border); margin:0 2px; }
+  .re-pal { padding:10px; background:var(--sky-pale); border-bottom:1px solid var(--border); }
+  .re-pal[hidden] { display:none; }
+  .re-pal-title { font-size:.8rem; color:var(--text-light); margin-bottom:6px; font-weight:700; }
+  .re-swatches { display:flex; flex-wrap:wrap; }
+  .re-sw { width:30px; height:30px; padding:0; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px #aaa; margin:3px; cursor:pointer; }
+  .re-pal-row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:8px; }
+  .re-custom { display:flex; align-items:center; gap:8px; margin:0; font-size:.85rem; }
+  .re-custom input[type=color] { width:46px; height:32px; padding:1px; border-radius:6px; }
+  .re-pal-clear { padding:7px 12px; font-size:.82rem; background:#fff; border:1px solid var(--err); color:var(--err); border-radius:8px; }
+  .re-editor { min-height:180px; padding:12px 14px; outline:none; font-family:'Noto Sans Devanagari',sans-serif; font-size:1.05rem; line-height:1.85; color:#1a2a3a; background:#fff; word-break:break-word; border-radius:0 0 12px 12px; }
+  .re-editor p { margin:0 0 .8em; text-align:justify; }
+  .re-editor .ed-img { position:relative; margin:.6em 0; text-align:center; }
+  .re-editor .ed-img img { max-width:100%; max-height:300px; width:auto; height:auto; border-radius:8px; display:inline-block; margin:0; object-fit:contain; }
+  .re-editor .ed-img-del { position:absolute; top:6px; right:6px; width:32px; height:32px; border-radius:50%; padding:0; background:rgba(0,0,0,.65); color:#fff; font-size:.9rem; }
 </style>
 </head>
 <body>
@@ -352,16 +373,9 @@
   <div class="ratio-hint"><span class="material-symbols-rounded">aspect_ratio</span>अनुपात: 3:4 जस्तो लामो/portrait (ठ्याक्कै 298×420 px भए उत्तम)</div>
   <label>टेक्स्ट रङ (पानाभित्रको)</label>
   <input type="color" id="bookColor" value="#1a1a1a" style="width:60px;height:36px;padding:2px;">
-  <label>विवरण (Text) — जति लेखे पनि हुन्छ, आवश्यक अनुसार पाना आफैं थपिन्छन्</label>
-  <textarea id="bookTextArea" style="min-height:220px;"></textarea>
-  <input type="file" accept="image/*" id="bookInlineFile" style="display:none;">
-  <input type="color" id="bookInlineColor" style="display:none;">
-  <div class="row" style="margin-top:8px;">
-    <button type="button" class="btn-outline" id="bookInsertPhotoBtn">📷 फोटो थप्नुहोस्</button>
-    <button type="button" class="btn-outline" id="bookBoldBtn"><b>B</b> Bold बनाउनुहोस्</button>
-    <button type="button" class="btn-outline" id="bookColorBtn">🎨 रङ लगाउनुहोस्</button>
-  </div>
-  <div class="hint">जति पनि फोटो थप्न सकिन्छ, जुनसुकै ठाउँमा। छानिएको (selected) टेक्स्टलाई मात्र Bold वा रङ लगाउन मिल्छ। एलाइन बटन (बायाँ / बीचमा / दायाँ) ले छानिएको अंशलाई छुट्टै अनुच्छेद बनाएर त्यसतर्फ सार्छ; "सामान्य" ले पहिलेकै जस्तो फर्काउँछ।</div>
+  <label>विवरण (Text) — सिधै यहीँ लेख्नुहोस्; Bold, रङ, हाइलाइट तलका बटनले लगाउनुहोस्। जति लेखे पनि हुन्छ, आवश्यक अनुसार पाना आफैं थपिन्छन्।</label>
+  <div id="bookEditorMount"></div>
+  <div class="hint">नयाँ अनुच्छेदका लागि Enter थिच्नुहोस्। जति पनि फोटो थप्न सकिन्छ। पहिले अक्षर छानेर (select गरेर) अनि Bold / रङ / हाइलाइट थिच्नुहोस्।</div>
   <div class="ratio-hint"><span class="material-symbols-rounded">aspect_ratio</span>भित्री फोटो: कुनै पनि अनुपात चल्छ (चौडाइ अनुसार आफै ठीक हुन्छ)</div>
   <div class="top-actions">
     <button class="btn-primary" id="bookSaveBtn">किताब Save गर्नुहोस्</button>
@@ -751,6 +765,296 @@ $('shlokaSaveBtn').addEventListener('click', async () => {
   finally { $('shlokaSaveBtn').disabled = false; }
 });
 
+// ═══════════════ RICH (WYSIWYG) EDITOR — कोड नदेखिने, real-time ═══════════════
+const RE_TEXT_COLORS = [
+  '#000000','#434343','#666666','#999999','#cccccc','#ffffff',
+  '#ff0000','#dc143c','#b22222','#8b0000','#ff6b6b','#ff4d94',
+  '#ff8c00','#ff6600','#ffa500','#d2691e','#a0522d','#8b4513',
+  '#ffd700','#ffff00','#f0e68c','#daa520','#b8860b','#808000',
+  '#00ff00','#32cd32','#228b22','#008000','#006400','#556b2f','#00a86b','#7cfc00',
+  '#00ffff','#40e0d0','#20b2aa','#008080',
+  '#87ceeb','#1e90ff','#4169e1','#0000ff','#0000cd','#00008b','#1a2a3a',
+  '#9400d3','#8a2be2','#800080','#4b0082','#ba55d3','#dda0dd',
+  '#ff1493','#ff69b4','#c71585','#ffc0cb'
+];
+const RE_HL_COLORS = [
+  '#ffff00','#fff59d','#ffe082','#ffcc80','#ffab91','#ff9800',
+  '#ff80ab','#f8bbd0','#e1bee7','#d1c4e9','#c5cae9','#bbdefb',
+  '#00ffff','#b3e5fc','#b2ebf2','#b2dfdb','#c8e6c9','#dcedc8',
+  '#00ff00','#f0f4c3','#e0e0e0','#bdbdbd','#000000','#ffffff'
+];
+let reLastEditor = null, reLastRange = null;
+document.addEventListener('selectionchange', () => {
+  const s = window.getSelection();
+  if (!s || !s.rangeCount) return;
+  const n = s.anchorNode;
+  const el = n && (n.nodeType === 1 ? n : n.parentElement);
+  const ed = el && el.closest && el.closest('.re-editor');
+  if (ed) {
+    reLastEditor = ed; reLastRange = s.getRangeAt(0).cloneRange();
+    if (ed._reUpdate) ed._reUpdate();
+  }
+});
+const _reCtx = document.createElement('canvas').getContext('2d');
+function reHex(c) {
+  if (!c) return '';
+  c = String(c).trim().toLowerCase();
+  if (c === 'transparent' || /^rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*0\s*\)$/.test(c)) return '';
+  _reCtx.fillStyle = '#123456';
+  _reCtx.fillStyle = c;
+  const r = _reCtx.fillStyle;
+  if (r === '#123456' && c !== '#123456') return '';
+  return /^#[0-9a-f]{6}$/i.test(r) ? r.toLowerCase() : '';
+}
+function reEsc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function reAttr(s) { return reEsc(s).replace(/"/g, '&quot;'); }
+function reImgBlock(src, align) {
+  return '<div class="ed-img" contenteditable="false"' + (align ? ' data-align="' + align + '"' : '') + '><img src="' + reAttr(src) + '"><button type="button" class="ed-img-del" title="फोटो हटाउनुहोस्">✕</button></div>';
+}
+function rePara(inner, align) {
+  return '<p' + (align ? ' style="text-align:' + align + '"' : '') + '>' + (inner || '<br>') + '</p>';
+}
+// editor DOM node → सफा inline HTML (b, i, u, s, span color/background)
+function reInline(node, base) {
+  if (node.nodeType === 3) return reEsc(node.nodeValue.replace(/\u00a0/g, ' '));
+  if (node.nodeType !== 1) return '';
+  if (node.classList && node.classList.contains('ed-img-del')) return '';
+  const tag = node.tagName.toLowerCase();
+  if (tag === 'br') return '<br>';
+  if (tag === 'img') return '';
+  let inner = Array.from(node.childNodes).map(n => reInline(n, base)).join('');
+  if (!inner) return '';
+  const st = node.style || {};
+  let bold = tag === 'b' || tag === 'strong', ital = tag === 'i' || tag === 'em',
+      und = tag === 'u', strike = tag === 's' || tag === 'strike' || tag === 'del';
+  let color = '', bg = '';
+  if (tag === 'font' && node.getAttribute('color')) color = reHex(node.getAttribute('color'));
+  if (tag === 'mark') bg = '#ffff00';
+  if (st.color) color = reHex(st.color);
+  if (st.backgroundColor) bg = reHex(st.backgroundColor);
+  const fw = st.fontWeight;
+  if (fw && (fw === 'bold' || fw === 'bolder' || +fw >= 600)) bold = true;
+  if (st.fontStyle === 'italic') ital = true;
+  const td = st.textDecorationLine || st.textDecoration || '';
+  if (/underline/.test(td)) und = true;
+  if (/line-through/.test(td)) strike = true;
+  if (color && base && color === reHex(base)) color = '';
+  if (color || bg) inner = '<span style="' + (color ? 'color:' + color + ';' : '') + (bg ? 'background-color:' + bg + ';' : '') + '">' + inner + '</span>';
+  if (strike) inner = '<s>' + inner + '</s>';
+  if (und) inner = '<u>' + inner + '</u>';
+  if (ital) inner = '<i>' + inner + '</i>';
+  if (bold) inner = '<b>' + inner + '</b>';
+  return inner;
+}
+// सेभ गरिएको text (साइटले पढ्ने ढाँचा) → editor भित्र देखिने HTML
+function reLoad(raw) {
+  const out = [];
+  String(raw || '').split(/\n\s*\n/).forEach(b => {
+    const t = b.trim();
+    if (!t) return;
+    const tpl = document.createElement('template');
+    tpl.innerHTML = t.replace(/\n/g, '<br>');
+    const frag = tpl.content;
+    const first = frag.firstElementChild;
+    let nodes = Array.from(frag.childNodes), al = '';
+    if (/^<p\b/i.test(t) && first && first.tagName === 'P' && frag.children.length === 1) {
+      const a = first.style.textAlign;
+      al = /^(left|center|right)$/.test(a) ? a : '';
+      nodes = Array.from(first.childNodes);
+    }
+    let buf = [];
+    const flush = () => {
+      if (!buf.length) return;
+      const html = buf.map(n => reInline(n, '')).join('').replace(/^(<br>)+|(<br>)+$/g, '');
+      buf = [];
+      if (html.replace(/<[^>]*>/g, '').trim()) out.push(rePara(html, al));
+    };
+    nodes.forEach(n => {
+      if (n.nodeType === 1 && n.tagName === 'IMG') { flush(); out.push(reImgBlock(n.getAttribute('src') || '', al)); }
+      else buf.push(n);
+    });
+    flush();
+  });
+  return out.join('');
+}
+// editor → सेभ हुने text (खाली लाइनले अनुच्छेद छुट्टिने, <img> अलग ब्लक)
+function reSerialize(root, base, allowAlign) {
+  const blocks = [];
+  let buf = [];
+  const pushPara = (nodes, align) => {
+    let html = nodes.map(n => reInline(n, base)).join('').replace(/^(<br>)+|(<br>)+$/g, '');
+    if (!html.replace(/<[^>]*>/g, '').trim()) return;
+    html.replace(/<br>/g, '\n').split(/\n{2,}/).forEach(part => {
+      part = part.replace(/^\n+|\n+$/g, '');
+      if (!part.trim()) return;
+      blocks.push(allowAlign && /^(left|center|right)$/.test(align) ? '<p style="text-align:' + align + '">' + part + '</p>' : part);
+    });
+  };
+  const flush = () => { if (buf.length) { pushPara(buf, ''); buf = []; } };
+  const walk = (nodes, inherited) => {
+    Array.from(nodes).forEach(n => {
+      if (n.nodeType === 1 && n.classList.contains('ed-img')) {
+        flush();
+        const im = n.querySelector('img');
+        if (im) {
+          const tag = '<img src="' + reAttr(im.getAttribute('src') || '') + '" alt="">';
+          const a = n.getAttribute('data-align');
+          blocks.push(allowAlign && /^(left|center|right)$/.test(a) ? '<p style="text-align:' + a + '">' + tag + '</p>' : tag);
+        }
+      } else if (n.nodeType === 1 && /^(P|DIV|H[1-6]|LI|BLOCKQUOTE)$/.test(n.tagName)) {
+        flush();
+        const al = n.style.textAlign || n.getAttribute('align') || inherited;
+        if (n.querySelector('p,div,.ed-img')) walk(n.childNodes, al);
+        else pushPara(Array.from(n.childNodes), al);
+      } else buf.push(n);
+    });
+    flush();
+  };
+  walk(root.childNodes, '');
+  return blocks.join('\n\n');
+}
+async function reUploadImage(file) {
+  let path;
+  await runGithubTask([async () => { path = await ghUploadImage(file); }], 'भित्री फोटो अपलोड हुँदै…', 'भित्री फोटो अपलोड भयो', { watch: false });
+  return path;
+}
+// opts: { html, baseColor, align(bool), upload(file)→path, onChange(text) }
+function makeRichEditor(opts) {
+  let baseColor = opts.baseColor || '#1a2a3a';
+  let palKind = '';
+  const root = document.createElement('div');
+  root.className = 're-wrap';
+  root.innerHTML =
+    '<div class="re-toolbar">' +
+      '<button type="button" data-c="bold" title="Bold"><b>B</b></button>' +
+      '<button type="button" data-c="italic" title="Italic"><i>I</i></button>' +
+      '<button type="button" data-c="underline" title="Underline"><u>U</u></button>' +
+      '<button type="button" data-c="strikeThrough" title="Strike"><s>S</s></button>' +
+      '<span class="re-sep"></span>' +
+      '<button type="button" data-c="color">🎨 अक्षर रङ</button>' +
+      '<button type="button" data-c="hilite">🖍 हाइलाइट</button>' +
+      (opts.align ? '<span class="re-sep"></span>' +
+        '<button type="button" data-c="justifyLeft">⬅ बायाँ</button>' +
+        '<button type="button" data-c="justifyCenter">↔ बीचमा</button>' +
+        '<button type="button" data-c="justifyRight">➡ दायाँ</button>' +
+        '<button type="button" data-c="justifyFull">☰ सामान्य</button>' : '') +
+      '<span class="re-sep"></span>' +
+      '<button type="button" data-c="photo">📷 फोटो</button>' +
+      '<button type="button" data-c="undo" title="Undo">↶</button>' +
+      '<button type="button" data-c="redo" title="Redo">↷</button>' +
+      '<button type="button" data-c="clear" title="फर्म्याटिङ हटाउनुहोस्">Tx</button>' +
+    '</div>' +
+    '<div class="re-pal" hidden></div>' +
+    '<div class="re-editor" contenteditable="true" spellcheck="false"></div>' +
+    '<input type="file" accept="image/*" style="display:none">';
+  const ed = root.querySelector('.re-editor');
+  const pal = root.querySelector('.re-pal');
+  const fileInput = root.querySelector('input[type=file]');
+  const baseHex = () => reHex(baseColor) || '#000000';
+
+  function ensureBlock() { if (!ed.innerHTML.trim()) ed.innerHTML = '<p><br></p>'; }
+  function setText(raw) { ed.innerHTML = reLoad(raw); ensureBlock(); }
+  function getText() { return reSerialize(ed, baseColor, !!opts.align); }
+  function changed() { if (opts.onChange) opts.onChange(getText()); }
+  function restore() {
+    ed.focus();
+    if (reLastEditor === ed && reLastRange) {
+      const s = window.getSelection();
+      s.removeAllRanges(); s.addRange(reLastRange);
+    }
+  }
+  function css(on) { try { document.execCommand('styleWithCSS', false, on); } catch (e) {} }
+  function exec(cmd, val, useCss) { restore(); css(!!useCss); document.execCommand(cmd, false, val); changed(); }
+  function applyColor(kind, col) {
+    restore(); css(true);
+    if (kind === 'color') document.execCommand('foreColor', false, col || baseHex());
+    else if (!document.execCommand('hiliteColor', false, col || 'transparent')) document.execCommand('backColor', false, col || 'transparent');
+    changed();
+  }
+  function closePal() { palKind = ''; pal.hidden = true; root.querySelectorAll('.re-toolbar [data-c=color],.re-toolbar [data-c=hilite]').forEach(b => b.classList.remove('on')); }
+  function openPal(kind) {
+    if (palKind === kind) { closePal(); return; }
+    palKind = kind;
+    const list = kind === 'color' ? RE_TEXT_COLORS : RE_HL_COLORS;
+    pal.innerHTML =
+      '<div class="re-pal-title">' + (kind === 'color' ? 'अक्षरको रङ छान्नुहोस्' : 'हाइलाइट रङ छान्नुहोस्') + '</div>' +
+      '<div class="re-swatches">' + list.map(c => '<button type="button" class="re-sw" data-col="' + c + '" style="background:' + c + '" aria-label="' + c + '"></button>').join('') + '</div>' +
+      '<div class="re-pal-row"><label class="re-custom">अर्को रङ: <input type="color" value="' + (kind === 'color' ? '#ff0000' : '#ffff00') + '"></label>' +
+      '<button type="button" class="re-pal-clear">✕ ' + (kind === 'color' ? 'रङ हटाउनुहोस्' : 'हाइलाइट हटाउनुहोस्') + '</button></div>';
+    pal.hidden = false;
+    root.querySelectorAll('.re-toolbar [data-c=color],.re-toolbar [data-c=hilite]').forEach(b => b.classList.toggle('on', b.dataset.c === kind));
+  }
+  function insertImage(path) {
+    restore();
+    const s = window.getSelection();
+    let node = (s.rangeCount && ed.contains(s.anchorNode)) ? s.anchorNode : null;
+    while (node && node.parentNode !== ed) node = node.parentNode;
+    const tmp = document.createElement('div');
+    tmp.innerHTML = reImgBlock(path);
+    const blk = tmp.firstChild;
+    ed.insertBefore(blk, node ? node.nextSibling : null);
+    const nx = blk.nextSibling;
+    if (!nx || (nx.classList && nx.classList.contains('ed-img'))) {
+      const p = document.createElement('p'); p.innerHTML = '<br>';
+      ed.insertBefore(p, nx);
+    }
+    changed();
+  }
+  ed._reUpdate = () => {
+    ['bold', 'italic', 'underline', 'strikeThrough'].forEach(c => {
+      const b = root.querySelector('.re-toolbar [data-c=' + c + ']');
+      let on = false; try { on = document.queryCommandState(c); } catch (e) {}
+      if (b) b.classList.toggle('on', on);
+    });
+  };
+
+  // बटन थिच्दा editor बाट focus/selection नजाओस्
+  root.addEventListener('mousedown', e => { if (e.target.closest('button')) e.preventDefault(); });
+  root.addEventListener('click', e => {
+    const del = e.target.closest('.ed-img-del');
+    if (del) { del.closest('.ed-img').remove(); ensureBlock(); changed(); return; }
+    const sw = e.target.closest('.re-sw');
+    if (sw) { applyColor(palKind, sw.dataset.col); closePal(); return; }
+    if (e.target.closest('.re-pal-clear')) { applyColor(palKind, null); closePal(); return; }
+    const b = e.target.closest('.re-toolbar button');
+    if (!b) return;
+    const c = b.dataset.c;
+    if (c === 'color' || c === 'hilite') { openPal(c); return; }
+    if (c === 'photo') { fileInput.click(); return; }
+    if (c === 'clear') { exec('removeFormat'); return; }
+    if (c === 'undo' || c === 'redo') { exec(c); return; }
+    exec(c, null, /^justify/.test(c));
+  });
+  pal.addEventListener('change', e => {
+    if (e.target.type === 'color') { applyColor(palKind, e.target.value); closePal(); }
+  });
+  fileInput.addEventListener('change', async () => {
+    const f = fileInput.files[0];
+    if (!f) return;
+    const btn = root.querySelector('[data-c=photo]');
+    const label = btn.textContent;
+    btn.textContent = 'अपलोड हुँदैछ...'; btn.disabled = true;
+    try { insertImage(await opts.upload(f)); }
+    catch (err) { alert('फोटो अपलोड गर्न सकिएन: ' + err.message); }
+    finally { btn.textContent = label; btn.disabled = false; fileInput.value = ''; }
+  });
+  ed.addEventListener('focus', () => { try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch (e) {} });
+  ed.addEventListener('input', () => { ensureBlock(); changed(); });
+  ed.addEventListener('paste', e => {
+    e.preventDefault();
+    const t = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, t);
+  });
+  ed.addEventListener('drop', e => { if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) e.preventDefault(); });
+
+  ed.style.color = baseColor;
+  setText(opts.html || '');
+  return {
+    root, getText, setText,
+    setBaseColor(c) { baseColor = c || '#1a2a3a'; ed.style.color = baseColor; }
+  };
+}
+
 // ═══════════════ ABOUT TEXT ═══════════════
 $('aboutSaveBtn').addEventListener('click', async () => {
   setStatus($('aboutStatus'), 'Saving...', '');
@@ -784,51 +1088,9 @@ $('bookCoverImageFile').addEventListener('change', async () => {
   } catch (err) { alert('फोटो अपलोड गर्न सकिएन: ' + err.message); }
   finally { el.disabled = false; el.value = ''; }
 });
-$('bookInsertPhotoBtn').addEventListener('click', () => { $('bookInlineFile').click(); });
-$('bookInlineFile').addEventListener('change', async () => {
-  const el = $('bookInlineFile');
-  if (!el.files[0]) return;
-  const btn = $('bookInsertPhotoBtn');
-  const original = btn.textContent;
-  btn.textContent = 'अपलोड हुँदैछ...'; btn.disabled = true;
-  try {
-    let path;
-    await runGithubTask([
-      async () => { path = await ghUploadImage(el.files[0]); }
-    ], 'भित्री फोटो अपलोड हुँदै…', 'भित्री फोटो अपलोड भयो', { watch: false });
-    const ta = $('bookTextArea');
-    const start = ta.selectionStart, end = ta.selectionEnd;
-    const insertion = `\n\n<img src="${path}" alt="">\n\n`;
-    ta.value = ta.value.slice(0, start) + insertion + ta.value.slice(end);
-    const pos = start + insertion.length;
-    ta.focus(); ta.setSelectionRange(pos, pos);
-  } catch (err) { alert('फोटो अपलोड गर्न सकिएन: ' + err.message); }
-  finally { btn.textContent = original; btn.disabled = false; el.value = ''; }
-});
-$('bookBoldBtn').addEventListener('click', () => {
-  const ta = $('bookTextArea');
-  const start = ta.selectionStart, end = ta.selectionEnd;
-  if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि यो बटन थिच्नुहोस्।'); return; }
-  const selected = ta.value.slice(start, end);
-  const wrapped = '<b>' + selected + '</b>';
-  ta.value = ta.value.slice(0, start) + wrapped + ta.value.slice(end);
-  const pos = start + wrapped.length;
-  ta.focus(); ta.setSelectionRange(pos, pos);
-});
-$('bookColorBtn').addEventListener('click', () => {
-  const ta = $('bookTextArea');
-  const start = ta.selectionStart, end = ta.selectionEnd;
-  if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि यो बटन थिच्नुहोस्।'); return; }
-  const colorInput = $('bookInlineColor');
-  colorInput.onchange = () => {
-    const selected = ta.value.slice(start, end);
-    const wrapped = `<span style="color:${colorInput.value}">${selected}</span>`;
-    ta.value = ta.value.slice(0, start) + wrapped + ta.value.slice(end);
-    const pos = start + wrapped.length;
-    ta.focus(); ta.setSelectionRange(pos, pos);
-  };
-  colorInput.click();
-});
+const bookEditor = makeRichEditor({ html: '', baseColor: '#1a1a1a', align: false, upload: reUploadImage });
+$('bookEditorMount').appendChild(bookEditor.root);
+$('bookColor').addEventListener('input', () => bookEditor.setBaseColor($('bookColor').value));
 $('bookSaveBtn').addEventListener('click', async () => {
   setStatus($('bookStatus'), 'Saving...', '');
   $('bookSaveBtn').disabled = true;
@@ -836,7 +1098,7 @@ $('bookSaveBtn').addEventListener('click', async () => {
     await runGithubTask([
       async () => { await ghPutFile('data/book.json', {
         title: $('bookTitle').value,
-        text: $('bookTextArea').value,
+        text: bookEditor.getText(),
         color: $('bookColor').value,
         coverColor: $('bookCoverColor').value,
         coverImage: $('bookCoverImage').value
@@ -855,6 +1117,7 @@ function makeNewsEditor(cfg) {
     $(cfg.countId).textContent = items.length;
     const list = $(cfg.listId);
     list.innerHTML = '';
+    const editors = [];
     items.forEach((item, i) => {
       const div = document.createElement('div');
       div.className = 'slide-card';
@@ -870,28 +1133,20 @@ function makeNewsEditor(cfg) {
         <label>Featured फोटो अपलोड (optional)</label>
         <input type="file" accept="image/*" data-idx="${i}" data-field="file">
         <div class="ratio-hint"><span class="material-symbols-rounded">aspect_ratio</span>कुनै पनि अनुपात चल्छ (क्रप हुँदैन, प्राकृतिक अनुपातमै देखिन्छ)</div>
-        <label>विवरण (Text) — कुनै अंश selection (छान्नु) गरेर तल Bold/रङ बटन थिच्दा त्यही अंश मात्र बोल्ड/रङमा बदलिन्छ। फोटो थप्न cursor राखेर "फोटो थप्नुहोस्" थिच्नुहोस्।</label>
-        <textarea data-idx="${i}" data-field="text" id="${taId}" style="min-height:160px;">${escapeHtml(item.text || '')}</textarea>
-        <input type="file" accept="image/*" data-idx="${i}" data-field="inline-file" style="display:none;">
-        <input type="color" data-idx="${i}" data-field="inline-color" style="display:none;">
-        <div class="row" style="margin-top:8px;">
-          <button type="button" class="btn-outline" data-idx="${i}" data-action="insert-photo">📷 फोटो थप्नुहोस्</button>
-          <button type="button" class="btn-outline" data-idx="${i}" data-action="make-bold"><b>B</b> Bold बनाउनुहोस्</button>
-          <button type="button" class="btn-outline" data-idx="${i}" data-action="make-color">🎨 रङ लगाउनुहोस्</button>
-        </div>
-        <div class="row" style="margin-top:8px;">
-          <button type="button" class="btn-outline" data-idx="${i}" data-action="align-left">⬅ बायाँ</button>
-          <button type="button" class="btn-outline" data-idx="${i}" data-action="align-center">↔ बीचमा</button>
-          <button type="button" class="btn-outline" data-idx="${i}" data-action="align-right">➡ दायाँ</button>
-          <button type="button" class="btn-outline" data-idx="${i}" data-action="align-justify">☰ सामान्य</button>
-        </div>
-        <div class="hint">जति पनि फोटो थप्न सकिन्छ, जुनसुकै ठाउँमा। छानिएको (selected) टेक्स्टलाई मात्र Bold वा रङ लगाउन मिल्छ।</div>
-        <div class="ratio-hint"><span class="material-symbols-rounded">aspect_ratio</span>भित्री फोटो: कुनै पनि अनुपात चल्छ</div>
+        <label>विवरण (Text) — सिधै यहीँ लेख्नुहोस्; Bold, रङ, हाइलाइट तलका बटनले लगाउनुहोस्। जे देखिन्छ वेबसाइटमा त्यस्तै देखिन्छ। पहिले अक्षर छानेर (select गरेर) बटन थिच्नुहोस्।</label>
+        <div class="re-mount" data-idx="${i}"></div>
+        <div class="hint">नयाँ अनुच्छेदका लागि Enter थिच्नुहोस्। जति पनि फोटो थप्न सकिन्छ, जुनसुकै ठाउँमा।</div>
         <div class="slide-actions">
           <span class="hint">समाचार #${i + 1}</span>
           <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
         </div>`;
       list.appendChild(div);
+      const ed = makeRichEditor({ html: item.text || '', baseColor: item.color || '#1a2a3a', align: true, upload: reUploadImage, onChange: t => { items[i].text = t; } });
+      div.querySelector('.re-mount').appendChild(ed.root);
+      editors[i] = ed;
+    });
+    list.querySelectorAll('input[data-field="color"]').forEach(el => {
+      el.addEventListener('input', () => { if (editors[+el.dataset.idx]) editors[+el.dataset.idx].setBaseColor(el.value); });
     });
     list.querySelectorAll('input[data-field="title"], input[data-field="color"], textarea[data-field="text"], input[data-field="image"]').forEach(el => {
       el.addEventListener('input', () => { items[+el.dataset.idx][el.dataset.field] = el.value; });
@@ -901,106 +1156,6 @@ function makeNewsEditor(cfg) {
     });
     list.querySelectorAll('button[data-action="delete"]').forEach(el => {
       el.addEventListener('click', () => { items.splice(+el.dataset.idx, 1); render(); });
-    });
-    list.querySelectorAll('button[data-action="insert-photo"]').forEach(el => {
-      el.addEventListener('click', () => {
-        const idx = +el.dataset.idx;
-        list.querySelector(`input[data-field="inline-file"][data-idx="${idx}"]`).click();
-      });
-    });
-    list.querySelectorAll('button[data-action="make-bold"]').forEach(el => {
-      el.addEventListener('click', () => {
-        const idx = +el.dataset.idx;
-        const ta = document.getElementById(cfg.taPrefix + idx);
-        const start = ta.selectionStart, end = ta.selectionEnd;
-        if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि यो बटन थिच्नुहोस्।'); return; }
-        const val = ta.value;
-        const selected = val.slice(start, end);
-        const wrapped = '<b>' + selected + '</b>';
-        ta.value = val.slice(0, start) + wrapped + val.slice(end);
-        items[idx].text = ta.value;
-        const pos = start + wrapped.length;
-        ta.focus(); ta.setSelectionRange(pos, pos);
-      });
-    });
-    list.querySelectorAll('button[data-action="make-color"]').forEach(el => {
-      el.addEventListener('click', () => {
-        const idx = +el.dataset.idx;
-        const ta = document.getElementById(cfg.taPrefix + idx);
-        const start = ta.selectionStart, end = ta.selectionEnd;
-        if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि यो बटन थिच्नुहोस्।'); return; }
-        const colorInput = list.querySelector(`input[data-field="inline-color"][data-idx="${idx}"]`);
-        colorInput.onchange = () => {
-          const val = ta.value;
-          const selected = val.slice(start, end);
-          const wrapped = `<span style="color:${colorInput.value}">${selected}</span>`;
-          ta.value = val.slice(0, start) + wrapped + val.slice(end);
-          items[idx].text = ta.value;
-          const pos = start + wrapped.length;
-          ta.focus(); ta.setSelectionRange(pos, pos);
-        };
-        colorInput.click();
-      });
-    });
-    list.querySelectorAll('button[data-action^="align-"]').forEach(el => {
-      el.addEventListener('click', () => {
-        const idx = +el.dataset.idx;
-        const dir = el.dataset.action.replace('align-', '');
-        const ta = document.getElementById(cfg.taPrefix + idx);
-        const start = ta.selectionStart, end = ta.selectionEnd;
-        if (start === end) { alert('पहिले टेक्स्ट छान्नुहोस् (select गर्नुहोस्), अनि एलाइन बटन थिच्नुहोस्।'); return; }
-        const v = ta.value;
-        // छानिएको अंश रहेको अनुच्छेद (खाली लाइनले छुट्याइएको) खोज्ने
-        let bs = start > 0 ? v.lastIndexOf('\n\n', start - 1) : -1; bs = bs < 0 ? 0 : bs + 2;
-        let be = v.indexOf('\n\n', end); if (be < 0) be = v.length;
-        const block = v.slice(bs, be).trim();
-        const m = /^<p style="text-align:(left|center|right|justify)">([\s\S]*)<\/p>$/.exec(block);
-        let out, from, to;
-        if (m) {                       // पहिले नै एलाइन गरिएको अनुच्छेद — दिशा मात्र बदल्ने
-          from = bs; to = be;
-          out = dir === 'justify' ? m[2] : '<p style="text-align:' + dir + '">' + m[2] + '</p>';
-        } else {                       // नयाँ — छानिएको अंश छुट्टै अनुच्छेद बनाउने
-          from = start; to = end;
-          const parts = v.slice(start, end).split(/\n\s*\n/).map(t => t.trim()).filter(Boolean);
-          out = dir === 'justify' ? parts.join('\n\n')
-              : parts.map(t => /^<img\b/i.test(t) ? t : '<p style="text-align:' + dir + '">' + t + '</p>').join('\n\n');
-          const before = v.slice(0, from), after = v.slice(to);
-          const sepB = from > 0 ? (/\n\n$/.test(before) ? '' : (/\n$/.test(before) ? '\n' : '\n\n')) : '';
-          const sepA = to < v.length ? (/^\n\n/.test(after) ? '' : (/^\n/.test(after) ? '\n' : '\n\n')) : '';
-          out = sepB + out + sepA;
-        }
-        ta.value = v.slice(0, from) + out + v.slice(to);
-        items[idx].text = ta.value;
-        const pos = from + out.length;
-        ta.focus(); ta.setSelectionRange(pos, pos);
-      });
-    });
-    list.querySelectorAll('input[data-field="inline-file"]').forEach(el => {
-      el.addEventListener('change', async () => {
-        const idx = +el.dataset.idx;
-        if (!el.files[0]) return;
-        const btn = list.querySelector(`button[data-action="insert-photo"][data-idx="${idx}"]`);
-        const originalLabel = btn.textContent;
-        btn.textContent = 'अपलोड हुँदैछ...'; btn.disabled = true;
-        try {
-          let path;
-          await runGithubTask([
-            async () => { path = await ghUploadImage(el.files[0]); }
-          ], 'भित्री फोटो अपलोड हुँदै…', 'भित्री फोटो अपलोड भयो', { watch: false });
-          const ta = document.getElementById(cfg.taPrefix + idx);
-          const start = ta.selectionStart, end = ta.selectionEnd;
-          const insertion = `\n\n<img src="${path}" alt="">\n\n`;
-          const val = ta.value;
-          ta.value = val.slice(0, start) + insertion + val.slice(end);
-          items[idx].text = ta.value;
-          const pos = start + insertion.length;
-          ta.focus(); ta.setSelectionRange(pos, pos);
-        } catch (err) {
-          alert('फोटो अपलोड गर्न सकिएन: ' + err.message);
-        } finally {
-          btn.textContent = originalLabel; btn.disabled = false; el.value = '';
-        }
-      });
     });
   }
   $(cfg.addBtnId).addEventListener('click', () => { items.push({ title: '', text: '', image: '', color: '#1a2a3a' }); render(); });
@@ -1460,8 +1615,9 @@ $('loadBtn').addEventListener('click', async () => {
     shlokaItems = shloka.json; renderShloka();
     $('aboutTextArea').value = (about.json && about.json.text) || '';
     $('bookTitle').value = (book.json && book.json.title) || '';
-    $('bookTextArea').value = (book.json && book.json.text) || '';
     $('bookColor').value = (book.json && book.json.color) || '#1a1a1a';
+    bookEditor.setBaseColor($('bookColor').value);
+    bookEditor.setText((book.json && book.json.text) || '');
     $('bookCoverColor').value = (book.json && book.json.coverColor) || '#dc143c';
     $('bookCoverImage').value = (book.json && book.json.coverImage) || '';
     if ($('bookCoverImage').value) { $('bookCoverImagePreview').src = $('bookCoverImage').value; $('bookCoverImagePreview').style.display = ''; }
