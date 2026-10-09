@@ -1,7 +1,7 @@
 {
-  "name": "Ādityā",
-  "short_name": "Ādityā",
-  "description": "Ādityā को आधिकारिक वेबसाइट",
+  "name": "आदित्य (ADITYA)",
+  "short_name": "आदित्य",
+  "description": "आदित्य को आधिकारिक वेबसाइट",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#eaf5fb",
@@ -10,12 +10,20 @@
   "dir": "ltr",
   "orientation": "portrait-primary",
   "icons": [
-    { "src": "icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
-    { "src": "icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ],
-  "categories": ["education"],
-  "shortcuts": [
-    { "name": "सूचनाहरू", "url": "./index.html#notices", "description": "विद्यालयका ताजा सूचनाहरू" },
-    { "name": "भर्ना", "url": "./index.html#admission", "description": "भर्ना सम्बन्धी जानकारी" }
+  "categories": [
+    "education"
   ]
 }

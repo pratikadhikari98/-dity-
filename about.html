@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>बारेमा - कालिका मानवज्ञान माध्यमिक विद्यालय</title>
+<title>बारेमा – आदित्य (ADITYA)</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#5c2f26">
 <link rel="apple-touch-icon" href="icon-192.svg">
@@ -43,7 +43,6 @@
     <a href="index.html">गृहपृष्ठ</a>
     <a href="about.html" class="active">बारेमा</a>
     <a href="#contact">सम्पर्क</a>
-    <a href="#admission" class="btn-admit">भर्ना खुला</a>
   </nav>
 </header>
 
@@ -72,16 +71,6 @@
       <div class="feature-card"><div class="feature-icon">🤝</div><h3>सेवा कार्यक्रम</h3><p>समाजसेवा र परोपकारी कार्यमार्फत धर्मको व्यावहारिक अभ्यास।</p></div>
       <div class="feature-card"><div class="feature-icon">👥</div><h3>युवा सहभागिता</h3><p>नियमित भेला र छलफलद्वारा युवा पुस्तालाई सक्रिय रूपमा संलग्न गराउने।</p></div>
       <div class="feature-card"><div class="feature-icon">📚</div><h3>ग्रन्थ संरक्षण</h3><p>वैदिक तथा शास्त्रीय ग्रन्थहरूको संकलन, संरक्षण र सम्पादन।</p></div>
-    </div>
-  </section>
-
-  <!-- PHOTO GALLERY SECTION -->
-  <section class="gallery-section" id="gallery">
-    <div class="section-label">तस्बिरहरू</div>
-    <div class="section-title">विद्यालयका झलकहरू</div>
-    <p class="section-sub">हाम्रा विशेष कार्यक्रम, कक्षाकोठा र विद्यार्थीहरूका यादगार पलहरू।</p>
-    <div class="gallery-grid" id="galleryGrid">
-      <div class="gallery-loading">तस्बिरहरू लोड हुँदैछन्…</div>
     </div>
   </section>
 
@@ -141,12 +130,6 @@
   <div id="gravity-grid" style="width:100%;height:260px;display:grid;"></div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section" id="admission">
-  <h2>आजै भर्ना गर्नुहोस् — सीटहरू सीमित छन्!</h2>
-  <p>तपाईँको नानीबाबुको उज्ज्वल भविष्यको शुरुवात कालिका मानवज्ञानबाट गर्नुहोस्।</p>
-  <a href="tel:071437072" class="btn-white">📞 ०७१-४३७०७२ मा फोन गर्नुहोस्</a>
-</section>
 
 <!-- LIGHTBOX -->
 <div class="lb-backdrop" id="lbBackdrop" onclick="closeLb(event)">
@@ -157,54 +140,13 @@
 
 <!-- FOOTER -->
 <footer id="contact">
-  <div class="footer-grid">
-    <div class="footer-col">
-      <h4>कालिका मानवज्ञान माध्यमिक विद्यालय</h4>
-      <p>गुणस्तरीय शिक्षा प्रदान गरी बच्चाहरूको सर्वाङ्गीण विकासमा समर्पित।</p>
-    </div>
-    <div class="footer-col">
-      <h4>द्रुत लिङ्कहरू</h4>
-      <a href="index.html#home">गृहपृष्ठ</a>
-      <a href="about.html#why">विशेषताहरू</a>
-      <a href="#admission">भर्ना</a>
-    </div>
-    <div class="footer-col">
-      <h4>सम्पर्क</h4>
-      <p>📞 071-437072</p>
-      <p>📍 Butwal-10, Kalikanagar, Rupendehi</p>
-      <a href="http://www.kalikaschoolbtl.edu.np">🌐 www.kalikaschoolbtl.edu.np</a>
-    </div>
-  </div>
   <div class="footer-bottom">
-    <span>© २०८२ कालिका मानवज्ञान माध्यमिक विद्यालय। सर्वाधिकार सुरक्षित।</span>
-    <span>Butwal-10, Kalikanagar</span>
+    <span>© आदित्य (ADITYA)। सर्वाधिकार सुरक्षित।</span>
   </div>
 </footer>
 
 
 <script>
-// ══ PHOTO GALLERY ══
-async function loadGallery() {
-  const grid = document.getElementById('galleryGrid');
-  try {
-    const res = await fetch('photos/description.json');
-    if (!res.ok) throw new Error('not found');
-    const data = await res.json(); // [{file:"post1.jpg", desc:"..."}]
-    grid.innerHTML = '';
-    data.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'gallery-card';
-      card.innerHTML = `<img src="photos/${item.file}" alt="${item.desc}" loading="lazy">
-        <div class="g-desc">${item.desc}</div>`;
-      card.querySelector('img').onclick = () => openLb('photos/' + item.file, item.desc);
-      grid.appendChild(card);
-    });
-    if (data.length === 0) grid.innerHTML = '<div class="gallery-loading">तस्बिरहरू छैनन्।</div>';
-  } catch {
-    grid.innerHTML = '<div class="gallery-loading">तस्बिरहरू लोड हुन सकेन। <code>photos/description.json</code> फाइल राख्नुहोस्।</div>';
-  }
-}
-
 function openLb(src, caption) {
   document.getElementById('lbImg').src = src;
   document.getElementById('lbCaption').textContent = caption;
@@ -217,7 +159,6 @@ function closeLb(e) {
   document.body.style.overflow = '';
 }
 
-loadGallery();
 </script>
 
 

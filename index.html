@@ -6,7 +6,40 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>कालिका मानवज्ञान माध्यमिक विद्यालय</title>
+<title>आदित्य (ADITYA) – संस्कृत ज्ञान-परम्परा र शिक्षा</title>
+<meta name="description" content="आदित्य — संस्कृत वाङ्मय र शास्त्र-परम्पराको प्राचीन ज्ञान-विज्ञानलाई आधुनिक पुस्तासम्म रोचक ढङ्गले पुर्‍याउने नेपाली संस्कृत ज्ञान अभियान। श्लोक, लेख, समाचार र किताब।">
+<meta name="keywords" content="आदित्य, Aditya, ADITYA, संस्कृत, संस्कृत शिक्षा, श्लोक, नेपाल">
+<meta name="robots" content="index, follow, max-snippet:-1">
+<link rel="canonical" href="https://aditya.pratikadhikari98.com.np/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="आदित्य">
+<meta property="og:title" content="आदित्य (ADITYA) – संस्कृत ज्ञान-परम्परा र शिक्षा">
+<meta property="og:description" content="आदित्य — संस्कृत वाङ्मय र शास्त्र-परम्पराको प्राचीन ज्ञान-विज्ञानलाई आधुनिक पुस्तासम्म रोचक ढङ्गले पुर्‍याउने नेपाली संस्कृत ज्ञान अभियान। श्लोक, लेख, समाचार र किताब।">
+<meta property="og:url" content="https://aditya.pratikadhikari98.com.np/">
+<meta property="og:image" content="https://aditya.pratikadhikari98.com.np/photos/aditya-logo.png">
+<meta property="og:locale" content="ne_NP">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "आदित्य",
+  "alternateName": ["ADITYA", "Aditya", "Ādityā"],
+  "url": "https://aditya.pratikadhikari98.com.np/",
+  "inLanguage": "ne",
+  "description": "आदित्य — संस्कृत वाङ्मय र शास्त्र-परम्पराको प्राचीन ज्ञान-विज्ञानलाई आधुनिक पुस्तासम्म रोचक ढङ्गले पुर्‍याउने नेपाली संस्कृत ज्ञान अभियान। श्लोक, लेख, समाचार र किताब।"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "आदित्य",
+  "alternateName": ["ADITYA", "Aditya"],
+  "url": "https://aditya.pratikadhikari98.com.np/",
+  "logo": "https://aditya.pratikadhikari98.com.np/photos/aditya-logo.png"
+}
+</script>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#5c2f26">
 <link rel="apple-touch-icon" href="icon-192.svg">
@@ -97,6 +130,9 @@
   #news .news-feed-card h3 { text-align: center; font-family: 'Ananda Devanagari Round', 'Noto Serif Devanagari', serif; font-weight: normal; -webkit-text-stroke: 0.5px currentColor; /* फन्टमा Bold छैन — हल्का रेखा थपेर बोल्ड बनाइएको */ font-size: 1.9rem; line-height: 1.35; }
   /* फ्लिप किताब र समाचार २ बीचको ठाउँ अलि बढाइएको */
   #news > .news2-section { padding-top: 30px; }
+  .site-h1 { font-family: 'Noto Serif Devanagari', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; margin: 0 0 4px; line-height: 1.2; }
+  .site-h1 span { font-size: .45em; font-weight: 500; opacity: .7; letter-spacing: .08em; }
+  .site-tagline { margin: 0 0 14px; font-size: 1rem; opacity: .85; }
 </style>
 </head>
 <body>
@@ -140,14 +176,12 @@
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-text">
+    <h1 class="site-h1">आदित्य <span>(ADITYA)</span></h1>
+    <p class="site-tagline">संस्कृत वाङ्मय र शास्त्र-परम्पराको ज्ञान-विज्ञान आधुनिक पुस्तासम्म पुर्‍याउने अभियान</p>
     <div class="shloka-rotator" id="shlokaRotator" data-source="data/shlokas.json">
       <h2 class="hero-shloka" id="shlokaText"></h2>
       <div class="section-label" style="text-align:left;">श्लोकार्थ</div>
       <p id="shlokaMeaning"></p>
-    </div>
-    <div class="hero-btns">
-      <a href="about.html#admission" class="btn-primary">भर्ना फारम भर्नुहोस्</a>
-      <a href="#" onclick="openLekh();return false;" class="btn-outline">थप जान्नुहोस्</a>
     </div>
   </div>
 
@@ -656,12 +690,6 @@ document.addEventListener('click', function(e){
 })();
 </script>
 
-<!-- HISTORY / LEKH MODAL -->
-<div class="lekh-backdrop" id="lekhBackdrop" onclick="closeLekh()"></div>
-<div class="lekh-modal" id="lekhModal">
-  <button class="lekh-close" onclick="closeLekh()">✕</button>
-  <div class="lekh-content" id="lekhContent"><div class="gallery-loading">लोड हुँदैछ…</div></div>
-</div>
 
 
 
@@ -838,200 +866,8 @@ document.addEventListener('click', function(e){
 })();
 </script>
 
-<!-- ══ RESULT SEARCH MODAL ══ -->
-<div id="resultModal">
-  <div class="rm-box">
-    <button class="rm-close" onclick="document.getElementById('resultModal').style.display='none'">&times;</button>
-    <div class="rm-title">📋 नतिजा हेर्नुहोस्</div>
-
-    <div class="rm-field">
-      <label>विद्यार्थीको नाम</label>
-      <input type="text" id="rmName" placeholder="पूरा नाम लेख्नुहोस्">
-    </div>
-    <div class="rm-row">
-      <div class="rm-field">
-        <label>जन्ममिति</label>
-        <input type="text" id="rmDOB" placeholder="२०५५/०२/१५">
-      </div>
-      <div class="rm-field">
-        <label>शैक्षिक वर्ष</label>
-        <select id="rmYear">
-          <option value="">— छान्नुहोस् —</option>
-          <option value="2083">२०८३</option>
-          <option value="2082">२०८२</option>
-          <option value="2081">२०८१</option>
-        </select>
-      </div>
-    </div>
-    <div class="rm-row">
-      <div class="rm-field">
-        <label>कक्षा</label>
-        <select id="rmClass">
-          <option value="">— छान्नुहोस् —</option>
-          <option value="class6">कक्षा ६</option>
-          <option value="class7">कक्षा ७</option>
-          <option value="class8">कक्षा ८</option>
-          <option value="class9">कक्षा ९</option>
-          <option value="class10">कक्षा १०</option>
-          <option value="class11">कक्षा ११</option>
-          <option value="class12">कक्षा १२</option>
-        </select>
-      </div>
-      <div class="rm-field">
-        <label>परीक्षा</label>
-        <select id="rmExam">
-          <option value="">— छान्नुहोस् —</option>
-          <option value="traimasik">त्रैमासिक</option>
-          <option value="ardhavaarshik">अर्धवार्षिक</option>
-          <option value="vaarshik">वार्षिक</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="rm-error" id="rmError">विद्यार्थीको नतिजा फेला परेन। नाम र जन्ममिति मिलाउनुहोस्।</div>
-    <button class="rm-btn" onclick="searchResult()">🔍 नतिजा खोज्नुहोस्</button>
-  </div>
-</div>
-
-<!-- ══ RESULT DISPLAY ══ -->
-<div id="resultDisplay">
-  <div class="rd-box">
-    <button class="rd-close" onclick="document.getElementById('resultDisplay').style.display='none'">&times;</button>
-    <div class="rd-name" id="rdName"></div>
-    <div class="rd-meta" id="rdMeta"></div>
-    <table class="rd-table">
-      <thead><tr><th>विषय</th><th>पूर्णाङ्क</th><th>प्राप्ताङ्क</th><th>ग्रेड</th></tr></thead>
-      <tbody id="rdBody"></tbody>
-    </table>
-    <div class="rd-total" id="rdTotal"></div>
-    <button class="rd-back" onclick="document.getElementById('resultDisplay').style.display='none';document.getElementById('resultModal').style.display='flex';">← फिर्ता जानुहोस्</button>
-  </div>
-</div>
-
-<script>
-// ══ RESULT SEARCH LOGIC ══
-async function searchResult() {
-  const name  = document.getElementById('rmName').value.trim();
-  const dob   = document.getElementById('rmDOB').value.trim();
-  const year  = document.getElementById('rmYear').value;
-  const cls   = document.getElementById('rmClass').value;
-  const exam  = document.getElementById('rmExam').value;
-  const errEl = document.getElementById('rmError');
-  errEl.style.display = 'none';
-
-  if (!name || !dob || !year || !cls || !exam) {
-    errEl.textContent = 'कृपया सबै खाना भर्नुहोस्।';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  // JSON path: Results/2083/traimasik/class6.json
-  const path = `Results/${year}/${exam}/${cls}.json`;
-
-  let data;
-  try {
-    const res = await fetch(path);
-    if (!res.ok) throw new Error('not found');
-    data = await res.json();
-  } catch {
-    errEl.textContent = 'नतिजा फाइल फेला परेन। ('+path+')';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  // Search student by name + dob (case-insensitive, trim)
-  const student = (data.students || []).find(s =>
-    s.name.trim().toLowerCase() === name.toLowerCase() &&
-    s.dob.trim() === dob
-  );
-
-  if (!student) {
-    errEl.textContent = 'नाम वा जन्ममिति मिलेन। पुनः जाँच गर्नुहोस्।';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  // Fill result display
-  const examLabels = { traimasik: 'त्रैमासिक', ardhavaarshik: 'अर्धवार्षिक', vaarshik: 'वार्षिक' };
-  const clsLabels  = { class6:'कक्षा ६', class7:'कक्षा ७', class8:'कक्षा ८', class9:'कक्षा ९', class10:'कक्षा १०', class11:'कक्षा ११', class12:'कक्षा १२' };
-
-  document.getElementById('rdName').textContent = '🎓 ' + student.name;
-  document.getElementById('rdMeta').textContent =
-    `जन्ममिति: ${student.dob} | ${clsLabels[cls]} | ${examLabels[exam]} परीक्षा | वर्ष: ${year}`;
-
-  const tbody = document.getElementById('rdBody');
-  tbody.innerHTML = '';
-  let total = 0, maxTotal = 0;
-
-  (student.subjects || []).forEach(sub => {
-    const tr = document.createElement('tr');
-    const grade = getGrade(sub.obtained, sub.full);
-    tr.innerHTML = `<td>${sub.name}</td><td>${sub.full}</td><td>${sub.obtained}</td><td>${grade}</td>`;
-    tbody.appendChild(tr);
-    total    += sub.obtained;
-    maxTotal += sub.full;
-  });
-
-  const pct = maxTotal ? Math.round(total / maxTotal * 100) : 0;
-  document.getElementById('rdTotal').textContent =
-    `जम्मा: ${total} / ${maxTotal}  (${pct}%)`;
-
-  document.getElementById('resultModal').style.display  = 'none';
-  document.getElementById('resultDisplay').style.display = 'flex';
-}
-
-function getGrade(obt, full) {
-  if (!full) return '—';
-  const p = obt / full * 100;
-  if (p >= 90) return 'A+';
-  if (p >= 80) return 'A';
-  if (p >= 70) return 'B+';
-  if (p >= 60) return 'B';
-  if (p >= 50) return 'C+';
-  if (p >= 40) return 'C';
-  if (p >= 35) return 'D';
-  return 'NG';
-}
-
-// Close modal on backdrop click
-['resultModal','resultDisplay'].forEach(id => {
-  document.getElementById(id).addEventListener('click', function(e) {
-    if (e.target === this) this.style.display = 'none';
-  });
-});
-</script>
 
 
-<script>
-// ══ LEKH / HISTORY MODAL ══
-let lekhLoaded = false;
-async function openLekh() {
-  document.getElementById('lekhBackdrop').classList.add('open');
-  document.getElementById('lekhModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  if (lekhLoaded) return;
-  const content = document.getElementById('lekhContent');
-  try {
-    const res = await fetch('lekh.json');
-    if (!res.ok) throw new Error();
-    const d = await res.json(); // {title, subtitle, sections:[{heading,paragraphs:[]}]}
-    let html = `<h2>${d.title}</h2><div class="lekh-sub">${d.subtitle || ''}</div>`;
-    (d.sections || []).forEach(sec => {
-      if (sec.heading) html += `<h3>${sec.heading}</h3>`;
-      (sec.paragraphs || []).forEach(p => { html += `<p>${p}</p>`; });
-    });
-    content.innerHTML = html;
-    lekhLoaded = true;
-  } catch {
-    content.innerHTML = '<p>इतिहास लोड हुन सकेन। <code>lekh.json</code> फाइल राख्नुहोस्।</p>';
-  }
-}
-function closeLekh() {
-  document.getElementById('lekhBackdrop').classList.remove('open');
-  document.getElementById('lekhModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-</script>
 
 <!-- FIREBASE: लगइन, शिक्षक पोस्ट, लाइक/कमेन्ट/सेयर -->
 
