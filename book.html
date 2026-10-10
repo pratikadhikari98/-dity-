@@ -17,7 +17,7 @@
     <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Khand:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Khand:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="flipbook/flipbook.css">
@@ -122,20 +122,60 @@
                 document.body.appendChild(measure);
 
                 var pages = [];
-                var current = '';
-                blocks.forEach(function (block) {
-                    var test = current + block;
-                    measure.innerHTML = test;
-                    if (current && measure.scrollHeight > PAGE_TARGET_HEIGHT) {
-                        pages.push(current);
-                        current = block;
-                    } else {
-                        current = test;
-                    }
-                });
+        var current = '';
+        var VOID = /^(br|img|hr|wbr)$/;
+        var DIMS = window.__bookImgDims || {};
+        // फोटो लोड भएको/नभएको चिन्ता नगरी उचाइ ठ्याक्कै नाप्न: फोटोको सट्टा त्यही उचाइको खाली बक्स राखेर नाप्ने
+        function forMeasure(html) {
+            return html.replace(/<img\b[^>]*?src="([^"]+)"[^>]*>/gi, function (m, src) {
+                var d = DIMS[src]; if (!d || !d.w) return m;
+                var sc = Math.min(1, 255 / d.w, 340 / d.h);
+                return '<div style="height:' + Math.round(d.h * sc + 12) + 'px"></div>';
+            });
+        }
+        function fits(html) { measure.innerHTML = forMeasure(html); return measure.scrollHeight <= PAGE_TARGET_HEIGHT; }
+        function hasText(s) { return s.replace(/<[^>]+>/g, '').trim().length > 0; }
+        function updateStack(stack, unit) {
+            unit.replace(/<(\/?)([a-zA-Z][a-zA-Z0-9]*)[^>]*>/g, function (m, close, name) {
+                name = name.toLowerCase();
+                if (VOID.test(name) || /\/>$/.test(m)) return m;
+                if (close) { for (var i = stack.length - 1; i >= 0; i--) { if (stack[i].name === name) { stack.splice(i, 1); break; } } }
+                else stack.push({ name: name, open: m });
+                return m;
+            });
+        }
+        function openTags(stack) { return stack.map(function (s) { return s.open; }).join(''); }
+        function closeTags(stack) { return stack.slice().reverse().map(function (s) { return '</' + s.name + '>'; }).join(''); }
+
+        blocks.forEach(function (block) {
+            if (fits(current + block)) { current += block; return; }
+            if (!/^<p>/i.test(block)) {            // फोटो आदि: टुक्र्याउन मिल्दैन
                 if (current) pages.push(current);
-                document.body.removeChild(measure);
-                return pages;
+                current = block; return;
+            }
+            // लामो अनुच्छेद: शब्द-शब्दमा पाना भरेर अर्को पानामा सार्ने (केही पनि नकटियोस्)
+            var inner = block.replace(/^<p>/i, '').replace(/<\/p>$/i, '');
+            var units = inner.match(/\s+|(?:<[^>]+>|[^<\s])+/g) || [];
+            var stack = [], piece = '';
+            for (var u = 0; u < units.length; u++) {
+                var unit = units[u];
+                var cand = piece + unit;
+                var tmp = stack.slice(); updateStack(tmp, unit);
+                if (fits(current + '<p>' + cand + closeTags(tmp) + '</p>')) { piece = cand; stack = tmp; continue; }
+                if (!hasText(piece)) {
+                    if (current) { pages.push(current); current = ''; u--; continue; }
+                    piece = cand; stack = tmp; continue;   // एक शब्द नै पाना भन्दा ठूलो (दुर्लभ)
+                }
+                pages.push(current + '<p>' + piece.replace(/\s+$/, '') + closeTags(stack) + '</p>');
+                current = '';
+                piece = openTags(stack);
+                if (!/^\s+$/.test(unit)) u--;
+            }
+            if (hasText(piece)) current += '<p>' + piece + closeTags(stack) + '</p>';
+        });
+        if (current) pages.push(current);
+        document.body.removeChild(measure);
+        return pages;
             }
 
             function buildFlipBook(data, pages, colorStyle) {
@@ -208,10 +248,10 @@
                         var txt = String(data.text || '');
                         var sample = txt.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 300) || 'अ';
                         var fontP = (document.fonts && document.fonts.load)
-                            ? document.fonts.load('400 9px Khand', sample).catch(function () {}) : Promise.resolve();
+                            ? document.fonts.load('500 17px Akshar', sample).catch(function () {}) : Promise.resolve();
                         var srcs = []; txt.replace(/<img[^>]+src="([^"]+)"/g, function (m, s) { srcs.push(s); return m; });
                         var imgP = Promise.all(srcs.map(function (s) {
-                            return new Promise(function (res) { var im = new Image(); im.onload = im.onerror = res; im.src = s; });
+                            return new Promise(function (res) { var im = new Image(); im.onload = function () { (window.__bookImgDims = window.__bookImgDims || {})[s] = { w: im.naturalWidth, h: im.naturalHeight }; res(); }; im.onerror = res; im.src = s; });
                         }));
                         return withTimeout(Promise.all([fontP, imgP]), 1500).then(function () { return data; });
                     })

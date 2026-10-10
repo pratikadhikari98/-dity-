@@ -96,12 +96,12 @@
 
   #bookEmbedWrap .book-page-text {
     width: 287px; height: 398px; position: absolute; top: 1px; left: 0; background: #fdfaf5; box-sizing: border-box;
-    padding: 22px 16px; overflow: hidden; font-family: 'Khand', 'Noto Sans Devanagari', sans-serif;
-    font-size: 0.56rem; line-height: 1.4; text-align: justify; color: #1a1a1a; z-index: 97;
+    padding: 22px 16px; overflow: hidden; font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif;
+    font-size: 1.1rem; font-weight: 500; line-height: 1.55; text-align: left; color: #1a1a1a; z-index: 97;
   }
   #bookEmbedWrap .book-page-text.book-front { border-radius: 0 5px 5px 0; }
   #bookEmbedWrap .book-page-text.book-back { left: 1px; border-radius: 5px 0 0 5px; }
-  #bookEmbedWrap .book-page-text img { max-width: 100%; border-radius: 6px; display: block; margin: 6px 0; }
+  #bookEmbedWrap .book-page-text img { max-width: 100%; max-height: 340px; object-fit: contain; border-radius: 6px; display: block; margin: 6px 0; }
   #bookEmbedWrap .book-page-text p { margin: 0 0 0.6em; }
   #bookEmbedWrap .book-cover-title {
     color: #fff; font-family: 'Noto Serif Devanagari', serif; font-weight: 700; font-size: 1.1rem;
@@ -137,10 +137,11 @@
   /* ── प्रतीक साहित्य संग्रहबाट random कविता (कभर → छोएपछि कविता खुल्छ) ── */
   .poem-section { margin-top: 18px; }
   .pf-box { background: var(--white); border: 1px solid var(--sky); border-radius: 16px; padding: 16px; box-shadow: 0 4px 18px rgba(147,84,71,.08); }
-  .pf-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
-  .pf-head h2 { font-size: 1.15rem; color: var(--blue-dark); margin: 0; }
-  .pf-shuffle { background: var(--white); border: 1.5px solid var(--blue-mid); color: var(--blue-mid); font-family: inherit; font-weight: 700; font-size: .85rem; padding: 7px 14px; border-radius: 999px; cursor: pointer; }
-  .pf-shuffle:active { background: var(--blue-mid); color: var(--white); }
+  .pf-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: nowrap; margin-bottom: 14px; }
+  /* Ananda Devanagari Round (Bold जस्तो) — समाचार शीर्षकसँग उही फन्ट */
+  .pf-head .pf-h { margin: 0; font-family: 'Ananda Devanagari Round', 'Noto Serif Devanagari', serif; font-weight: normal; -webkit-text-stroke: 0.5px currentColor; font-size: 1.7rem; line-height: 1.3; color: var(--blue-dark); text-align: left; }
+  .pf-dots { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--blue-mid); color: var(--blue-mid); display: flex; align-items: center; justify-content: center; text-decoration: none; background: var(--white); }
+  .pf-dots:active { background: var(--blue-mid); color: var(--white); }
   .pf-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 16px; }
   @media (min-width: 760px) { .pf-grid { grid-template-columns: repeat(4, 1fr); } }
   .pf-item { cursor: pointer; outline: none; transition: transform .15s ease; }
@@ -163,9 +164,10 @@
   .pf-modal[hidden] { display: none; }
   .pf-panel { position: relative; background: var(--white); border-radius: 16px; width: 100%; max-width: 560px; max-height: 88vh; overflow-y: auto; padding: 22px 18px 18px; box-shadow: 0 10px 40px rgba(0,0,0,.35); }
   .pf-close { position: sticky; top: 0; float: right; width: 38px; height: 38px; margin: -8px -6px 0 8px; border-radius: 50%; border: 0; background: var(--blue-mid); color: #fff; font-size: 1rem; cursor: pointer; z-index: 2; }
-  .pf-panel h3 { font-size: 1.3rem; color: var(--blue-dark); margin: 0 0 4px; text-align: center; }
-  .pf-meta { font-size: .8rem; color: var(--text-light); text-align: center; margin-bottom: 14px; }
-  .pf-text { white-space: pre-line; line-height: 2; font-size: 1.05rem; color: var(--text); text-align: center; }
+  .pf-item, .pf-modal { font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif; }
+  .pf-panel h3 { font-size: 1.4rem; font-weight: 700; color: var(--blue-dark); margin: 0 0 4px; text-align: left; }
+  .pf-meta { font-size: .85rem; color: var(--text-light); text-align: left; margin-bottom: 14px; }
+  .pf-text { white-space: pre-line; line-height: 2; font-size: 1.1rem; color: var(--text); text-align: left; }
 </style>
 </head>
 <body>
@@ -448,11 +450,12 @@ document.addEventListener('click', function(e){
     <section class="news-feed-section poem-section" id="poemFeedSection" style="display:none;">
       <div class="pf-box">
         <div class="pf-head">
-          <h2>📖 प्रतीक साहित्य संग्रहबाट कविता</h2>
-          <button type="button" class="pf-shuffle" id="pfShuffle">🔀 अरू कविता</button>
+          <h2 class="pf-h" aria-label="प्रतीक साहित्य सङ्ग्रह">k|tLs ;flxTo ;ª\u|x</h2>
+          <a class="pf-dots" href="https://pratikadhikari98.com.np/" target="_blank" rel="noopener" aria-label="प्रतीक साहित्य सङ्ग्रहमा जानुहोस्" title="प्रतीक साहित्य सङ्ग्रह">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg>
+          </a>
         </div>
         <div id="poemFeed"></div>
-        <div class="pf-foot"><a href="https://pratikadhikari98.com.np/" target="_blank" rel="noopener">प्रतीक साहित्य संग्रहमा थप कविता पढ्नुहोस् →</a></div>
       </div>
     </section>
   </div>
@@ -595,15 +598,55 @@ document.addEventListener('click', function(e){
 
         var pages = [];
         var current = '';
+        var VOID = /^(br|img|hr|wbr)$/;
+        var DIMS = window.__bookImgDims || {};
+        // फोटो लोड भएको/नभएको चिन्ता नगरी उचाइ ठ्याक्कै नाप्न: फोटोको सट्टा त्यही उचाइको खाली बक्स राखेर नाप्ने
+        function forMeasure(html) {
+            return html.replace(/<img\b[^>]*?src="([^"]+)"[^>]*>/gi, function (m, src) {
+                var d = DIMS[src]; if (!d || !d.w) return m;
+                var sc = Math.min(1, 255 / d.w, 340 / d.h);
+                return '<div style="height:' + Math.round(d.h * sc + 12) + 'px"></div>';
+            });
+        }
+        function fits(html) { measure.innerHTML = forMeasure(html); return measure.scrollHeight <= PAGE_TARGET_HEIGHT; }
+        function hasText(s) { return s.replace(/<[^>]+>/g, '').trim().length > 0; }
+        function updateStack(stack, unit) {
+            unit.replace(/<(\/?)([a-zA-Z][a-zA-Z0-9]*)[^>]*>/g, function (m, close, name) {
+                name = name.toLowerCase();
+                if (VOID.test(name) || /\/>$/.test(m)) return m;
+                if (close) { for (var i = stack.length - 1; i >= 0; i--) { if (stack[i].name === name) { stack.splice(i, 1); break; } } }
+                else stack.push({ name: name, open: m });
+                return m;
+            });
+        }
+        function openTags(stack) { return stack.map(function (s) { return s.open; }).join(''); }
+        function closeTags(stack) { return stack.slice().reverse().map(function (s) { return '</' + s.name + '>'; }).join(''); }
+
         blocks.forEach(function (block) {
-            var test = current + block;
-            measure.innerHTML = test;
-            if (current && measure.scrollHeight > PAGE_TARGET_HEIGHT) {
-                pages.push(current);
-                current = block;
-            } else {
-                current = test;
+            if (fits(current + block)) { current += block; return; }
+            if (!/^<p>/i.test(block)) {            // फोटो आदि: टुक्र्याउन मिल्दैन
+                if (current) pages.push(current);
+                current = block; return;
             }
+            // लामो अनुच्छेद: शब्द-शब्दमा पाना भरेर अर्को पानामा सार्ने (केही पनि नकटियोस्)
+            var inner = block.replace(/^<p>/i, '').replace(/<\/p>$/i, '');
+            var units = inner.match(/\s+|(?:<[^>]+>|[^<\s])+/g) || [];
+            var stack = [], piece = '';
+            for (var u = 0; u < units.length; u++) {
+                var unit = units[u];
+                var cand = piece + unit;
+                var tmp = stack.slice(); updateStack(tmp, unit);
+                if (fits(current + '<p>' + cand + closeTags(tmp) + '</p>')) { piece = cand; stack = tmp; continue; }
+                if (!hasText(piece)) {
+                    if (current) { pages.push(current); current = ''; u--; continue; }
+                    piece = cand; stack = tmp; continue;   // एक शब्द नै पाना भन्दा ठूलो (दुर्लभ)
+                }
+                pages.push(current + '<p>' + piece.replace(/\s+$/, '') + closeTags(stack) + '</p>');
+                current = '';
+                piece = openTags(stack);
+                if (!/^\s+$/.test(unit)) u--;
+            }
+            if (hasText(piece)) current += '<p>' + piece + closeTags(stack) + '</p>';
         });
         if (current) pages.push(current);
         measure.remove();
@@ -667,6 +710,7 @@ document.addEventListener('click', function(e){
         var availW = host.clientWidth - 16;
         var scale = availW / TARGET_W;
         if (!isOpen) scale = Math.min(scale, 1.6); // कभर अवस्थामा अत्यधिक ठूलो नहोस्
+        else scale = Math.min(scale, 1.3); // खुल्दा पनि डेस्कटपमा अक्षर अति ठूला नहोऊन्
         wrap.style.transform = 'scale(' + scale + ')';
         host.style.height = Math.round(420 * scale) + 'px';
     }
@@ -679,10 +723,10 @@ document.addEventListener('click', function(e){
                 var txt = String(data.text || '');
                 var sample = txt.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 300) || 'अ';
                 var fontP = (document.fonts && document.fonts.load)
-                    ? document.fonts.load('400 9px Khand', sample).catch(function () {}) : Promise.resolve();
+                    ? document.fonts.load('500 17px Akshar', sample).catch(function () {}) : Promise.resolve();
                 var srcs = []; txt.replace(/<img[^>]+src="([^"]+)"/g, function (m, s) { srcs.push(s); return m; });
                 var imgP = Promise.all(srcs.map(function (s) {
-                    return new Promise(function (res) { var im = new Image(); im.onload = im.onerror = res; im.src = s; });
+                    return new Promise(function (res) { var im = new Image(); im.onload = function () { (window.__bookImgDims = window.__bookImgDims || {})[s] = { w: im.naturalWidth, h: im.naturalHeight }; res(); }; im.onerror = res; im.src = s; });
                 }));
                 return withTimeout(Promise.all([fontP, imgP]), 1500).then(function () { return data; });
             })
@@ -797,7 +841,7 @@ document.addEventListener('click', function(e){
   modal.innerHTML = '<div class="pf-panel" role="dialog" aria-modal="true">' +
     '<button type="button" class="pf-close" aria-label="बन्द गर्नुहोस्">✕</button>' +
     '<h3></h3><div class="pf-meta"></div><div class="pf-text"></div>' +
-    '<div class="pf-foot"><a href="'+ORIGIN+'" target="_blank" rel="noopener">प्रतीक साहित्य संग्रहमा थप कविता पढ्नुहोस् →</a></div></div>';
+    '</div>';
   document.body.appendChild(modal);
   var panel = modal.querySelector('.pf-panel');
   function openPoem(p){
