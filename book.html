@@ -153,25 +153,44 @@
                 if (current) pages.push(current);
                 current = block; return;
             }
-            // लामो अनुच्छेद: शब्द-शब्दमा पाना भरेर अर्को पानामा सार्ने (केही पनि नकटियोस्)
+            // लामो अनुच्छेद: शब्द-शब्दमा पाना भरेर अर्को पानामा सार्ने (केही पनि नकटियोस्)।
+            // हरेक शब्दमा नाप्दा ढिलो हुने भएकाले binary search: प्रति पाना ~१० पटक मात्र नाप्ने।
             var inner = block.replace(/^<p>/i, '').replace(/<\/p>$/i, '');
             var units = inner.match(/\s+|(?:<[^>]+>|[^<\s])+/g) || [];
-            var stack = [], piece = '';
-            for (var u = 0; u < units.length; u++) {
-                var unit = units[u];
-                var cand = piece + unit;
-                var tmp = stack.slice(); updateStack(tmp, unit);
-                if (fits(current + '<p>' + cand + closeTags(tmp) + '</p>')) { piece = cand; stack = tmp; continue; }
-                if (!hasText(piece)) {
-                    if (current) { pages.push(current); current = ''; u--; continue; }
-                    piece = cand; stack = tmp; continue;   // एक शब्द नै पाना भन्दा ठूलो (दुर्लभ)
-                }
-                pages.push(current + '<p>' + piece.replace(/\s+$/, '') + closeTags(stack) + '</p>');
-                current = '';
-                piece = openTags(stack);
-                if (!/^\s+$/.test(unit)) u--;
+            var pos = 0, stack = [], lead = '';
+            function build(k) {
+                var st = stack.slice(), h = lead;
+                for (var q = pos; q < k; q++) { h += units[q]; updateStack(st, units[q]); }
+                return { h: h, st: st };
             }
-            if (hasText(piece)) current += '<p>' + piece + closeTags(stack) + '</p>';
+            while (pos < units.length) {
+                var hi = Math.min(units.length, pos + 260);
+                var r = build(hi);
+                var best = 0, bestR = null;
+                if (fits(current + '<p>' + r.h + closeTags(r.st) + '</p>')) { best = hi; bestR = r; }
+                else {
+                    var lo = pos + 1, up = hi - 1;
+                    while (lo <= up) {
+                        var mid = (lo + up) >> 1;
+                        var rm = build(mid);
+                        if (fits(current + '<p>' + rm.h + closeTags(rm.st) + '</p>')) { best = mid; bestR = rm; lo = mid + 1; }
+                        else up = mid - 1;
+                    }
+                }
+                if (!best || !hasText(bestR.h)) {
+                    if (current) { pages.push(current); current = ''; lead = ''; continue; }
+                    best = Math.min(units.length, pos + 1); bestR = build(best);   // एक शब्द नै पाना भन्दा ठूलो (दुर्लभ)
+                }
+                if (best >= units.length) {
+                    current += '<p>' + bestR.h + closeTags(bestR.st) + '</p>';
+                    pos = units.length;
+                } else {
+                    pages.push(current + '<p>' + bestR.h.replace(/\s+$/, '') + closeTags(bestR.st) + '</p>');
+                    current = '';
+                    stack = bestR.st; lead = openTags(stack); pos = best;
+                    while (pos < units.length && /^\s+$/.test(units[pos])) pos++;
+                }
+            }
         });
         if (current) pages.push(current);
         document.body.removeChild(measure);
@@ -256,16 +275,38 @@
                         return withTimeout(Promise.all([fontP, imgP]), 1500).then(function () { return data; });
                     })
                     .then(function (data) {
-                    var blocks = toBlocks(data.text);
-                    var pages = paginate(blocks);
-                    var colorStyle = data.color ? 'color:' + data.color + ';' : '';
-                    buildFlipBook(data, pages, colorStyle);
-                    applyScale();
+            var colorStyle = data.color ? 'color:' + data.color + ';' : '';
+            var sample = String(data.text || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 300) || 'अ';
+            var listenersBound = false;
+            // धेरै पाना हुँदा सबै पाना 3D मा राख्दा फोन ढिलो/धमिलो हुन्छ — अहिले खुला किताब वरिपरिका पाना मात्र देखाउने
+            function syncSheets() {
+                var els = container.querySelectorAll('.page'), n = els.length, f = 0, i;
+                for (i = 1; i <= n; i++) { var cb = document.getElementById('page' + i + '_checkbox'); if (cb && cb.checked) f++; }
+                for (i = 1; i <= n; i++) els[i - 1].style.display = (i >= f - 2 && i <= f + 4) ? '' : 'none';
+            }
+            function build() {
+                var old = document.getElementById('dynamicBookPageStyles'); if (old) old.remove();
+                var pages = paginate(toBlocks(data.text));
+                buildFlipBook(data, pages, colorStyle);
+                applyScale();
+                Array.prototype.forEach.call(container.querySelectorAll('input[type=checkbox]'), function (cb) { cb.addEventListener('change', syncSheets); });
+                var cover = document.getElementById('cover_checkbox');
+                if (cover) cover.addEventListener('change', applyScale);
+                syncSheets();
+                if (!listenersBound) {
                     window.addEventListener('resize', applyScale);
                     window.addEventListener('orientationchange', applyScale);
-                    var coverCheckbox = document.getElementById('cover_checkbox');
-                    if (coverCheckbox) coverCheckbox.addEventListener('change', applyScale);
-                })
+                    listenersBound = true;
+                }
+            }
+            build();
+            // पाना नाप्दा Akshar आइपुगेको थिएन भने (अर्कै फन्टले नापिएको) पाठकले छुनुअघि एकपटक फेरि मिलाउने
+            if (document.fonts && document.fonts.check && document.fonts.load && !document.fonts.check('500 17px Akshar', sample)) {
+                document.fonts.load('500 17px Akshar', sample).then(function () {
+                    if (!container.querySelector('input[type=checkbox]:checked')) build();
+                }).catch(function () {});
+            }
+        })
                 .catch(function () {
                     container.innerHTML = '<p style="color:#fff;">किताब लोड गर्न सकिएन।</p>';
                 });
