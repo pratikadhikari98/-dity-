@@ -1,7 +1,7 @@
 {
-  "name": "आदित्य (ADITYA)",
-  "short_name": "आदित्य",
-  "description": "आदित्य को आधिकारिक वेबसाइट",
+  "name": "प्रतीक अध्यात्म सञ्जाल (Pratik Adhyatma Sanjal)",
+  "short_name": "प्रतीक अध्यात्म सञ्जाल",
+  "description": "प्रतीक अध्यात्म सञ्जाल को आधिकारिक वेबसाइट",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#eaf5fb",
@@ -11,16 +11,16 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "icon-192.svg",
+      "src": "/favicon-192x192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "icon-512.svg",
+      "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "categories": [
