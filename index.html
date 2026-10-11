@@ -170,7 +170,25 @@
   .pf-text { white-space: pre-line; line-height: 2; font-size: 1.1rem; color: var(--text); text-align: left; }
   /* चक्रका ८ लेबल: Ananda Devanagari Round (Bold जस्तो) */
   #wheelSvg .wheel-label { font-family: 'Ananda Devanagari Round', 'Noto Sans Devanagari', sans-serif; font-weight: normal; font-size: 14.5px; stroke: #5c2f26; stroke-width: 0.4px; stroke-linejoin: round; }
+  /* ── गृहपृष्ठमा हिरो + परिचय मात्र; बाँकी भाग ☰ मेनुबाट खुल्ने "view" हरू ── */
+  html[data-vs="home"] [data-view],
+  html[data-vs="showcase"] [data-view]:not([data-view="showcase"]),
+  html[data-vs="news"] [data-view]:not([data-view="news"]),
+  html[data-vs="book"] [data-view]:not([data-view="book"]),
+  html[data-vs="poems"] [data-view]:not([data-view="poems"]) {
+    position: absolute !important; left: -20000px; top: 0; width: min(100vw, 1080px); height: 0 !important;
+    overflow: hidden !important; visibility: hidden !important; pointer-events: none !important;
+  }
+  html:not([data-vs="home"]) #desktopTopWrap, html:not([data-vs="home"]) #purpose { display: none !important; }
+  html[data-vs="home"] .news-page-inner { padding-top: 0; }
+  .header-dropdown { min-width: 220px; }
+  .menu-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
+  .menu-nav-link { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: var(--text); font-size: 1rem; font-weight: 600; }
+  .menu-nav-link:hover, .menu-nav-link:active { background: var(--sky-pale); }
+  .menu-nav-link.active { background: var(--sky); color: var(--blue-dark); }
+  .menu-sep { height: 1px; background: #f0ddd3; margin: 4px 0 8px; }
 </style>
+<script>(function(){var m=/view=(showcase|news|book|poems)/.exec(location.hash||"");document.documentElement.setAttribute("data-vs",m?m[1]:"home");})();</script>
 </head>
 <body>
 
@@ -196,6 +214,14 @@
   <div class="header-menu">
     <button class="menu-dots-btn" id="menuDotsBtn" onclick="toggleHeaderMenu()" aria-label="मेनु" aria-haspopup="true" aria-expanded="false">☰</button>
     <div class="header-dropdown" id="headerDropdown">
+      <nav class="menu-nav" aria-label="मुख्य मेनु">
+        <a class="menu-nav-link" href="#view=home" data-go="home">🏠 गृहपृष्ठ</a>
+        <a class="menu-nav-link" href="#view=showcase" data-go="showcase">🖼 झलक</a>
+        <a class="menu-nav-link" href="#view=news" data-go="news">📰 समाचार</a>
+        <a class="menu-nav-link" href="#view=book" data-go="book">📖 किताब</a>
+        <a class="menu-nav-link" href="#view=poems" data-go="poems">📜 प्रतीक साहित्य सङ्ग्रह</a>
+      </nav>
+      <div class="menu-sep"></div>
       <div class="theme-picker">
         <div class="theme-picker-label">थिम रोज्नुहोस्</div>
         <div class="theme-swatches">
@@ -394,6 +420,30 @@ function toggleHeaderMenu() {
   dropdown.classList.toggle('open', willOpen);
   if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
 }
+// ── ☰ मेनुबाट भाग खोल्ने (गृहपृष्ठ / झलक / समाचार / किताब / प्रतीक साहित्य सङ्ग्रह) ──
+(function(){
+  function current(){ var m = /view=(showcase|news|book|poems)/.exec(location.hash || ''); return m ? m[1] : 'home'; }
+  function apply(){
+    var v = current();
+    document.documentElement.setAttribute('data-vs', v);
+    Array.prototype.forEach.call(document.querySelectorAll('.menu-nav-link'), function(a){ a.classList.toggle('active', a.getAttribute('data-go') === v); });
+    window.scrollTo(0, 0);
+    // देखिएपछि किताब/हिरो आदिले आफ्नो साइज फेरि नाप्न
+    requestAnimationFrame(function(){ window.dispatchEvent(new Event('resize')); });
+    setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 350);
+  }
+  window.addEventListener('hashchange', apply);
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('.menu-nav-link');
+    if (!a) return;
+    var dd = document.getElementById('headerDropdown'), btn = document.getElementById('menuDotsBtn');
+    if (dd) dd.classList.remove('open');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    // उही भागमा फेरि थिच्दा hashchange नआउने भएकाले हातैले लागू गर्ने
+    if (a.getAttribute('href') === '#view=' + current()) { e.preventDefault(); apply(); }
+  });
+  document.addEventListener('DOMContentLoaded', apply);
+})();
 document.addEventListener('click', function(e){
   const dropdown = document.getElementById('headerDropdown');
   const btn = document.getElementById('menuDotsBtn');
@@ -417,7 +467,7 @@ document.addEventListener('click', function(e){
 </section>
 
 <!-- SHOWCASE PHOTO + TEXT — swipeable carousel (content loads from data/showcase.json) -->
-<section class="showcase-section" id="showcase">
+<section class="showcase-section" id="showcase" data-view="showcase">
   <div class="showcase-slider" data-source="data/showcase.json">
     <div class="showcase-slides" id="showcaseSlides"></div>
   </div>
@@ -428,12 +478,12 @@ document.addEventListener('click', function(e){
 
   <!-- NEWS SECTION (Newspaper 1 + Newspaper 2) -->
   <div id="news">
-    <section class="news-feed-section">
+    <section class="news-feed-section" data-view="news">
       <div class="news-feed-list" id="newsFeedList" data-source="data/news.json"></div>
     </section>
 
     <!-- किताब (book.html बाट सारिएको फ्लिप बुक) — समाचार १ को तल -->
-    <section class="news-feed-section" id="bookEmbedSection">
+    <section class="news-feed-section" id="bookEmbedSection" data-view="book">
       <div id="bookEmbedWrap">
         <div id="bookScaleWrap">
           <div id="flipBookContainer"><!-- JS ले यहाँ भर्छ --></div>
@@ -441,7 +491,7 @@ document.addEventListener('click', function(e){
       </div>
     </section>
 
-    <section class="news-feed-section news2-section">
+    <section class="news-feed-section news2-section" data-view="news">
       <div class="news-feed-list news-feed-list-single" id="newsFeedList2" data-source="data/news2.json"></div>
       <div class="ad-carousel" id="adCarousel" data-source="data/ads.json">
         <div class="ad-carousel-track" id="adCarouselTrack"></div>
@@ -449,7 +499,7 @@ document.addEventListener('click', function(e){
     </section>
 
     <!-- प्रतीक साहित्य संग्रह — random कविता (विज्ञापन पानलको तल) -->
-    <section class="news-feed-section poem-section" id="poemFeedSection" style="display:none;">
+    <section class="news-feed-section poem-section" id="poemFeedSection" data-view="poems" style="display:none;">
       <div class="pf-box">
         <div class="pf-head">
           <h2 class="pf-h" aria-label="प्रतीक साहित्य सङ्ग्रह">k|tLs ;flxTo ;ª\u|x</h2>
@@ -923,7 +973,7 @@ document.addEventListener('click', function(e){
   }
   function loop(){
     setTimeout(function(){
-      if (held || document.hidden || !modal.hidden) { loop(); return; }
+      if (held || document.hidden || !modal.hidden || document.documentElement.getAttribute('data-vs') !== 'poems') { loop(); return; }
       rotate().then(loop, loop);
     }, 2650);
   }
