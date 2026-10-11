@@ -212,7 +212,8 @@
     </div>
   </div>
   <div class="header-menu">
-    <button class="menu-dots-btn" id="menuDotsBtn" onclick="toggleHeaderMenu()" aria-label="मेनु" aria-haspopup="true" aria-expanded="false"><svg id="hbIcon" class="hb-icon" width="28" height="28" viewBox="0 0 100 100" aria-hidden="true"><path class="hb-p1"><animate class="hb-a1" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path><path class="hb-p2"><animate class="hb-a2" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path><path class="hb-p3"><animate class="hb-a3" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path></svg></button>
+    <div class="hm-card" id="hmCard">
+    <button class="menu-dots-btn" id="menuDotsBtn" onclick="toggleHeaderMenu()" aria-label="मेनु" aria-haspopup="true" aria-expanded="false"><span class="hm-title">मेनु</span><svg id="hbIcon" class="hb-icon" width="32" height="32" viewBox="0 0 100 100" aria-hidden="true"><path class="hb-p1"><animate class="hb-a1" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path><path class="hb-p2"><animate class="hb-a2" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path><path class="hb-p3"><animate class="hb-a3" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path></svg></button>
     <div class="header-dropdown" id="headerDropdown">
       <nav class="menu-nav" aria-label="मुख्य मेनु">
         <a class="menu-nav-link" href="#view=home" data-go="home">🏠 गृहपृष्ठ</a>
@@ -229,6 +230,7 @@
         </div>
       </div>
       <a href="admin.html" class="menu-admin-link" title="Admin">🐚 <span>Admin</span></a>
+    </div>
     </div>
   </div>
 </header>
@@ -1458,6 +1460,21 @@ if ('serviceWorker' in navigator) {
     });
   }
   new MutationObserver(run).observe(btn,{attributes:true,attributeFilter:['aria-expanded']});
+})();
+</script>
+<script>
+// मेनु card — पठाइएको कोडजस्तै: थिच्दा card को उचाइ ४००ms मा बढ्ने/घट्ने
+(function(){
+  var card=document.getElementById('hmCard'),btn=document.getElementById('menuDotsBtn'),dd=document.getElementById('headerDropdown');
+  if(!card||!btn||!dd) return;
+  function size(){
+    var open=btn.getAttribute('aria-expanded')==='true';
+    card.classList.toggle('active',open);
+    card.style.height=(open?btn.offsetHeight+dd.scrollHeight+2:btn.offsetHeight)+'px';
+  }
+  new MutationObserver(size).observe(btn,{attributes:true,attributeFilter:['aria-expanded']});
+  window.addEventListener('resize',size);
+  card.style.height=btn.offsetHeight+'px';
 })();
 </script>
 </body>

@@ -922,4 +922,17 @@
 @media (max-width: 480px) { .ag-wrap { margin-top: 22px; padding: 20px 10px; border-radius: 22px; } }
 
 /* ☰ बटन SVG रेखाहरू (animated hamburger) */
-.menu-dots-btn .hb-icon { display: block; fill: none; stroke: currentColor; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.menu-dots-btn .hb-icon { display: block; fill: none; stroke: currentColor; stroke-width: 12; stroke-linecap: square; stroke-linejoin: round; pointer-events: none; }
+
+/* ═══ मेनु card (svg-hamburger-menu जस्तै) ═══ */
+.header-menu { width: 230px; max-width: 62vw; height: 76px; }
+.hm-card { position: absolute; top: 0; right: 0; width: 100%; height: 76px; background: var(--white); border-radius: 20px; overflow: hidden; z-index: 200;
+  box-shadow: 0px 1.5px 5.4px rgba(92,47,38,0.054), 0px 3.7px 10.9px rgba(92,47,38,0.068), 0px 7px 16.8px rgba(92,47,38,0.074), 0px 12.5px 24.6px rgba(92,47,38,0.076), 0px 23.4px 38.1px rgba(92,47,38,0.08), 0px 56px 80px rgba(92,47,38,0.1);
+  transition: height 400ms; -webkit-tap-highlight-color: rgba(92,47,38,0.06); }
+.hm-card .menu-dots-btn { width: 100%; height: 76px; border: 0; border-bottom: 1px solid rgba(0,0,0,0.15); border-radius: 0; background: transparent; color: var(--blue-dark); display: flex; align-items: center; justify-content: space-between; padding: 0 22px; cursor: pointer; transition: none; }
+.hm-card .menu-dots-btn:hover { background: transparent; color: var(--blue-dark); }
+.hm-card .menu-dots-btn:active { transform: none; }
+.hm-title { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-size: 22px; -webkit-text-stroke: .4px currentColor; user-select: none; -webkit-user-select: none; }
+.hm-card .menu-dots-btn .hb-icon { flex: 0 0 32px; }
+.hm-card .header-dropdown { position: static; opacity: 1; transform: none; box-shadow: none; border: 0; border-radius: 0; padding: 10px 12px 14px; min-width: 0; visibility: hidden; transition: visibility 0s linear 400ms; }
+.hm-card .header-dropdown.open { visibility: visible; transition-delay: 0s; }
