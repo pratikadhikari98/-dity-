@@ -920,3 +920,6 @@
   .ag-container { flex-direction: row; max-width: 380px; margin: 0 auto; }
 }
 @media (max-width: 480px) { .ag-wrap { margin-top: 22px; padding: 20px 10px; border-radius: 22px; } }
+
+/* ☰ बटन SVG रेखाहरू (animated hamburger) */
+.menu-dots-btn .hb-icon { display: block; fill: none; stroke: currentColor; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }

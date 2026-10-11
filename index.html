@@ -212,7 +212,7 @@
     </div>
   </div>
   <div class="header-menu">
-    <button class="menu-dots-btn" id="menuDotsBtn" onclick="toggleHeaderMenu()" aria-label="मेनु" aria-haspopup="true" aria-expanded="false">☰</button>
+    <button class="menu-dots-btn" id="menuDotsBtn" onclick="toggleHeaderMenu()" aria-label="मेनु" aria-haspopup="true" aria-expanded="false"><svg id="hbIcon" class="hb-icon" width="28" height="28" viewBox="0 0 100 100" aria-hidden="true"><path class="hb-p1"><animate class="hb-a1" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path><path class="hb-p2"><animate class="hb-a2" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path><path class="hb-p3"><animate class="hb-a3" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path></svg></button>
     <div class="header-dropdown" id="headerDropdown">
       <nav class="menu-nav" aria-label="मुख्य मेनु">
         <a class="menu-nav-link" href="#view=home" data-go="home">🏠 गृहपृष्ठ</a>
@@ -471,11 +471,11 @@ document.addEventListener('click', function(e){
       <aside class="ag-sidebar">
         <div class="ag-logo">प्रतीक अध्यात्म सञ्जाल</div>
         <ul class="ag-menu">
-        <li class="active"><a href="#view=home" data-ag="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span>गृहपृष्ठ</span></a><span class="ag-glow"></span></li>
-        <li><a href="#view=showcase" data-ag="showcase"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m4 18 5-4.5 3.5 3 3-2.5L20 17"/></svg><span>झलक</span></a><span class="ag-glow"></span></li>
-        <li><a href="#view=news" data-ag="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M18 9h2a1 1 0 0 1 1 1v8a2 2 0 0 1-2 2"/><path d="M8.5 8.5h6M8.5 12h6M8.5 15.5h4"/></svg><span>समाचार</span></a><span class="ag-glow"></span></li>
-        <li><a href="#view=book" data-ag="book"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg><span>किताब</span></a><span class="ag-glow"></span></li>
-        <li><a href="#view=poems" data-ag="poems"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.8a4.3 4.3 0 0 1 7.5 2.7c0 5.4-7.5 10-7.5 10z"/></svg><span>प्रतीक साहित्य सङ्ग्रह</span></a><span class="ag-glow"></span></li>
+          <li><a href="#" data-ag="name" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-3.8 3.6-6 7.5-6s6.7 2.2 7.5 6"/></svg><span>नाम</span></a><span class="ag-glow"></span></li>
+          <li><a href="#" data-ag="address" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg><span>ठेगाना</span></a><span class="ag-glow"></span></li>
+          <li><a href="#" data-ag="facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5h2.5V5H14c-2.2 0-3.5 1.4-3.5 3.6V11H8v3.5h2.5V21H14v-6.5h2.4l.6-3.5H14V9.2c0-.5.2-.7.7-.7z"/></svg><span>Facebook</span></a><span class="ag-glow"></span></li>
+          <li><a href="#" data-ag="instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".8"/></svg><span>Instagram</span></a><span class="ag-glow"></span></li>
+          <li><a href="#" data-ag="email" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg><span>Email</span></a><span class="ag-glow"></span></li>
         </ul>
         <div class="ag-profile">
           <div class="ag-avatar"><img src="photos/aditya-logo.png" alt="ADITYA"></div>
@@ -1420,23 +1420,44 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 <script>
-// Apple-style glass panel: hover/touch glow र active चिह्न
+// Apple-style glass panel — लिंकहरू यहाँ मात्र सम्पादन गर्नुहोस् (खाली "" भए थिच्दा केही खुल्दैन)
 (function(){
+  var LINKS = {
+    name:      "about.html",
+    address:   "",   // जस्तै: "https://maps.app.goo.gl/xxxx"
+    facebook:  "https://www.facebook.com/share/1Dkz17TPeV/",
+    instagram: "",   // जस्तै: "https://www.instagram.com/तपाईंको_आईडी/"
+    email:     ""    // जस्तै: "mailto:नाम@gmail.com"
+  };
   var items=document.querySelectorAll('#agPanel .ag-menu li');
   Array.prototype.forEach.call(items,function(li){
+    var a=li.querySelector('a'), key=a.getAttribute('data-ag'), url=LINKS[key]||'';
+    if(url){ a.setAttribute('href',url); if(url.indexOf('mailto:')===0||key==='name') a.removeAttribute('target'); }
+    else { a.addEventListener('click',function(e){e.preventDefault();}); a.style.opacity='.6'; }
     function glow(e){var r=li.getBoundingClientRect();var p=e.touches?e.touches[0]:e;li.style.setProperty('--gx',(p.clientX-r.left)+'px');li.style.setProperty('--gy',(p.clientY-r.top)+'px');li.classList.add('glow');setTimeout(function(){li.classList.remove('glow');},500);}
     li.addEventListener('mouseenter',glow);li.addEventListener('touchstart',glow,{passive:true});
-    li.addEventListener('click',function(){
-      var ic=li.querySelector('svg');if(ic){ic.style.transform='scale(1.2)';setTimeout(function(){ic.style.transform='';},200);}
-    });
   });
-  function sync(){var m=/view=(showcase|news|book|poems)/.exec(location.hash||'');var v=m?m[1]:'home';
-    Array.prototype.forEach.call(items,function(li){li.classList.toggle('active',li.querySelector('a').getAttribute('data-ag')===v);});}
-  window.addEventListener('hashchange',sync);sync();
-  // उही भागमा फेरि थिच्दा hashchange नआउने भएकाले
-  document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.ag-menu a');if(!a)return;
-    var v=a.getAttribute('data-ag');var cur=(/view=(showcase|news|book|poems)/.exec(location.hash||'')||[0,'home'])[1];
-    if(v===cur){e.preventDefault();window.dispatchEvent(new HashChangeEvent('hashchange'));}});
+})();
+</script>
+<script>
+// ☰ बटन — ३ रेखा मिसिएर बन्द चिह्न बन्ने (svg-hamburger-menu शैली); aria-expanded बदलिँदा आफैँ चल्छ
+(function(){
+  var btn=document.getElementById('menuDotsBtn'); if(!btn) return;
+  var V1=["M 84,24 C 84,24 61.333333,24.001 50,24.001 38.666667,24.001 16,24 16,24","M 82,24 C 82,24 66.957389,30.5 50,30.5 33.042611,30.5 18,24 18,24","M 80,24 C 80,24 61.663104,37 50,37 38.336896,37 20,24 20,24","M 78,24 C 78,24 55.685686,43.5 50,43.5 44.314314,43.5 22,24 22,24","M 76,24 C 76,24 50.055365,50 50,50 49.94463,50 24,24 24,24"];
+  var V2=["M 84,50 H 50 16","M 75.5,50 H 50 24.5","M 67,50 H 50 33","M 58.5,50 H 50 41.5","M 50.001,50 H 50 49.99"];
+  var V3=["M 84,76 C 84,76 61.333333,76.001 50,76.001 38.666667,76.001 16,76 16,76","M 82,76 C 82,76 66.957389,69.5 50,69.5 33.042611,69.5 18,76 18,76","M 80,76 C 80,76 61.663104,63 50,63 38.336896,63 20,76 20,76","M 78,76 C 78,76 55.685686,56.5 50,56.5 44.314314,56.5 22,76 22,76","M 76,76 C 76,76 50.055365,50 50,50 49.944635,50 24,76 24,76"];
+  var sets=[[V1,'.hb-p1','.hb-a1'],[V2,'.hb-p2','.hb-a2'],[V3,'.hb-p3','.hb-a3']];
+  sets.forEach(function(s){ btn.querySelector(s[1]).setAttribute('d',s[0][0]); });
+  var open=false;
+  function run(){
+    var now=btn.getAttribute('aria-expanded')==='true'; if(now===open) return; open=now;
+    sets.forEach(function(s){
+      var a=btn.querySelector(s[2]);
+      a.setAttribute('values',(open?s[0]:s[0].slice().reverse()).join('; '));
+      if(a.beginElement) a.beginElement();
+    });
+  }
+  new MutationObserver(run).observe(btn,{attributes:true,attributeFilter:['aria-expanded']});
 })();
 </script>
 </body>
