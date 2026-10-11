@@ -464,6 +464,26 @@ document.addEventListener('click', function(e){
       <p class="about-text" id="aboutText" data-source="data/about.json"></p>
     </div>
   </div>
+
+  <!-- APPLE-STYLE GLASS PANEL — गृहपृष्ठको खाली भाग -->
+  <div class="ag-wrap" id="agPanel">
+    <div class="ag-container">
+      <aside class="ag-sidebar">
+        <div class="ag-logo">प्रतीक अध्यात्म सञ्जाल</div>
+        <ul class="ag-menu">
+        <li class="active"><a href="#view=home" data-ag="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span>गृहपृष्ठ</span></a><span class="ag-glow"></span></li>
+        <li><a href="#view=showcase" data-ag="showcase"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m4 18 5-4.5 3.5 3 3-2.5L20 17"/></svg><span>झलक</span></a><span class="ag-glow"></span></li>
+        <li><a href="#view=news" data-ag="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M18 9h2a1 1 0 0 1 1 1v8a2 2 0 0 1-2 2"/><path d="M8.5 8.5h6M8.5 12h6M8.5 15.5h4"/></svg><span>समाचार</span></a><span class="ag-glow"></span></li>
+        <li><a href="#view=book" data-ag="book"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg><span>किताब</span></a><span class="ag-glow"></span></li>
+        <li><a href="#view=poems" data-ag="poems"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.8a4.3 4.3 0 0 1 7.5 2.7c0 5.4-7.5 10-7.5 10z"/></svg><span>प्रतीक साहित्य सङ्ग्रह</span></a><span class="ag-glow"></span></li>
+        </ul>
+        <div class="ag-profile">
+          <div class="ag-avatar"><img src="photos/aditya-logo.png" alt="ADITYA"></div>
+          <div class="ag-info"><h3>ADITYA</h3><p>युवा अध्यात्म सञ्जाल</p></div>
+        </div>
+      </aside>
+    </div>
+  </div>
 </section>
 
 <!-- SHOWCASE PHOTO + TEXT — swipeable carousel (content loads from data/showcase.json) -->
@@ -1397,6 +1417,26 @@ if ('serviceWorker' in navigator) {
   box.addEventListener('click', play);
   box.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') play(); });
   setTimeout(play, 600);
+})();
+</script>
+<script>
+// Apple-style glass panel: hover/touch glow र active चिह्न
+(function(){
+  var items=document.querySelectorAll('#agPanel .ag-menu li');
+  Array.prototype.forEach.call(items,function(li){
+    function glow(e){var r=li.getBoundingClientRect();var p=e.touches?e.touches[0]:e;li.style.setProperty('--gx',(p.clientX-r.left)+'px');li.style.setProperty('--gy',(p.clientY-r.top)+'px');li.classList.add('glow');setTimeout(function(){li.classList.remove('glow');},500);}
+    li.addEventListener('mouseenter',glow);li.addEventListener('touchstart',glow,{passive:true});
+    li.addEventListener('click',function(){
+      var ic=li.querySelector('svg');if(ic){ic.style.transform='scale(1.2)';setTimeout(function(){ic.style.transform='';},200);}
+    });
+  });
+  function sync(){var m=/view=(showcase|news|book|poems)/.exec(location.hash||'');var v=m?m[1]:'home';
+    Array.prototype.forEach.call(items,function(li){li.classList.toggle('active',li.querySelector('a').getAttribute('data-ag')===v);});}
+  window.addEventListener('hashchange',sync);sync();
+  // उही भागमा फेरि थिच्दा hashchange नआउने भएकाले
+  document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.ag-menu a');if(!a)return;
+    var v=a.getAttribute('data-ag');var cur=(/view=(showcase|news|book|poems)/.exec(location.hash||'')||[0,'home'])[1];
+    if(v===cur){e.preventDefault();window.dispatchEvent(new HashChangeEvent('hashchange'));}});
 })();
 </script>
 </body>

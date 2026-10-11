@@ -888,3 +888,35 @@
     #desktopTopInner { width: 100%; transform: none !important; }
     #desktopTopWrap { overflow: visible; height: auto !important; }
   }
+
+
+/* ═══ APPLE-STYLE GLASS PANEL (गृहपृष्ठको तल) — साइटको terracotta रङसँग मिल्ने ═══ */
+.ag-wrap { position: relative; max-width: 1080px; margin: 34px auto 0; padding: 28px 18px; border-radius: 28px; overflow: hidden; isolation: isolate; }
+.ag-wrap::before, .ag-wrap::after { content: ''; position: absolute; z-index: -1; border-radius: 50%; filter: blur(34px); }
+.ag-wrap::before { width: 260px; height: 260px; left: -70px; top: -60px; background: radial-gradient(circle, var(--blue-light) 0%, rgba(184,119,101,0) 70%); opacity: .55; }
+.ag-wrap::after { width: 300px; height: 300px; right: -90px; bottom: -90px; background: radial-gradient(circle, var(--blue-mid) 0%, rgba(147,84,71,0) 70%); opacity: .45; }
+.ag-container { display: flex; flex-direction: column; background: rgba(255,255,255,0.38); -webkit-backdrop-filter: blur(26px) saturate(150%); backdrop-filter: blur(26px) saturate(150%); border: 1px solid rgba(255,255,255,0.6); border-radius: 24px; box-shadow: 0 10px 34px rgba(92,47,38,0.16), inset 0 1px 0 rgba(255,255,255,0.7); overflow: hidden; text-align: left; }
+.ag-sidebar { padding: 22px 14px 16px; display: flex; flex-direction: column; background: rgba(240,221,211,0.35); }
+.ag-logo { text-align: center; margin-bottom: 14px; color: var(--blue-mid); font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-size: 1.25rem; color: var(--blue-dark); -webkit-text-stroke: .4px currentColor; }
+.ag-menu { list-style: none; margin: 0; padding: 0; }
+.ag-menu li { position: relative; margin-bottom: 8px; border-radius: 16px; transition: background .2s ease; overflow: hidden; }
+.ag-menu li::after { content: ''; position: absolute; inset: 0; border-radius: 16px; box-shadow: inset 0 0 0 1px rgba(147,84,71,0); transition: box-shadow .3s ease; pointer-events: none; }
+.ag-menu li:hover { background: rgba(255,255,255,0.55); }
+.ag-menu li:hover::after { box-shadow: inset 0 0 0 1px rgba(147,84,71,0.28); }
+.ag-menu li.active { background: rgba(255,255,255,0.7); }
+.ag-menu li.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 22px; background: var(--blue-mid); border-radius: 0 4px 4px 0; }
+.ag-menu a { display: flex; align-items: center; gap: 14px; padding: 13px 16px; color: var(--blue-dark); text-decoration: none; font-weight: 600; font-size: 1.02rem; -webkit-tap-highlight-color: transparent; }
+.ag-menu a svg { width: 22px; height: 22px; flex: 0 0 22px; stroke: var(--blue-mid); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+.ag-menu li.active a svg { stroke: var(--blue-dark); }
+.ag-menu li .ag-glow { position: absolute; inset: 0; border-radius: 16px; pointer-events: none; opacity: 0; transition: opacity .3s ease; background: radial-gradient(circle at var(--gx,50%) var(--gy,50%), rgba(184,119,101,0.32) 0%, rgba(184,119,101,0) 70%); }
+.ag-menu li.glow .ag-glow { opacity: 1; }
+.ag-profile { margin-top: 10px; display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.7); border-radius: 16px; }
+.ag-avatar { width: 46px; height: 46px; flex: 0 0 46px; border-radius: 50%; overflow: hidden; border: 2px solid var(--blue-light); background: var(--white); display: flex; align-items: center; justify-content: center; }
+.ag-avatar img { width: 100%; height: 100%; object-fit: contain; }
+.ag-info h3 { font-size: 1rem; font-weight: 700; color: var(--blue-dark); margin: 0 0 2px; letter-spacing: 0; }
+.ag-info p { font-size: .8rem; color: var(--text-light); margin: 0; }
+@media (min-width: 720px) {
+  .ag-wrap { padding: 36px 30px; }
+  .ag-container { flex-direction: row; max-width: 380px; margin: 0 auto; }
+}
+@media (max-width: 480px) { .ag-wrap { margin-top: 22px; padding: 20px 10px; border-radius: 22px; } }
