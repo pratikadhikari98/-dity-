@@ -175,7 +175,8 @@
   html[data-vs="showcase"] [data-view]:not([data-view="showcase"]),
   html[data-vs="news"] [data-view]:not([data-view="news"]),
   html[data-vs="book"] [data-view]:not([data-view="book"]),
-  html[data-vs="poems"] [data-view]:not([data-view="poems"]) {
+  html[data-vs="poems"] [data-view]:not([data-view="poems"]),
+  html[data-vs="about"] [data-view]:not([data-view="about"]) {
     position: absolute !important; left: -20000px; top: 0; width: min(100vw, 1080px); height: 0 !important;
     overflow: hidden !important; visibility: hidden !important; pointer-events: none !important;
   }
@@ -188,7 +189,7 @@
   .menu-nav-link.active { background: var(--sky); color: var(--blue-dark); }
   .menu-sep { height: 1px; background: #f0ddd3; margin: 4px 0 8px; }
 </style>
-<script>(function(){var m=/view=(showcase|news|book|poems)/.exec(location.hash||"");document.documentElement.setAttribute("data-vs",m?m[1]:"home");})();</script>
+<script>(function(){var m=/view=(showcase|news|book|poems|about)/.exec(location.hash||"");document.documentElement.setAttribute("data-vs",m?m[1]:"home");})();</script>
 </head>
 <body>
 
@@ -221,6 +222,7 @@
         <a class="menu-nav-link" href="#view=news" data-go="news">📰 समाचार</a>
         <a class="menu-nav-link" href="#view=book" data-go="book">📖 किताब</a>
         <a class="menu-nav-link" href="#view=poems" data-go="poems">📜 प्रतीक साहित्य सङ्ग्रह</a>
+        <a class="menu-nav-link" href="#view=about" data-go="about">ℹ️ बारेमा</a>
       </nav>
       <div class="menu-sep"></div>
       <div class="theme-picker">
@@ -424,7 +426,7 @@ function toggleHeaderMenu() {
 }
 // ── ☰ मेनुबाट भाग खोल्ने (गृहपृष्ठ / झलक / समाचार / किताब / प्रतीक साहित्य सङ्ग्रह) ──
 (function(){
-  function current(){ var m = /view=(showcase|news|book|poems)/.exec(location.hash || ''); return m ? m[1] : 'home'; }
+  function current(){ var m = /view=(showcase|news|book|poems|about)/.exec(location.hash || ''); return m ? m[1] : 'home'; }
   function apply(){
     var v = current();
     document.documentElement.setAttribute('data-vs', v);
@@ -467,6 +469,26 @@ document.addEventListener('click', function(e){
     </div>
   </div>
 
+</section>
+
+<!-- सूचना-पाटी (कालोपाटी) — गृहपृष्ठको तल; लेख data/notice.json बाट -->
+<section class="nb-section" id="noticeBoard">
+  <h2 class="nb-title">सूचना<span class="nb-hy">-</span>पाटी</h2>
+  <div class="bb-outer">
+    <div class="bb-wrap">
+      <img class="bb-bg" src="photos/blackboard.png" alt="" draggable="false">
+      <div class="bb-viewport">
+        <div class="nb-text" id="nbText">
+          <div class="nb-heading" id="nbHeading"></div>
+          <div class="nb-lines" id="nbLines"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- बारेमा (☰ मेनुबाट खुल्ने view) — Apple-style glass panel -->
+<section class="ag-section" id="aboutView" data-view="about">
   <!-- APPLE-STYLE GLASS PANEL — गृहपृष्ठको खाली भाग -->
   <div class="ag-wrap" id="agPanel">
     <div class="ag-container">
@@ -484,22 +506,6 @@ document.addEventListener('click', function(e){
           <div class="ag-info"><h3>ADITYA</h3><p>युवा अध्यात्म सञ्जाल</p></div>
         </div>
       </aside>
-    </div>
-  </div>
-</section>
-
-<!-- सूचना-पाटी (कालोपाटी) — गृहपृष्ठको तल; लेख data/notice.json बाट -->
-<section class="nb-section" id="noticeBoard">
-  <h2 class="nb-title">सूचना-पाटी</h2>
-  <div class="bb-outer">
-    <div class="bb-wrap">
-      <img class="bb-bg" src="photos/blackboard.png" alt="" draggable="false">
-      <div class="bb-viewport">
-        <div class="nb-text" id="nbText">
-          <div class="nb-heading" id="nbHeading"></div>
-          <div class="nb-lines" id="nbLines"></div>
-        </div>
-      </div>
     </div>
   </div>
 </section>

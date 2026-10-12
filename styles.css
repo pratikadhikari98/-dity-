@@ -939,7 +939,7 @@
 
 /* ═══ सूचना-पाटी (गृहपृष्ठ) — कालोपाटी, दुवै छेउ नछुने ═══ */
 .nb-section { background: #fdf1ec; padding: 6px 5% 56px; text-align: center; }
-.nb-section .nb-title { font-family: 'Noto Serif Devanagari',serif; font-weight: 700; font-size: 2.1rem; color: var(--blue-dark); margin: 0 0 6px; letter-spacing: .5px; }
+.nb-section .nb-title { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-weight: normal; font-size: 2.3rem; color: var(--blue-dark); -webkit-text-stroke: .6px currentColor; margin: 0 0 6px; letter-spacing: .5px; }
 .nb-section .bb-outer { max-width: 900px; margin: 0 auto; }
 .nb-section .bb-wrap { margin-top: 10px; aspect-ratio: 762 / 432; cursor: default; touch-action: auto; container-type: inline-size; filter: drop-shadow(0 12px 22px rgba(92,47,38,0.28)); }
 .nb-section .bb-viewport { top: 12%; bottom: 14%; left: 9%; right: 9%; }
@@ -950,3 +950,8 @@
 .nb-lines { display: flex; flex-direction: column; gap: 2.2cqw; }
 .nb-line { font-size: 1rem; font-size: 4.3cqw; line-height: 1.5; letter-spacing: .02em; }
 @media (min-width: 900px) { .nb-heading { font-size: 2.1rem; } .nb-line { font-size: 1.5rem; } }
+
+.nb-title .nb-hy { font-family: 'Noto Serif Devanagari', serif; -webkit-text-stroke: 0; font-weight: 700; margin: 0 2px; }
+/* बारेमा view */
+.ag-section { background: var(--sky-pale); padding: 22px 5% 60px; }
+.ag-section .ag-wrap { margin-top: 0; }
