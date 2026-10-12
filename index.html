@@ -179,7 +179,7 @@
     position: absolute !important; left: -20000px; top: 0; width: min(100vw, 1080px); height: 0 !important;
     overflow: hidden !important; visibility: hidden !important; pointer-events: none !important;
   }
-  html:not([data-vs="home"]) #desktopTopWrap, html:not([data-vs="home"]) #purpose { display: none !important; }
+  html:not([data-vs="home"]) #desktopTopWrap, html:not([data-vs="home"]) #purpose, html:not([data-vs="home"]) #noticeBoard { display: none !important; }
   html[data-vs="home"] .news-page-inner { padding-top: 0; }
   .header-dropdown { min-width: 220px; }
   .menu-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
@@ -484,6 +484,22 @@ document.addEventListener('click', function(e){
           <div class="ag-info"><h3>ADITYA</h3><p>युवा अध्यात्म सञ्जाल</p></div>
         </div>
       </aside>
+    </div>
+  </div>
+</section>
+
+<!-- सूचना-पाटी (कालोपाटी) — गृहपृष्ठको तल; लेख data/notice.json बाट -->
+<section class="nb-section" id="noticeBoard">
+  <h2 class="nb-title">सूचना-पाटी</h2>
+  <div class="bb-outer">
+    <div class="bb-wrap">
+      <img class="bb-bg" src="photos/blackboard.png" alt="" draggable="false">
+      <div class="bb-viewport">
+        <div class="nb-text" id="nbText">
+          <div class="nb-heading" id="nbHeading"></div>
+          <div class="nb-lines" id="nbLines"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1475,6 +1491,20 @@ if ('serviceWorker' in navigator) {
   new MutationObserver(size).observe(btn,{attributes:true,attributeFilter:['aria-expanded']});
   window.addEventListener('resize',size);
   card.style.height=btn.offsetHeight+'px';
+})();
+</script>
+<script>
+// सूचना-पाटीको लेख — data/notice.json: {"heading":"...","lines":["...","..."]}
+(function(){
+  var h=document.getElementById('nbHeading'),l=document.getElementById('nbLines');
+  if(!h||!l) return;
+  function show(d){
+    h.textContent=d.heading||'';
+    l.innerHTML='';
+    (d.lines||[]).forEach(function(s){var p=document.createElement('div');p.className='nb-line';p.textContent=s;l.appendChild(p);});
+  }
+  var fallback={heading:'सूचना',lines:['यहाँ सूचना लेख्नुहोस्।']};
+  fetch('data/notice.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():fallback;}).then(show).catch(function(){show(fallback);});
 })();
 </script>
 </body>
