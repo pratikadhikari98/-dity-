@@ -956,5 +956,4 @@
 .ag-section .ag-wrap { margin-top: 0; }
 
 /* श्लोक — आनन्द बोल्ड फन्ट (Preeti कोडमा लेखिएको) */
-.hero-text h2.hero-shloka.preeti-shloka { font-size: 2.5rem; line-height: 1.5; margin-top: 0; }
 .hero-shloka.preeti-shloka { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-weight: normal; -webkit-text-stroke: .6px currentColor; }
