@@ -1376,6 +1376,7 @@ document.addEventListener('click', function(e){
       if (!items || !items.length) return;
       var idx = 0;
       function render(i){
+        textEl.classList.toggle('preeti-shloka', items[i].font === 'preeti');  // Preeti कोडमा लेखिएको श्लोक → आनन्द फन्टमा
         textEl.innerHTML = String(items[i].shloka || '').split('\n').map(function(line){
           var d = document.createElement('div'); d.textContent = line; return d.innerHTML;
         }).join('<br>');

@@ -11,6 +11,78 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+<script>
+// Unicode नेपाली → Preeti (पुराना Unicode श्लोक एकपटक Preeti मा बदल्न) — index.html को उही कन्भर्टर
+(function(){
+var PT_FULL = {'क':'s','ख':'v','ग':'u','घ':'3','ङ':'ª','च':'r','छ':'5','ज':'h','झ':'´','ञ':'`','ट':'6','ठ':'7','ड':'8','ढ':'9','ण':'0f','त':'t','थ':'y','द':'b','ध':'w','न':'g','प':'k','फ':'km','ब':'a','भ':'e','म':'d','य':'o','र':'/','ल':'n','व':'j','श':'z','ष':'i','स':';','ह':'x','क्ष':'If','त्र':'q','ज्ञ':'1'};
+  var PT_HALF = {'क':'S','ख':'V','ग':'U','घ':'¡','च':'R','ज':'H','त':'T','ध':'W','न':'G','प':'K','ब':'A','भ':'E','म':'D','ल':'N','व':'J','श':'Z','स':':','ह':'X','ण':'0','क्ष':'I'};
+  var PT_VOWEL = {'अ':'c','आ':'cf','इ':'O','ई':'O{','उ':'p','ऊ':'pm','ऋ':'C','ए':'P','ऐ':'P]','ओ':'cf]','औ':'cf}','ॐ':'ç'};
+  var PT_MATRA = {'ा':'f','ी':'L','ु':"'",'ू':'"','ृ':'[','े':']','ै':'}','ो':'f]','ौ':'f}','ं':'+','ँ':'F','ः':'M'};
+  var PT_OTHER = {'।':'.','०':')','१':'!','२':'@','३':'#','४':'$','५':'%','६':'^','७':'&','८':'*','९':'('};
+  function ptIsCons(ch){ return !!ch && ch >= 'क' && ch <= 'ह'; }
+  function ptEsc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function toPreeti(str){
+    var s = String(str == null ? '' : str).replace(/[\u200c\u200d\u093c]/g, '');
+    var out = '', i = 0, n = s.length;
+    var FB = ' style="font-family:\'Noto Serif Devanagari\',serif"'; // फन्टमा नभएका अक्षर (अङ्ग्रेजी आदि) का लागि
+    function fb(t){ return '<span' + FB + '>' + ptEsc(t) + '</span>'; }
+    while (i < n) {
+      var c = s.charAt(i);
+      if (ptIsCons(c)) {
+        var units = [], reph = false, rakar = false, trailing = false;
+        // रेफ (र्) — क्लस्टरको सुरुमा 'र' + '्' + व्यञ्जन
+        if (c === 'र' && s.charAt(i + 1) === '्' && ptIsCons(s.charAt(i + 2))) { reph = true; i += 2; }
+        for (;;) {
+          var u = s.charAt(i); i++;
+          if (u === 'क' && s.charAt(i) === '्' && s.charAt(i + 1) === 'ष') { u = 'क्ष'; i += 2; }
+          else if (u === 'त' && s.charAt(i) === '्' && s.charAt(i + 1) === 'र') { u = 'त्र'; i += 2; }
+          else if (u === 'ज' && s.charAt(i) === '्' && s.charAt(i + 1) === 'ञ') { u = 'ज्ञ'; i += 2; }
+          units.push(u);
+          if (s.charAt(i) === '्') {
+            var nx = s.charAt(i + 1);
+            if (nx === 'र' && s.charAt(i + 2) !== '्') { rakar = true; i += 2; break; }   // रकार (्र) — जस्तै प्र
+            if (ptIsCons(nx)) { i++; continue; }                                            // संयुक्त अक्षर जारी
+            trailing = true; i++; break;                                                    // शब्दको अन्त्यको हलन्त
+          }
+          break;
+        }
+        var matras = [];
+        while (i < n && PT_MATRA[s.charAt(i)] || s.charAt(i) === 'ि') { matras.push(s.charAt(i)); i++; }
+        var hasI = matras.indexOf('ि') >= 0;
+        // रु / रू — Preeti मा छुट्टै अक्षर '?' हुन्छ (र + ु/ू को सट्टा)
+        var ru = (units.length === 1 && units[0] === 'र' && !reph && !rakar && !trailing && (matras.indexOf('ु') >= 0 || matras.indexOf('ू') >= 0));
+        if (hasI) out += 'l';                                  // ि व्यञ्जनभन्दा अगाडि लेखिन्छ
+        if (ru) out += '?';
+        for (var k = 0; !ru && k < units.length; k++) {
+          var un = units[k], last = (k === units.length - 1);
+          if (!last) out += PT_HALF[un] || (PT_FULL[un] + '\\');
+          else if (trailing) out += PT_HALF[un] || (PT_FULL[un] + '\\');
+          else out += PT_FULL[un] + (rakar ? '|' : '');
+        }
+        if (reph) out += '{';                                  // रेफ अन्तिम अक्षरको माथि
+        matras.forEach(function(m){ if (m !== 'ि' && !(ru && (m === 'ु' || m === 'ू'))) out += PT_MATRA[m]; });
+        continue;
+      }
+      if (PT_VOWEL[c]) { out += PT_VOWEL[c]; i++; continue; }
+      if (c === 'ि') { out += 'l'; i++; continue; }
+      if (PT_MATRA[c]) { out += PT_MATRA[c]; i++; continue; }
+      if (PT_OTHER[c]) { out += PT_OTHER[c]; i++; continue; }
+      if (/[A-Za-z0-9]/.test(c)) {                             // अङ्ग्रेजी/अंक — सामान्य फन्टमा
+        var j = i; while (j < n && /[A-Za-z0-9]/.test(s.charAt(j))) j++;
+        out += fb(s.slice(i, j)); i = j; continue;
+      }
+      if (c >= '\u0900' && c <= '\u097f') { out += fb(c); i++; continue; } // नमिलेको देवनागरी — fallback
+      out += ptEsc(c); i++;
+    }
+    return out;
+  }
+
+  window.uniToPreetiPlain = function(s){
+    var d = document.createElement('div'); d.innerHTML = toPreeti(s);
+    return d.textContent.replace(/\u0965/g, '..');
+  };
+})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
@@ -186,6 +258,12 @@
   .re-editor .ed-img { position:relative; margin:.6em 0; text-align:center; }
   .re-editor .ed-img img { max-width:100%; max-height:300px; width:auto; height:auto; border-radius:8px; display:inline-block; margin:0; object-fit:contain; }
   .re-editor .ed-img-del { position:absolute; top:6px; right:6px; width:32px; height:32px; border-radius:50%; padding:0; background:rgba(0,0,0,.65); color:#fff; font-size:.9rem; }
+
+/* Ananda Devanagari Round — श्लोक Preeti मा लेख्न र प्रिभ्यु हेर्न */
+@font-face { font-family: 'Ananda Devanagari Round'; src: url('fonts/AnandaDevanagariRound-Regular.ttf') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }
+textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font-size: 1.15rem; line-height: 1.7; }
+.preeti-preview-label { display:block; margin: 10px 0 4px; font-size: .85rem; color: #935447; font-weight: 600; }
+.preeti-preview { background: linear-gradient(135deg,#f7e6df,#fdf1ec); border: 1px solid #e8cfc4; border-radius: 12px; padding: 14px 16px; min-height: 60px; color: #5c2f26; font-family: 'Ananda Devanagari Round', 'Noto Serif Devanagari', serif; font-weight: normal; -webkit-text-stroke: .6px currentColor; font-size: 1.5rem; line-height: 1.6; text-align: left; white-space: pre-wrap; word-break: break-word; }
 </style>
 </head>
 <body>
@@ -334,7 +412,7 @@
 </div>
 <div class="card acc-panel" id="shlokaCard" style="display:none;">
   <h2>3. श्लोक (Hero — Wheel को साइडमा) <span class="badge" id="shlokaCount">0</span></h2>
-  <div class="hint">एकभन्दा बढी श्लोक राख्नुभयो भने, homepage मा हरेक ५ सेकेन्डमा अर्को श्लोक देखिन्छ।</div>
+  <div class="hint">श्लोक Preeti कुञ्जीमा लेख्नुहोस् — तलको प्रिभ्युमा आनन्द फन्टमा कस्तो देखिन्छ हेर्न सकिन्छ। पुराना Unicode श्लोक आफैँ Preeti मा बदलिएर देखिन्छन्। एकभन्दा बढी श्लोक राख्नुभयो भने, homepage मा हरेक ५ सेकेन्डमा अर्को श्लोक देखिन्छ।</div>
   <div id="shlokaList"></div>
   <div class="top-actions">
     <button class="btn-outline" id="shlokaAddBtn">+ नयाँ श्लोक थप्नुहोस्</button>
@@ -737,9 +815,11 @@ function renderShloka() {
     const div = document.createElement('div');
     div.className = 'slide-card';
     div.innerHTML = `
-      <label>श्लोक (हरेक लाइन नयाँ line मा लेख्नुहोस्)</label>
-      <textarea data-idx="${i}" data-field="shloka" style="min-height:100px;">${escapeHtml(item.shloka || '')}</textarea>
-      <label>श्लोकार्थ (अर्थ)</label>
+      <label>श्लोक — Preeti मा लेख्नुहोस् (हरेक लाइन नयाँ line मा)</label>
+      <textarea class="preeti-input" data-idx="${i}" data-field="shloka" spellcheck="false" style="min-height:120px;">${escapeHtml(item.shloka || '')}</textarea>
+      <span class="preeti-preview-label">प्रिभ्यु (वेबसाइटमा यस्तै देखिन्छ)</span>
+      <div class="preeti-preview" id="shlokaPrev${i}">${escapeHtml(item.shloka || '')}</div>
+      <label>श्लोकार्थ (अर्थ — सामान्य Unicode नेपालीमा)</label>
       <textarea data-idx="${i}" data-field="meaning">${escapeHtml(item.meaning || '')}</textarea>
       <div class="slide-actions">
         <span class="hint">श्लोक #${i + 1}</span>
@@ -748,18 +828,22 @@ function renderShloka() {
     list.appendChild(div);
   });
   list.querySelectorAll('textarea[data-field]').forEach(el => {
-    el.addEventListener('input', () => { shlokaItems[+el.dataset.idx][el.dataset.field] = el.value; });
+    el.addEventListener('input', () => {
+      const idx = +el.dataset.idx;
+      shlokaItems[idx][el.dataset.field] = el.value;
+      if (el.dataset.field === 'shloka') { const p = $('shlokaPrev' + idx); if (p) p.textContent = el.value; }
+    });
   });
   list.querySelectorAll('button[data-action="delete"]').forEach(el => {
     el.addEventListener('click', () => { shlokaItems.splice(+el.dataset.idx, 1); renderShloka(); });
   });
 }
-$('shlokaAddBtn').addEventListener('click', () => { shlokaItems.push({ shloka: '', meaning: '' }); renderShloka(); });
+$('shlokaAddBtn').addEventListener('click', () => { shlokaItems.push({ shloka: '', meaning: '', font: 'preeti' }); renderShloka(); });
 $('shlokaSaveBtn').addEventListener('click', async () => {
   setStatus($('shlokaStatus'), 'Saving...', '');
   $('shlokaSaveBtn').disabled = true;
   try {
-    const clean = shlokaItems.map(s => ({ shloka: s.shloka || '', meaning: s.meaning || '' }));
+    const clean = shlokaItems.map(s => ({ shloka: s.shloka || '', meaning: s.meaning || '', font: 'preeti' }));
     await runGithubTask([
       async () => { await ghPutFile('data/shlokas.json', clean, 'admin: update shlokas.json'); }
     ], 'श्लोक GitHub मा पठाउँदै…', 'श्लोक Deploy भयो');
@@ -1616,7 +1700,7 @@ $('loadBtn').addEventListener('click', async () => {
     ]);
     deployProgress.done('सबै फाइल Load भयो');
     showcaseItems = showcase.json; renderShowcase();
-    shlokaItems = shloka.json; renderShloka();
+    shlokaItems = (shloka.json || []).map(s => (s.font === 'preeti' ? s : { shloka: window.uniToPreetiPlain(s.shloka || ''), meaning: s.meaning || '', font: 'preeti' })); renderShloka();
     $('aboutTextArea').value = (about.json && about.json.text) || '';
     $('bookTitle').value = (book.json && book.json.title) || '';
     $('bookColor').value = (book.json && book.json.color) || '#1a1a1a';
