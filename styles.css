@@ -1148,3 +1148,5 @@
 /* बारेमा अनुच्छेद — line र word spacing कम */
 .about-text.preeti-about { line-height: 1.22; word-spacing: -0.14em; text-align: left; }
 @media (max-width: 768px) { .about-text.preeti-about { line-height: 1.2; word-spacing: -0.14em; text-align: left; } }
+.about-text.preeti-about { word-spacing: -0.04em; }
+@media (max-width: 768px) { .about-text.preeti-about { word-spacing: -0.04em; } }
