@@ -1126,3 +1126,16 @@
 }
 /* सूचना पाटी शीर्षकको पछाडि सेतो बक्स — दुवै छेउ (स्क्रिनको किनारा) सम्म */
 .nb-section .nb-title { background: var(--white); margin: 0 -5.5556% 14px; padding: 8px 0 6px; box-shadow: 0 4px 14px rgba(92,47,38,.10); }
+
+/* ═══ यो चरणका परिवर्तन ═══ */
+/* १. लाइक · कमेन्ट · सेयर — टाढा-टाढा */
+.eb-bar { max-width: none; justify-content: center; gap: 34px; }
+.eb-item { flex: 0 0 76px; }
+#ebCommentBox { max-width: 280px; }
+@media (min-width: 769px) { .eb-bar { max-width: none; gap: 60px; } .eb-item { flex: 0 0 90px; } #ebCommentBox { max-width: 320px; } }
+/* २. होमको "बारेमा" कार्ड र सूचना पाटीबीचको ग्याप कम; सेतो पट्टी पातलो */
+#purpose.why-section { padding-bottom: 6px; }
+.nb-section { padding-top: 0; }
+.nb-section .nb-title { padding: 0; margin-bottom: 12px; line-height: 1.15; }
+/* ३. श्लोकको line spacing कम */
+.hero-text h2.hero-shloka.preeti-shloka { line-height: 1.12; }

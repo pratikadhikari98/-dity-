@@ -259,7 +259,7 @@ var PT_FULL = {'क':'s','ख':'v','ग':'u','घ':'3','ङ':'ª','च':'r','छ
   .re-editor .ed-img img { max-width:100%; max-height:300px; width:auto; height:auto; border-radius:8px; display:inline-block; margin:0; object-fit:contain; }
   .re-editor .ed-img-del { position:absolute; top:6px; right:6px; width:32px; height:32px; border-radius:50%; padding:0; background:rgba(0,0,0,.65); color:#fff; font-size:.9rem; }
 
-/* Ananda Devanagari Round — श्लोक Preeti मा लेख्न र प्रिभ्यु हेर्न */
+/* Ananda Devanagari Round — श्लोक Preeti मा लेख्न */
 @font-face { font-family: 'Ananda Devanagari Round'; src: url('fonts/AnandaDevanagariRound-Regular.ttf') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }
 textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font-size: 1.15rem; line-height: 1.7; }
 .preeti-preview-label { display:block; margin: 10px 0 4px; font-size: .85rem; color: #935447; font-weight: 600; }
@@ -412,7 +412,7 @@ textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font
 </div>
 <div class="card acc-panel" id="shlokaCard" style="display:none;">
   <h2>3. श्लोक (Hero — Wheel को साइडमा) <span class="badge" id="shlokaCount">0</span></h2>
-  <div class="hint">श्लोक Preeti कुञ्जीमा लेख्नुहोस् — तलको प्रिभ्युमा आनन्द फन्टमा कस्तो देखिन्छ हेर्न सकिन्छ। पुराना Unicode श्लोक आफैँ Preeti मा बदलिएर देखिन्छन्। एकभन्दा बढी श्लोक राख्नुभयो भने, homepage मा हरेक ५ सेकेन्डमा अर्को श्लोक देखिन्छ।</div>
+  <div class="hint">श्लोक Preeti कुञ्जीमा लेख्नुहोस्। पुराना Unicode श्लोक आफैँ Preeti मा बदलिएर देखिन्छन्। एकभन्दा बढी श्लोक राख्नुभयो भने, homepage मा हरेक ५ सेकेन्डमा अर्को श्लोक देखिन्छ।</div>
   <div id="shlokaList"></div>
   <div class="top-actions">
     <button class="btn-outline" id="shlokaAddBtn">+ नयाँ श्लोक थप्नुहोस्</button>
@@ -817,8 +817,6 @@ function renderShloka() {
     div.innerHTML = `
       <label>श्लोक — Preeti मा लेख्नुहोस् (हरेक लाइन नयाँ line मा)</label>
       <textarea class="preeti-input" data-idx="${i}" data-field="shloka" spellcheck="false" style="min-height:120px;">${escapeHtml(item.shloka || '')}</textarea>
-      <span class="preeti-preview-label">प्रिभ्यु (वेबसाइटमा यस्तै देखिन्छ)</span>
-      <div class="preeti-preview" id="shlokaPrev${i}">${escapeHtml(item.shloka || '')}</div>
       <label>श्लोकार्थ (अर्थ — सामान्य Unicode नेपालीमा)</label>
       <textarea data-idx="${i}" data-field="meaning">${escapeHtml(item.meaning || '')}</textarea>
       <div class="slide-actions">
@@ -831,7 +829,6 @@ function renderShloka() {
     el.addEventListener('input', () => {
       const idx = +el.dataset.idx;
       shlokaItems[idx][el.dataset.field] = el.value;
-      if (el.dataset.field === 'shloka') { const p = $('shlokaPrev' + idx); if (p) p.textContent = el.value; }
     });
   });
   list.querySelectorAll('button[data-action="delete"]').forEach(el => {
