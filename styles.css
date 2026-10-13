@@ -1105,3 +1105,9 @@
 .tc-heading { width: max-content; max-width: 100%; box-sizing: border-box; white-space: normal; }
 .tc-heading .preeti-title { white-space: nowrap; }
 .eb-nxt:empty::before { content: "0"; }
+
+/* लेबल (लाइक/कमेन्ट/सेयर) हटाइयो — आइकन मात्र, बीचमा */
+.eb-ico { width: 18px; height: 18px; }
+@media (hover: hover) { .eb-btn:hover .eb-ico { transform: scale(1.25); } }
+.eb-btn:active .eb-ico { margin-bottom: 0; transform: scale(1.25) rotate(-20deg); }
+@media (min-width: 769px) { .eb-ico { width: 20px; height: 20px; } }
