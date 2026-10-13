@@ -1144,3 +1144,7 @@
 .about-text.preeti-about { font-family: 'Ananda Devanagari Round','Khand','Noto Sans Devanagari',sans-serif; font-weight: normal; -webkit-text-stroke: .45px currentColor; font-size: 1.3rem; line-height: 1.6; }
 @media (max-width: 768px) { .about-text.preeti-about { font-size: .74rem; line-height: 1.5; } }
 @media (max-width: 768px) { .about-text.preeti-about { font-size: .88rem; line-height: 1.4; -webkit-text-stroke: .25px currentColor; letter-spacing: 0; } }
+
+/* बारेमा अनुच्छेद — line र word spacing कम */
+.about-text.preeti-about { line-height: 1.22; word-spacing: -0.14em; text-align: left; }
+@media (max-width: 768px) { .about-text.preeti-about { line-height: 1.2; word-spacing: -0.14em; text-align: left; } }
