@@ -1561,15 +1561,15 @@ if ('serviceWorker' in navigator) {
     items=pool;
     track.innerHTML=items.map(function(p,i){
       var u=coverUrl(p.cover), col=colorOf(p);
-      var face=u?'<div class="pf-face"'+(col?' style="--cover-color:'+col+'"':'')+'><img src="'+esc(u)+'" alt="'+esc(p.title)+'" draggable="false"></div>'
-               :'<div class="pf-face is-text"'+(col?' style="--cover-color:'+col+'"':'')+'>'+textCover(p.title)+'</div>';
-      return '<div class="tc-card" data-index="'+i+'">'+face+'</div>';
+      var inner=u?'<img src="'+esc(u)+'" alt="'+esc(p.title)+'" draggable="false">'
+                 :'<div class="tc-text"'+(col?' style="--cover-color:'+col+'"':'')+'>'+esc(String(p.title||'').trim())+'</div>';
+      return '<div class="tc-card" data-index="'+i+'">'+inner+'</div>';
     }).join('');
     dotsBox.innerHTML=items.map(function(_,i){ return '<div class="tc-dot" data-index="'+i+'"></div>'; }).join('');
     cards=[].slice.call(track.querySelectorAll('.tc-card'));
     dots=[].slice.call(dotsBox.querySelectorAll('.tc-dot'));
-    [].forEach.call(track.querySelectorAll('.pf-face > img'),function(img){
-      img.addEventListener('error',function(){ var f=img.parentNode, i=+f.parentNode.dataset.index; f.classList.add('is-text'); f.innerHTML=textCover(items[i].title); });
+    [].forEach.call(track.querySelectorAll('.tc-card > img'),function(img){
+      img.addEventListener('error',function(){ var f=img.parentNode, i=+f.dataset.index, col=colorOf(items[i]); f.innerHTML='<div class="tc-text"'+(col?' style="--cover-color:'+col+'"':'')+'>'+esc(String(items[i].title||'').trim())+'</div>'; });
     });
     cards.forEach(function(c,i){ c.addEventListener('click',function(){ manual(); if(i===cur){ if(window.__openPoem) window.__openPoem(items[i]); } else go(i); }); });
     dots.forEach(function(d,i){ d.addEventListener('click',function(){ manual(); go(i); }); });
@@ -1612,6 +1612,15 @@ if ('serviceWorker' in navigator) {
   sec.addEventListener('pointerenter',function(e){ if(e.pointerType==='mouse') hovering=true; });
   sec.addEventListener('pointerleave',function(e){ if(e.pointerType==='mouse') hovering=false; });
   if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ visible=es[0].isIntersecting; }).observe(sec); }
+  // पेज तल/माथि स्क्रोल गर्दा फोटोहरू पनि तल/माथि सर्ने (तल स्क्रोल → अर्को, माथि स्क्रोल → अघिल्लो)
+  var lastY=window.pageYOffset||0, acc=0;
+  window.addEventListener('scroll',function(){
+    var y=window.pageYOffset||0, d=y-lastY; lastY=y;
+    if(!cards.length||!visible||document.documentElement.getAttribute('data-vs')!=='home') { acc=0; return; }
+    if((d>0)!==(acc>0)) acc=0;
+    acc+=d;
+    if(Math.abs(acc)>=90){ if(!animating){ go(cur+(acc>0?1:-1)); manual(); } acc=0; }
+  },{passive:true});
   // auto-scroll: ३.५ सेकेन्डमा आफैँ अर्को; हातले छोएपछि ४.५ सेकेन्ड रोकिने
   function tick(){
     if(!cards.length||hovering||!visible||document.hidden||animating) return;
