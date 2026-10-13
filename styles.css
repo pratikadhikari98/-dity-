@@ -1040,3 +1040,10 @@
 .tc-heading { display: inline-block; background: var(--white); border: 1px solid var(--sky); border-radius: 16px; padding: 6px 16px; box-shadow: 0 6px 18px rgba(92,47,38,.12); }
 .tc-headrow { text-align: center; }
 @media (min-width: 769px) { .tc-main { padding: 0 30px; } .tc-heading { padding: 8px 26px; border-radius: 20px; } }
+
+/* "प्रतीक साहित्य सङ्ग्रह" — दायाँ भागमा, कार्ड स्ट्याकको सबैभन्दा माथिको कार्डको बराबर */
+.tc-headrow { display: none; }
+.tc-controls { align-self: stretch; position: relative; }
+.tc-heading { position: absolute; top: 34px; left: 50%; transform: translateX(-50%); margin: 0; white-space: nowrap; }
+@media (min-width: 769px) { .tc-heading { top: 20px; } }
+@media (max-width: 768px) { .tc-heading { padding: 5px 9px; border-radius: 14px; max-width: 100%; } .tc-heading .preeti-title { font-size: 1.12rem; } }
