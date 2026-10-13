@@ -1551,16 +1551,24 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 <script>
-// सूचना-पाटीको लेख — data/notice.json: {"heading":"...","lines":["...","..."]}
+// सूचना-पाटीको लेख — data/notice.json: {"heading":"...","lines":["..."],"font":"preeti"}; कालोपाटीभित्र आफैँ अटाउने
 (function(){
-  var h=document.getElementById('nbHeading'),l=document.getElementById('nbLines');
-  if(!h||!l) return;
-  function show(d){
-    h.textContent=d.heading||'';
-    l.innerHTML='';
-    (d.lines||[]).forEach(function(s){var p=document.createElement('div');p.className='nb-line';p.textContent=s;l.appendChild(p);});
+  var h=document.getElementById('nbHeading'),l=document.getElementById('nbLines'),box=document.getElementById('nbText');
+  if(!h||!l||!box) return;
+  function fit(){
+    var s=1; box.style.setProperty('--nbs',s);
+    while(box.scrollHeight>box.clientHeight+1 && s>0.3){ s=Math.round((s-0.04)*100)/100; box.style.setProperty('--nbs',s); }
   }
-  var fallback={heading:'सूचना',lines:['यहाँ सूचना लेख्नुहोस्।']};
+  function show(d){
+    box.classList.toggle('preeti',!!(d&&d.font==='preeti'));
+    h.textContent=(d&&d.heading)||'';
+    l.innerHTML='';
+    ((d&&d.lines)||[]).forEach(function(s){var p=document.createElement('div');p.className='nb-line';p.textContent=s;l.appendChild(p);});
+    fit();
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);
+  }
+  window.addEventListener('resize',fit);
+  var fallback={heading:'',lines:[],font:'preeti'};
   fetch('data/notice.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():fallback;}).then(show).catch(function(){show(fallback);});
 })();
 </script>

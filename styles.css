@@ -945,10 +945,10 @@
 .nb-section .bb-viewport { top: 12%; bottom: 14%; left: 9%; right: 9%; }
 .nb-text { width: 100%; height: 100%; overflow-y: auto; padding: 1% 2%; box-sizing: border-box; text-align: center; font-family: 'Akshar','Noto Sans Devanagari',sans-serif; color: rgba(255,255,255,0.92); text-shadow: 1px 1px 3px rgba(0,0,0,0.5); scrollbar-width: none; }
 .nb-text::-webkit-scrollbar { display: none; }
-.nb-heading { font-size: 1.15rem; font-size: 5.6cqw; font-weight: 700; color: #fff; text-decoration: underline; text-underline-offset: 4px; letter-spacing: .05em; line-height: 1.3; margin-bottom: 3%; }
+.nb-heading { font-size: 1.15rem; font-size: calc(5.6cqw * var(--nbs, 1)); font-weight: 700; color: #fff; text-decoration: underline; text-underline-offset: 4px; letter-spacing: .05em; line-height: 1.3; margin-bottom: 3%; }
 .nb-heading:empty { display: none; }
-.nb-lines { display: flex; flex-direction: column; gap: 2.2cqw; }
-.nb-line { font-size: 1rem; font-size: 4.3cqw; line-height: 1.5; letter-spacing: .02em; }
+.nb-lines { display: flex; flex-direction: column; gap: calc(2.2cqw * var(--nbs, 1)); }
+.nb-line { font-size: 1rem; font-size: calc(4.3cqw * var(--nbs, 1)); line-height: 1.5; letter-spacing: .02em; }
 @media (min-width: 900px) { .nb-heading { font-size: 2.1rem; } .nb-line { font-size: 1.5rem; } }
 
 /* बारेमा view */
@@ -1157,3 +1157,11 @@
 .about-photo img { width: 100%; height: 100%; object-fit: contain; border-radius: 0; box-shadow: none; }
 @media (max-width: 768px) { .about-photo { border-radius: 14px; box-shadow: 0 8px 20px rgba(92,47,38,0.16); } }
 @media (min-width: 769px) { .about-text.preeti-about { font-size: 1.75rem; } }
+
+/* सूचना-पाटी — Haha फन्ट (Preeti कोडमा लेखिएको), कालोपाटीभित्र आफैँ अटाउने */
+@font-face { font-family: 'Haha'; src: url('fonts/Haha_Regular.ttf') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }
+.nb-text.preeti { font-family: 'Haha', 'Noto Sans Devanagari', sans-serif; }
+.nb-text.preeti .nb-heading { font-family: 'Haha', sans-serif; font-weight: normal; letter-spacing: 0; text-decoration: none; font-size: calc(7cqw * var(--nbs, 1)); }
+.nb-text.preeti .nb-line { font-family: 'Haha', sans-serif; letter-spacing: 0; font-size: calc(5.6cqw * var(--nbs, 1)); line-height: 1.35; }
+.nb-text { overflow-y: hidden; }
+@media (min-width: 900px) { .nb-text.preeti .nb-heading { font-size: calc(2.6rem * var(--nbs, 1)); } .nb-text.preeti .nb-line { font-size: calc(2rem * var(--nbs, 1)); } .nb-heading { font-size: calc(2.1rem * var(--nbs, 1)); } .nb-line { font-size: calc(1.5rem * var(--nbs, 1)); } }

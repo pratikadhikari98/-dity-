@@ -260,7 +260,9 @@ var PT_FULL = {'क':'s','ख':'v','ग':'u','घ':'3','ङ':'ª','च':'r','छ
   .re-editor .ed-img-del { position:absolute; top:6px; right:6px; width:32px; height:32px; border-radius:50%; padding:0; background:rgba(0,0,0,.65); color:#fff; font-size:.9rem; }
 
 /* Ananda Devanagari Round — श्लोक Preeti मा लेख्न */
+@font-face { font-family: 'Haha'; src: url('fonts/Haha_Regular.ttf') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }
 @font-face { font-family: 'Ananda Devanagari Round'; src: url('fonts/AnandaDevanagariRound-Regular.ttf') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }
+textarea.haha-input, input.haha-input { font-family: 'Haha', sans-serif; font-size: 1.3rem; line-height: 1.6; }
 textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font-size: 1.15rem; line-height: 1.7; }
 .preeti-preview-label { display:block; margin: 10px 0 4px; font-size: .85rem; color: #935447; font-weight: 600; }
 .preeti-preview { background: linear-gradient(135deg,#f7e6df,#fdf1ec); border: 1px solid #e8cfc4; border-radius: 12px; padding: 14px 16px; min-height: 60px; color: #5c2f26; font-family: 'Ananda Devanagari Round', 'Noto Serif Devanagari', serif; font-weight: normal; -webkit-text-stroke: .6px currentColor; font-size: 1.5rem; line-height: 1.6; text-align: left; white-space: pre-wrap; word-break: break-word; }
@@ -419,6 +421,24 @@ textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font
     <button class="btn-primary" id="shlokaSaveBtn">श्लोक Save गर्नुहोस्</button>
   </div>
   <div class="status" id="shlokaStatus"></div>
+</div>
+
+<div class="acc-header" data-target="noticeCard">
+  <div class="sidebar-item_icon"><span class="material-symbols-rounded">campaign</span></div>
+  <div class="sidebar-item_text">सूचना पाटी</div>
+  <span class="acc-chevron material-symbols-rounded">expand_more</span>
+</div>
+<div class="card acc-panel" id="noticeCard" style="display:none;">
+  <h2>सूचना पाटी (Homepage को कालोपाटी)</h2>
+  <div class="hint">Preeti कुञ्जीमा लेख्नुहोस्। कालोपाटीमा "Haha" फन्टमा देखिन्छ, र लेख धेरै भए अक्षर आफैँ सानो भएर कालोपाटीभित्रै अटाउँछ। हरेक लाइन नयाँ line मा लेख्नुहोस्।</div>
+  <label>शीर्षक (जस्तै: सूचना)</label>
+  <input type="text" id="noticeHeading" class="haha-input" spellcheck="false" autocomplete="off">
+  <label>सूचना (हरेक लाइन नयाँ line मा)</label>
+  <textarea id="noticeLines" class="haha-input" spellcheck="false" style="min-height:160px;"></textarea>
+  <div class="top-actions">
+    <button class="btn-primary" id="noticeSaveBtn">सूचना Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="noticeStatus"></div>
 </div>
 
 <div class="acc-header" data-target="aboutCard">
@@ -848,6 +868,24 @@ $('shlokaSaveBtn').addEventListener('click', async () => {
     setStatus($('shlokaStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
   } catch (err) { setStatus($('shlokaStatus'), '✗ ' + err.message, 'err'); }
   finally { $('shlokaSaveBtn').disabled = false; }
+});
+
+// ═══════════════ सूचना पाटी ═══════════════
+$('noticeSaveBtn').addEventListener('click', async () => {
+  setStatus($('noticeStatus'), 'Saving...', '');
+  $('noticeSaveBtn').disabled = true;
+  try {
+    const data = {
+      heading: $('noticeHeading').value.trim(),
+      lines: $('noticeLines').value.split('\n').map(s => s.replace(/\s+$/,'')).filter(s => s.trim() !== ''),
+      font: 'preeti'
+    };
+    await runGithubTask([
+      async () => { await ghPutFile('data/notice.json', data, 'admin: update notice.json'); }
+    ], 'सूचना GitHub मा पठाउँदै…', 'सूचना Deploy भयो');
+    setStatus($('noticeStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+  } catch (err) { setStatus($('noticeStatus'), '✗ ' + err.message, 'err'); }
+  finally { $('noticeSaveBtn').disabled = false; }
 });
 
 // ═══════════════ RICH (WYSIWYG) EDITOR — कोड नदेखिने, real-time ═══════════════
@@ -1647,8 +1685,8 @@ $('zipList').addEventListener('click', e => {
 
 
 // ═══════════════ ACCORDION (थिचेको ठाउँको ठ्याक्कै तल खुल्ने) + THEME ═══════════════
-const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','aboutCard','bookCard','newsCard','news2Card','adsCard'];
-const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','news2SaveBtn','adsSaveBtn'];
+const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','noticeCard','aboutCard','bookCard','newsCard','news2Card','adsCard'];
+const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','noticeSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','news2SaveBtn','adsSaveBtn'];
 SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = true; }); // Load नगरी Save गर्दा खाली डेटाले ओभरराइट हुनबाट बचाउन
 
 (function () {
@@ -1709,6 +1747,13 @@ $('loadBtn').addEventListener('click', async () => {
     newsEditor1.setItems(news.json);
     newsEditor2.setItems(news2.json);
     adsItems = ads.json; renderAds();
+    try {
+      const nt = await ghGetFile('data/notice.json');
+      const nj = nt && nt.json ? nt.json : {};
+      const P = s => (nj.font === 'preeti' ? (s || '') : window.uniToPreetiPlain(s || ''));
+      $('noticeHeading').value = P(nj.heading);
+      $('noticeLines').value = (nj.lines || []).map(P).join('\n');
+    } catch (e) { /* फाइल नभए खाली */ }
     SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = false; });
     setStatus($('connStatus'), '✓ सबै Load भयो।', 'ok');
   } catch (err) {
