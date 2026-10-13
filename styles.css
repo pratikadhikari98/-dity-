@@ -1087,3 +1087,21 @@
 /* प्रतीक साहित्य सङ्ग्रह शीर्षक — अलि माथि */
 .tc-heading { top: 18px; }
 @media (min-width: 769px) { .tc-heading { top: 0; } }
+
+/* लाइक · कमेन्ट · सेयर — सानो */
+.eb-bar { max-width: 340px; gap: 6px; margin-top: 18px; }
+.eb-btn { height: 40px; border-radius: 8px; box-shadow: 0 3px 0 rgba(92,47,38,0.22); }
+.eb-lp { font-size: .92rem; }
+.eb-ico { width: 14px; height: 14px; }
+.eb-lbl { font-size: .78rem; margin-left: .25em; }
+#ebCommentBox { max-width: 340px; }
+@media (min-width: 769px) {
+  .eb-bar { max-width: 420px; gap: 8px; }
+  .eb-btn { height: 44px; }
+  .eb-lp { font-size: 1.05rem; } .eb-ico { width: 16px; height: 16px; } .eb-lbl { font-size: .9rem; }
+  #ebCommentBox { max-width: 420px; }
+}
+/* प्रतीक साहित्य सङ्ग्रह — सेतो पट्टीले पूरै अक्षर ढाक्ने (चौडाइ अक्षर अनुसार) */
+.tc-heading { width: max-content; max-width: 100%; box-sizing: border-box; white-space: normal; }
+.tc-heading .preeti-title { white-space: nowrap; }
+.eb-nxt:empty::before { content: "0"; }
