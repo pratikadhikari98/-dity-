@@ -1150,3 +1150,10 @@
 @media (max-width: 768px) { .about-text.preeti-about { line-height: 1.2; word-spacing: -0.14em; text-align: left; } }
 .about-text.preeti-about { word-spacing: -0.04em; }
 @media (max-width: 768px) { .about-text.preeti-about { word-spacing: -0.04em; } }
+
+/* होमको "बारेमा" — किताबको फोटो-कार्ड र टेक्स्ट-कार्डको उचाइ बराबर */
+.about-inner { align-items: stretch; }
+.about-photo { display: flex; background: var(--white); border-radius: 20px; box-shadow: 0 14px 34px rgba(92,47,38,0.16); overflow: hidden; }
+.about-photo img { width: 100%; height: 100%; object-fit: contain; border-radius: 0; box-shadow: none; }
+@media (max-width: 768px) { .about-photo { border-radius: 14px; box-shadow: 0 8px 20px rgba(92,47,38,0.16); } }
+@media (min-width: 769px) { .about-text.preeti-about { font-size: 1.75rem; } }
