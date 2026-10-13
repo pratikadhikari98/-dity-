@@ -427,9 +427,9 @@ textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font
   <span class="acc-chevron material-symbols-rounded">expand_more</span>
 </div>
 <div class="card acc-panel" id="aboutCard" style="display:none;">
-  <h2>4. बारेमा टेक्स्ट (Homepage को "हाम्रो बारेमा" card)</h2>
+  <h2>4. बारेमा टेक्स्ट (Homepage को "हाम्रो बारेमा" card) — Preeti मा लेख्नुहोस्</h2>
   <label>Text</label>
-  <textarea id="aboutTextArea" style="min-height:140px;"></textarea>
+  <textarea id="aboutTextArea" class="preeti-input" spellcheck="false" style="min-height:160px;"></textarea>
   <div class="top-actions">
     <button class="btn-primary" id="aboutSaveBtn">बारेमा Save गर्नुहोस्</button>
   </div>
@@ -1146,7 +1146,7 @@ $('aboutSaveBtn').addEventListener('click', async () => {
   $('aboutSaveBtn').disabled = true;
   try {
     await runGithubTask([
-      async () => { await ghPutFile('data/about.json', { text: $('aboutTextArea').value }, 'admin: update about.json'); }
+      async () => { await ghPutFile('data/about.json', { text: $('aboutTextArea').value, font: 'preeti' }, 'admin: update about.json'); }
     ], 'बारेमा GitHub मा पठाउँदै…', 'बारेमा Deploy भयो');
     setStatus($('aboutStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
   } catch (err) { setStatus($('aboutStatus'), '✗ ' + err.message, 'err'); }
@@ -1698,7 +1698,7 @@ $('loadBtn').addEventListener('click', async () => {
     deployProgress.done('सबै फाइल Load भयो');
     showcaseItems = showcase.json; renderShowcase();
     shlokaItems = (shloka.json || []).map(s => (s.font === 'preeti' ? s : { shloka: window.uniToPreetiPlain(s.shloka || ''), meaning: s.meaning || '', font: 'preeti' })); renderShloka();
-    $('aboutTextArea').value = (about.json && about.json.text) || '';
+    $('aboutTextArea').value = (about.json && about.json.text) ? (about.json.font === 'preeti' ? about.json.text : window.uniToPreetiPlain(about.json.text)) : '';
     $('bookTitle').value = (book.json && book.json.title) || '';
     $('bookColor').value = (book.json && book.json.color) || '#1a1a1a';
     bookEditor.setBaseColor($('bookColor').value);

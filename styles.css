@@ -1139,3 +1139,8 @@
 .nb-section .nb-title { padding: 0; margin-bottom: 12px; line-height: 1.15; }
 /* ३. श्लोकको line spacing कम */
 .hero-text h2.hero-shloka.preeti-shloka { line-height: 1.12; }
+
+/* "बारेमा" अनुच्छेद — आनन्द फन्ट (Preeti कोडमा लेखिएको) */
+.about-text.preeti-about { font-family: 'Ananda Devanagari Round','Khand','Noto Sans Devanagari',sans-serif; font-weight: normal; -webkit-text-stroke: .45px currentColor; font-size: 1.3rem; line-height: 1.6; }
+@media (max-width: 768px) { .about-text.preeti-about { font-size: .74rem; line-height: 1.5; } }
+@media (max-width: 768px) { .about-text.preeti-about { font-size: .88rem; line-height: 1.4; -webkit-text-stroke: .25px currentColor; letter-spacing: 0; } }

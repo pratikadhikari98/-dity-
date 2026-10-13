@@ -1456,7 +1456,7 @@ document.addEventListener('click', function(e){
   var src = el.dataset.source;
   fetch(src, { cache: 'no-store' })
     .then(function(r){ return r.json(); })
-    .then(function(data){ el.textContent = (data && data.text) || ''; })
+    .then(function(data){ el.classList.toggle('preeti-about', !!(data && data.font === 'preeti')); el.textContent = (data && data.text) || ''; })
     .catch(function(){ /* लोड गर्न सकिएन */ });
 })();
 </script>
