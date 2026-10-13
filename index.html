@@ -180,7 +180,7 @@
     position: absolute !important; left: -20000px; top: 0; width: min(100vw, 1080px); height: 0 !important;
     overflow: hidden !important; visibility: hidden !important; pointer-events: none !important;
   }
-  html:not([data-vs="home"]) #desktopTopWrap, html:not([data-vs="home"]) #purpose, html:not([data-vs="home"]) #noticeBoard { display: none !important; }
+  html:not([data-vs="home"]) #desktopTopWrap, html:not([data-vs="home"]) #purpose, html:not([data-vs="home"]) #noticeBoard, html:not([data-vs="home"]) #poemCarousel { display: none !important; }
   html[data-vs="home"] .news-page-inner { padding-top: 0; }
   .header-dropdown { min-width: 220px; }
   .menu-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
@@ -483,6 +483,30 @@ document.addEventListener('click', function(e){
           <div class="nb-lines" id="nbLines"></div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- कविता कभर carousel (team-carousel शैली) — प्रतीक साहित्य सङ्ग्रहका कभर, auto + manual -->
+<section class="tc-section" id="poemCarousel" style="display:none">
+  <div class="tc-main">
+    <div class="tc-carousel-section">
+      <div class="tc-carousel-container" id="tcContainer">
+        <button class="tc-arrow up" type="button" aria-label="अघिल्लो"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
+        <div class="tc-track" id="tcTrack"></div>
+        <button class="tc-arrow down" type="button" aria-label="अर्को"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="tc-controls">
+      <div class="tc-nav-controls">
+        <button class="tc-arrow up" type="button" aria-label="अघिल्लो"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
+        <button class="tc-arrow down" type="button" aria-label="अर्को"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      </div>
+      <div class="tc-info">
+        <h2 class="tc-name" id="tcName"></h2>
+        <p class="tc-role" id="tcRole"></p>
+      </div>
+      <div class="tc-dots" id="tcDots"></div>
     </div>
   </div>
 </section>
@@ -1054,6 +1078,8 @@ document.addEventListener('click', function(e){
 
   Promise.all([loadBase(), loadRemote()]).then(function(r){
     poems = merge(r[0] || [], r[1]);
+    window.__poemsList = poems; window.__openPoem = openPoem;   // गृहपृष्ठको कभर carousel का लागि
+    document.dispatchEvent(new Event('poems-ready'));
     render();
     if (poems.length > SHOW) { prepareNext(); loop(); }
   }).catch(function(){ section.style.display='none'; });
@@ -1512,6 +1538,91 @@ if ('serviceWorker' in navigator) {
   }
   var fallback={heading:'सूचना',lines:['यहाँ सूचना लेख्नुहोस्।']};
   fetch('data/notice.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():fallback;}).then(show).catch(function(){show(fallback);});
+})();
+</script>
+<script>
+// कविता कभर carousel — team-carousel (gopi chakradhar) को उही चाल; कभर प्रतीक साहित्य सङ्ग्रहबाट; auto-scroll + manual
+(function(){
+  var ORIGIN='https://pratikadhikari98.com.np/';
+  var sec=document.getElementById('poemCarousel'); if(!sec) return;
+  var track=document.getElementById('tcTrack'), nameEl=document.getElementById('tcName'), roleEl=document.getElementById('tcRole'), dotsBox=document.getElementById('tcDots'), cont=document.getElementById('tcContainer');
+  var items=[], cards=[], dots=[], cur=0, animating=false, lastManual=0, hovering=false, visible=true, started=false;
+  function esc(s){ var d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var x=a[i]; a[i]=a[j]; a[j]=x; } return a; }
+  function coverUrl(c){ c=String(c||'').trim(); if(!c) return ''; if(/^https?:\/\//i.test(c)) return c; return ORIGIN+c.replace(/^\/+/,''); }
+  function colorOf(p){ var c=String(p.coverColor||''); return /^(#[0-9a-f]{3,8}|rgb\([\d\s,]+\))$/i.test(c)?c:''; }
+  function textCover(t){ return '<div class="pf-text-cover"><div class="pf-text-title">'+esc(String(t||'').trim())+'</div></div>'; }
+  function role(p){ return p.category==='gazal'?'गजल':'कविता'; }
+
+  function build(list){
+    var withCover=list.filter(function(p){ return coverUrl(p.cover); });
+    var pool=shuffle(withCover.length>=5?withCover:list).slice(0,8);
+    if(pool.length<3){ sec.style.display='none'; return; }
+    items=pool;
+    track.innerHTML=items.map(function(p,i){
+      var u=coverUrl(p.cover), col=colorOf(p);
+      var face=u?'<div class="pf-face"'+(col?' style="--cover-color:'+col+'"':'')+'><img src="'+esc(u)+'" alt="'+esc(p.title)+'" draggable="false"></div>'
+               :'<div class="pf-face is-text"'+(col?' style="--cover-color:'+col+'"':'')+'>'+textCover(p.title)+'</div>';
+      return '<div class="tc-card" data-index="'+i+'">'+face+'</div>';
+    }).join('');
+    dotsBox.innerHTML=items.map(function(_,i){ return '<div class="tc-dot" data-index="'+i+'"></div>'; }).join('');
+    cards=[].slice.call(track.querySelectorAll('.tc-card'));
+    dots=[].slice.call(dotsBox.querySelectorAll('.tc-dot'));
+    [].forEach.call(track.querySelectorAll('.pf-face > img'),function(img){
+      img.addEventListener('error',function(){ var f=img.parentNode, i=+f.parentNode.dataset.index; f.classList.add('is-text'); f.innerHTML=textCover(items[i].title); });
+    });
+    cards.forEach(function(c,i){ c.addEventListener('click',function(){ manual(); if(i===cur){ if(window.__openPoem) window.__openPoem(items[i]); } else go(i); }); });
+    dots.forEach(function(d,i){ d.addEventListener('click',function(){ manual(); go(i); }); });
+    sec.style.display='';
+    go(0,true);
+    if(!started){ started=true; setInterval(tick,3500); }
+  }
+
+  function go(n,force){
+    if(animating && !force) return;
+    animating=true;
+    cur=(n+cards.length)%cards.length;
+    cards.forEach(function(card,i){
+      var off=(i-cur+cards.length)%cards.length;
+      card.classList.remove('center','up-1','up-2','down-1','down-2','hidden');
+      if(off===0) card.classList.add('center');
+      else if(off===1) card.classList.add('down-1');
+      else if(off===2) card.classList.add('down-2');
+      else if(off===cards.length-1) card.classList.add('up-1');
+      else if(off===cards.length-2) card.classList.add('up-2');
+      else card.classList.add('hidden');
+    });
+    dots.forEach(function(d,i){ d.classList.toggle('active',i===cur); });
+    nameEl.style.opacity='0'; roleEl.style.opacity='0';
+    setTimeout(function(){ nameEl.textContent=String(items[cur].title||'').trim(); roleEl.textContent=role(items[cur]); nameEl.style.opacity='1'; roleEl.style.opacity='1'; },300);
+    setTimeout(function(){ animating=false; },800);
+  }
+  function manual(){ lastManual=Date.now(); }
+
+  // manual: तीर, dot, कार्डमा थिच्ने, आडो swipe
+  [].forEach.call(sec.querySelectorAll('.tc-arrow'),function(b){
+    b.addEventListener('click',function(){ manual(); go(cur+(b.classList.contains('up')?-1:1)); });
+  });
+  var sx=0, sy=0;
+  cont.addEventListener('touchstart',function(e){ sx=e.changedTouches[0].clientX; sy=e.changedTouches[0].clientY; manual(); },{passive:true});
+  cont.addEventListener('touchend',function(e){
+    var dx=sx-e.changedTouches[0].clientX, dy=sy-e.changedTouches[0].clientY; manual();
+    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)) go(cur+(dx>0?1:-1));
+  },{passive:true});
+  sec.addEventListener('pointerenter',function(e){ if(e.pointerType==='mouse') hovering=true; });
+  sec.addEventListener('pointerleave',function(e){ if(e.pointerType==='mouse') hovering=false; });
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ visible=es[0].isIntersecting; }).observe(sec); }
+  // auto-scroll: ३.५ सेकेन्डमा आफैँ अर्को; हातले छोएपछि ४.५ सेकेन्ड रोकिने
+  function tick(){
+    if(!cards.length||hovering||!visible||document.hidden||animating) return;
+    if(document.documentElement.getAttribute('data-vs')!=='home') return;
+    if(Date.now()-lastManual<4500) return;
+    go(cur+1);
+  }
+
+  function init(){ if(window.__poemsList && window.__poemsList.length) build(window.__poemsList); }
+  document.addEventListener('poems-ready',init);
+  init();
 })();
 </script>
 </body>
