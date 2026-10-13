@@ -489,24 +489,18 @@ document.addEventListener('click', function(e){
 
 <!-- कविता कभर carousel (team-carousel शैली) — प्रतीक साहित्य सङ्ग्रहका कभर, auto + manual -->
 <section class="tc-section" id="poemCarousel" style="display:none">
+  <a class="tc-heading" href="https://pratikadhikari98.com.np/" target="_blank" rel="noopener" aria-label="प्रतीक साहित्य सङ्ग्रह — वेबसाइटमा जानुहोस्"><span class="preeti-title">k|tLs ;flxTo ;ª\u|x</span></a>
   <div class="tc-main">
     <div class="tc-carousel-section">
       <div class="tc-carousel-container" id="tcContainer">
-        <button class="tc-arrow up" type="button" aria-label="अघिल्लो"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
         <div class="tc-track" id="tcTrack"></div>
-        <button class="tc-arrow down" type="button" aria-label="अर्को"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
       </div>
     </div>
     <div class="tc-controls">
-      <div class="tc-nav-controls">
-        <button class="tc-arrow up" type="button" aria-label="अघिल्लो"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
-        <button class="tc-arrow down" type="button" aria-label="अर्को"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
-      </div>
       <div class="tc-info">
         <h2 class="tc-name" id="tcName"></h2>
         <p class="tc-role" id="tcRole"></p>
       </div>
-      <div class="tc-dots" id="tcDots"></div>
     </div>
   </div>
 </section>
@@ -1545,8 +1539,8 @@ if ('serviceWorker' in navigator) {
 (function(){
   var ORIGIN='https://pratikadhikari98.com.np/';
   var sec=document.getElementById('poemCarousel'); if(!sec) return;
-  var track=document.getElementById('tcTrack'), nameEl=document.getElementById('tcName'), roleEl=document.getElementById('tcRole'), dotsBox=document.getElementById('tcDots'), cont=document.getElementById('tcContainer');
-  var items=[], cards=[], dots=[], cur=0, animating=false, lastManual=0, hovering=false, visible=true, started=false;
+  var track=document.getElementById('tcTrack'), nameEl=document.getElementById('tcName'), roleEl=document.getElementById('tcRole'), cont=document.getElementById('tcContainer');
+  var items=[], cards=[], cur=0, animating=false, lastManual=0, hovering=false, visible=true, started=false;
   function esc(s){ var d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
   function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var x=a[i]; a[i]=a[j]; a[j]=x; } return a; }
   function coverUrl(c){ c=String(c||'').trim(); if(!c) return ''; if(/^https?:\/\//i.test(c)) return c; return ORIGIN+c.replace(/^\/+/,''); }
@@ -1565,14 +1559,11 @@ if ('serviceWorker' in navigator) {
                  :'<div class="tc-text"'+(col?' style="--cover-color:'+col+'"':'')+'>'+esc(String(p.title||'').trim())+'</div>';
       return '<div class="tc-card" data-index="'+i+'">'+inner+'</div>';
     }).join('');
-    dotsBox.innerHTML=items.map(function(_,i){ return '<div class="tc-dot" data-index="'+i+'"></div>'; }).join('');
     cards=[].slice.call(track.querySelectorAll('.tc-card'));
-    dots=[].slice.call(dotsBox.querySelectorAll('.tc-dot'));
     [].forEach.call(track.querySelectorAll('.tc-card > img'),function(img){
       img.addEventListener('error',function(){ var f=img.parentNode, i=+f.dataset.index, col=colorOf(items[i]); f.innerHTML='<div class="tc-text"'+(col?' style="--cover-color:'+col+'"':'')+'>'+esc(String(items[i].title||'').trim())+'</div>'; });
     });
-    cards.forEach(function(c,i){ c.addEventListener('click',function(){ manual(); if(i===cur){ if(window.__openPoem) window.__openPoem(items[i]); } else go(i); }); });
-    dots.forEach(function(d,i){ d.addEventListener('click',function(){ manual(); go(i); }); });
+    cards.forEach(function(c,i){ c.addEventListener('click',function(){ manual(); if(dragMoved) return; if(i===cur){ if(window.__openPoem) window.__openPoem(items[i]); } else go(i); }); });
     sec.style.display='';
     go(0,true);
     if(!started){ started=true; setInterval(tick,3500); }
@@ -1592,23 +1583,28 @@ if ('serviceWorker' in navigator) {
       else if(off===cards.length-2) card.classList.add('up-2');
       else card.classList.add('hidden');
     });
-    dots.forEach(function(d,i){ d.classList.toggle('active',i===cur); });
     nameEl.style.opacity='0'; roleEl.style.opacity='0';
     setTimeout(function(){ nameEl.textContent=String(items[cur].title||'').trim(); roleEl.textContent=role(items[cur]); nameEl.style.opacity='1'; roleEl.style.opacity='1'; },300);
     setTimeout(function(){ animating=false; },800);
   }
   function manual(){ lastManual=Date.now(); }
 
-  // manual: तीर, dot, कार्डमा थिच्ने, आडो swipe
-  [].forEach.call(sec.querySelectorAll('.tc-arrow'),function(b){
-    b.addEventListener('click',function(){ manual(); go(cur+(b.classList.contains('up')?-1:1)); });
+  // manual: कार्डलाई औँला/माउसले तल-माथि तानेर (drag) वा माउस wheel ले चलाउने
+  var dragging=false, startY=0, dragMoved=false, STEP=40;
+  cont.addEventListener('pointerdown',function(e){ dragging=true; dragMoved=false; startY=e.clientY; manual(); try{ cont.setPointerCapture(e.pointerId); }catch(_){} });
+  cont.addEventListener('pointermove',function(e){
+    if(!dragging) return;
+    var dy=e.clientY-startY;
+    if(Math.abs(dy)>6) dragMoved=true;
+    if(Math.abs(dy)>=STEP && !animating){ go(cur+(dy<0?1:-1)); startY=e.clientY; manual(); }
   });
-  var sx=0, sy=0;
-  cont.addEventListener('touchstart',function(e){ sx=e.changedTouches[0].clientX; sy=e.changedTouches[0].clientY; manual(); },{passive:true});
-  cont.addEventListener('touchend',function(e){
-    var dx=sx-e.changedTouches[0].clientX, dy=sy-e.changedTouches[0].clientY; manual();
-    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)) go(cur+(dx>0?1:-1));
-  },{passive:true});
+  function endDrag(){ dragging=false; manual(); setTimeout(function(){ dragMoved=false; },60); }
+  cont.addEventListener('pointerup',endDrag); cont.addEventListener('pointercancel',endDrag);
+  var wacc=0;
+  cont.addEventListener('wheel',function(e){
+    e.preventDefault(); manual(); wacc+=e.deltaY;
+    if(Math.abs(wacc)>=40){ if(!animating) go(cur+(wacc>0?1:-1)); wacc=0; }
+  },{passive:false});
   sec.addEventListener('pointerenter',function(e){ if(e.pointerType==='mouse') hovering=true; });
   sec.addEventListener('pointerleave',function(e){ if(e.pointerType==='mouse') hovering=false; });
   if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ visible=es[0].isIntersecting; }).observe(sec); }
