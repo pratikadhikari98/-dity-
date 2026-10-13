@@ -1018,3 +1018,13 @@
 @media (min-width: 769px) { .tc-heading .preeti-title { font-size: 2.8rem; } .tc-heading { margin-bottom: 14px; } }
 /* कालोपाटी र carousel बीचको ग्याप कम */
 .nb-section { padding-bottom: 8px; }
+
+/* carousel — पछाडि सेतो लेअर; शीर्षक कार्डको माथिल्लो भागको बराबरमा */
+.tc-main { background: var(--white); border-radius: 26px; box-shadow: 0 10px 30px rgba(92,47,38,.12); border: 1px solid var(--sky); width: calc(100% - 24px); box-sizing: border-box; padding: 14px 6px; align-items: stretch; }
+.tc-carousel-section { align-self: center; }
+.tc-controls { position: relative; align-self: stretch; }
+.tc-heading { position: absolute; top: 28px; left: 0; right: 0; margin: 0; }
+@media (min-width: 769px) {
+  .tc-main { border-radius: 32px; padding: 26px 30px; width: calc(100% - 40px); }
+  .tc-heading { top: 16px; margin: 0; }
+}
