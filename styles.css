@@ -1166,8 +1166,4 @@
 .nb-text { overflow-y: hidden; }
 @media (min-width: 900px) { .nb-text.preeti .nb-heading { font-size: calc(2.6rem * var(--nbs, 1)); } .nb-text.preeti .nb-line { font-size: calc(2rem * var(--nbs, 1)); } .nb-heading { font-size: calc(2.1rem * var(--nbs, 1)); } .nb-line { font-size: calc(1.5rem * var(--nbs, 1)); } }
 
-/* सूचना-पाटी (Haha फन्ट) — अक्षरबीचको अन्तर थोरै बढी */
-.nb-text.preeti .nb-heading, .nb-text.preeti .nb-line { letter-spacing: 0.07em; word-spacing: 0.08em; }
 
-/* सूचना-पाटी (Haha) — अक्षर अन्तर घटाइयो (अघिको ० भन्दा पनि थोरै कम) */
-.nb-text.preeti .nb-heading, .nb-text.preeti .nb-line { letter-spacing: -0.03em; word-spacing: -0.02em; }
