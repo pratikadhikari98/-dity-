@@ -489,7 +489,6 @@ document.addEventListener('click', function(e){
 
 <!-- कविता कभर carousel (team-carousel शैली) — प्रतीक साहित्य सङ्ग्रहका कभर, auto + manual -->
 <section class="tc-section" id="poemCarousel" style="display:none">
-  <a class="tc-heading" href="https://pratikadhikari98.com.np/" target="_blank" rel="noopener" aria-label="प्रतीक साहित्य सङ्ग्रह — वेबसाइटमा जानुहोस्"><span class="preeti-title">k|tLs ;flxTo ;ª\u|x</span></a>
   <div class="tc-main">
     <div class="tc-carousel-section">
       <div class="tc-carousel-container" id="tcContainer">
@@ -497,6 +496,7 @@ document.addEventListener('click', function(e){
       </div>
     </div>
     <div class="tc-controls">
+      <a class="tc-heading" href="https://pratikadhikari98.com.np/" target="_blank" rel="noopener" aria-label="प्रतीक साहित्य सङ्ग्रह — वेबसाइटमा जानुहोस्"><span class="preeti-title">k|tLs ;flxTo ;ª\u|x</span></a>
       <div class="tc-info">
         <h2 class="tc-name" id="tcName"></h2>
         <p class="tc-role" id="tcRole"></p>
@@ -1549,19 +1549,18 @@ if ('serviceWorker' in navigator) {
   function role(p){ return p.category==='gazal'?'गजल':'कविता'; }
 
   function build(list){
-    var withCover=list.filter(function(p){ return coverUrl(p.cover); });
-    var pool=shuffle(withCover.length>=5?withCover:list).slice(0,8);
+    var pool=shuffle(list).slice(0,8);   // कभर भएका र नभएका (टेक्स्ट कभर) दुवै कविता
     if(pool.length<3){ sec.style.display='none'; return; }
     items=pool;
     track.innerHTML=items.map(function(p,i){
       var u=coverUrl(p.cover), col=colorOf(p);
       var inner=u?'<img src="'+esc(u)+'" alt="'+esc(p.title)+'" draggable="false">'
-                 :'<div class="tc-text"'+(col?' style="--cover-color:'+col+'"':'')+'>'+esc(String(p.title||'').trim())+'</div>';
+                 :'<div class="tc-text"'+(col?' style="--cover-color:'+col+'"':'')+'><div class="tc-text-box"><div class="tc-text-title">'+esc(String(p.title||'').trim())+'</div></div></div>';
       return '<div class="tc-card" data-index="'+i+'">'+inner+'</div>';
     }).join('');
     cards=[].slice.call(track.querySelectorAll('.tc-card'));
     [].forEach.call(track.querySelectorAll('.tc-card > img'),function(img){
-      img.addEventListener('error',function(){ var f=img.parentNode, i=+f.dataset.index, col=colorOf(items[i]); f.innerHTML='<div class="tc-text"'+(col?' style="--cover-color:'+col+'"':'')+'>'+esc(String(items[i].title||'').trim())+'</div>'; });
+      img.addEventListener('error',function(){ var f=img.parentNode, i=+f.dataset.index, col=colorOf(items[i]); f.innerHTML='<div class="tc-text"'+(col?' style="--cover-color:'+col+'"':'')+'><div class="tc-text-box"><div class="tc-text-title">'+esc(String(items[i].title||'').trim())+'</div></div></div>'; });
     });
     cards.forEach(function(c,i){ c.addEventListener('click',function(){ manual(); if(dragMoved) return; if(i===cur){ if(window.__openPoem) window.__openPoem(items[i]); } else go(i); }); });
     sec.style.display='';

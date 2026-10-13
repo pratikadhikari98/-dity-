@@ -970,7 +970,10 @@
 .tc-track { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; transform-style: preserve-3d; }
 .tc-card { position: absolute; width: var(--cw); height: var(--ch); background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 20px 40px rgba(92,47,38,.22); transition: all .8s cubic-bezier(.25,.46,.45,.94); cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .tc-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: all .8s cubic-bezier(.25,.46,.45,.94); }
-.tc-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center; color: #fff; font-weight: 700; line-height: 1.35; font-size: 1rem; background: var(--cover-color, var(--blue-mid)); text-shadow: 0 1px 3px rgba(0,0,0,.35); }
+.tc-text { position: absolute; inset: 0; background-color: var(--cover-color, rgb(220, 20, 60)); }
+.tc-text::after { content: ""; position: absolute; inset: 0; background: url("photos/book_edge_shading.webp") center / 100% 100% no-repeat; pointer-events: none; z-index: 2; }
+.tc-text-box { position: absolute; inset: 9% 5% 9% 9%; border: 1px solid rgba(255,255,255,.5); display: flex; align-items: center; justify-content: center; padding: 6px 10px; text-align: center; }
+.tc-text-title { color: #fff; font-weight: 700; line-height: 1.3; font-size: .95rem; text-shadow: 0 1px 3px rgba(0,0,0,.35); word-break: break-word; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .tc-card.center { z-index: 10; transform: scale(1.1) translateZ(0); }
 .tc-card.up-2 { z-index: 1; transform: translateY(calc(var(--o2) * -1)) scale(.8) translateZ(-300px); opacity: .7; }
 .tc-card.up-1 { z-index: 5; transform: translateY(calc(var(--o1) * -1)) scale(.9) translateZ(-100px); opacity: .9; }
@@ -1003,14 +1006,15 @@
   .tc-name::before, .tc-name::after { content: ""; display: block; position: absolute; top: 100%; width: 80px; height: 2px; background: var(--blue-dark); transform: none; margin-top: 0; }
   .tc-name::before { left: -100px; } .tc-name::after { left: auto; right: -100px; }
   .tc-role { font-size: 1.2rem; }
-  .tc-text { font-size: 1.6rem; }
+  .tc-text-title { font-size: 1.7rem; } .tc-text-box { padding: 10px 24px; }
 }
 
 /* कविता carousel — शीर्षक (प्रतीक साहित्य सङ्ग्रह, लिंक) */
-.tc-heading { display: inline-block; text-decoration: none; margin: 0 0 4px; padding: 4px 12px; -webkit-tap-highlight-color: transparent; }
-.tc-heading .preeti-title { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-weight: normal; font-size: 2.2rem; line-height: 1.3; color: var(--blue-dark); -webkit-text-stroke: .6px currentColor; display: inline-block; transition: color .2s ease, transform .2s ease; }
+/* शीर्षक (प्रतीक साहित्य सङ्ग्रह) — कविताको नामको माथि, कुनामा */
+.tc-heading { display: block; text-decoration: none; margin: 0 0 6px; padding: 2px 4px; text-align: center; -webkit-tap-highlight-color: transparent; }
+.tc-heading .preeti-title { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-weight: normal; font-size: 1.35rem; line-height: 1.3; color: var(--blue-dark); -webkit-text-stroke: .6px currentColor; display: inline-block; transition: color .2s ease, transform .2s ease; }
 .tc-heading:active .preeti-title { color: var(--blue-mid); transform: scale(.97); }
 @media (hover: hover) { .tc-heading:hover .preeti-title { color: var(--blue-mid); } }
-@media (min-width: 769px) { .tc-heading .preeti-title { font-size: 2.8rem; } }
+@media (min-width: 769px) { .tc-heading .preeti-title { font-size: 2.8rem; } .tc-heading { margin-bottom: 14px; } }
 /* कालोपाटी र carousel बीचको ग्याप कम */
 .nb-section { padding-bottom: 8px; }
