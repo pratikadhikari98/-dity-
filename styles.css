@@ -1167,3 +1167,7 @@
 @media (min-width: 900px) { .nb-text.preeti .nb-heading { font-size: calc(2.6rem * var(--nbs, 1)); } .nb-text.preeti .nb-line { font-size: calc(2rem * var(--nbs, 1)); } .nb-heading { font-size: calc(2.1rem * var(--nbs, 1)); } .nb-line { font-size: calc(1.5rem * var(--nbs, 1)); } }
 
 
+
+/* श्लोकार्थ (अर्थ र शीर्षक) — Akshar फन्ट */
+.hero-text #shlokaMeaning { font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif; font-weight: 500; font-size: 1.1rem; line-height: 1.6; }
+.hero-text .section-label { font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: 0; }
