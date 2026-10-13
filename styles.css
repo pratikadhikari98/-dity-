@@ -1111,3 +1111,18 @@
 @media (hover: hover) { .eb-btn:hover .eb-ico { transform: scale(1.25); } }
 .eb-btn:active .eb-ico { margin-bottom: 0; transform: scale(1.25) rotate(-20deg); }
 @media (min-width: 769px) { .eb-ico { width: 20px; height: 20px; } }
+
+/* लाइक · कमेन्ट · सेयर — अझै सानो */
+.eb-bar { max-width: 240px; gap: 5px; margin-top: 14px; }
+.eb-btn { height: 32px; border-radius: 7px; box-shadow: 0 2px 0 rgba(92,47,38,0.22); }
+.eb-lp { font-size: .78rem; }
+.eb-ico { width: 14px; height: 14px; }
+#ebCommentBox { max-width: 240px; }
+@media (min-width: 769px) {
+  .eb-bar { max-width: 280px; gap: 6px; }
+  .eb-btn { height: 34px; }
+  .eb-lp { font-size: .9rem; } .eb-ico { width: 15px; height: 15px; }
+  #ebCommentBox { max-width: 280px; }
+}
+/* सूचना पाटी शीर्षकको पछाडि सेतो बक्स — दुवै छेउ (स्क्रिनको किनारा) सम्म */
+.nb-section .nb-title { background: var(--white); margin: 0 -5.5556% 14px; padding: 8px 0 6px; box-shadow: 0 4px 14px rgba(92,47,38,.10); }
