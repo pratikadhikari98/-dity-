@@ -485,6 +485,36 @@ document.addEventListener('click', function(e){
       </div>
     </div>
   </div>
+  <!-- लाइक · कमेन्ट · सेयर (split-counter शैली) -->
+  <div class="eb-bar" id="engageBar">
+    <div class="eb-item">
+      <input hidden id="ebLikeCheck" type="checkbox">
+      <label for="ebLikeCheck" class="eb-btn" id="ebLikeBtn">
+        <span class="eb-lp"><p class="eb-cur" id="ebLikeCur">0</p><p class="eb-nxt" id="ebLikeNxt">1</p></span>
+        <span class="eb-rp"><svg class="eb-ico" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg><span class="eb-lbl">लाइक</span></span>
+      </label>
+    </div>
+    <div class="eb-item">
+      <button type="button" class="eb-btn" id="ebCommentBtn" aria-expanded="false" aria-controls="ebCommentBox">
+        <span class="eb-lp"><p class="eb-cur">0</p><p class="eb-nxt"></p></span>
+        <span class="eb-rp"><svg class="eb-ico" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="eb-lbl">कमेन्ट</span></span>
+      </button>
+    </div>
+    <div class="eb-item">
+      <button type="button" class="eb-btn" id="ebShareBtn">
+        <span class="eb-lp"><p class="eb-cur">0</p><p class="eb-nxt"></p></span>
+        <span class="eb-rp"><svg class="eb-ico" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span class="eb-lbl">सेयर</span></span>
+      </button>
+    </div>
+  </div>
+  <div id="ebCommentBox" hidden>
+    <ul id="ebComments"></ul>
+    <form id="ebCommentForm">
+      <input id="ebCommentText" type="text" placeholder="कमेन्ट लेख्नुहोस्…" autocomplete="off">
+      <button type="submit">पठाउनुहोस्</button>
+    </form>
+  </div>
+  <div id="ebToast" role="status"></div>
 </section>
 
 <!-- कविता कभर carousel (team-carousel शैली) — प्रतीक साहित्य सङ्ग्रहका कभर, auto + manual -->
@@ -1627,6 +1657,50 @@ if ('serviceWorker' in navigator) {
   function init(){ if(window.__poemsList && window.__poemsList.length) build(window.__poemsList); }
   document.addEventListener('poems-ready',init);
   init();
+})();
+</script>
+<script>
+// लाइक / कमेन्ट / सेयर — split-counter बटन (गणना यही ब्राउजरमा मात्र सुरक्षित हुन्छ)
+(function(){
+  var KEY='adityaEngage';
+  var st={liked:false,comments:[],shares:0};
+  try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ st.liked=!!s.liked; st.comments=Array.isArray(s.comments)?s.comments:[]; st.shares=+s.shares||0; } }catch(e){}
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+  var like=document.getElementById('ebLikeCheck'), cb=document.getElementById('ebCommentBtn'), shb=document.getElementById('ebShareBtn'),
+      box=document.getElementById('ebCommentBox'), list=document.getElementById('ebComments'), toast=document.getElementById('ebToast');
+  if(!like||!cb||!shb) return;
+  function say(m){ toast.textContent=m; toast.classList.add('show'); clearTimeout(say.t); say.t=setTimeout(function(){toast.classList.remove('show');},1800); }
+  function roll(btn,v){
+    var cur=btn.querySelector('.eb-cur'), nxt=btn.querySelector('.eb-nxt');
+    nxt.textContent=v; btn.classList.add('rolled');
+    setTimeout(function(){ cur.textContent=v; btn.classList.add('noanim'); btn.classList.remove('rolled'); void btn.offsetWidth; btn.classList.remove('noanim'); },260);
+  }
+  function addItem(name,text){
+    var li=document.createElement('li'), s=document.createElement('strong');
+    s.textContent=name; li.appendChild(s); li.appendChild(document.createTextNode(text)); list.appendChild(li);
+  }
+  // सुरुवाती अवस्था
+  like.checked=st.liked;
+  document.getElementById('ebLikeCur').textContent=st.liked?1:0;
+  document.getElementById('ebLikeNxt').textContent=st.liked?0:1;
+  cb.querySelector('.eb-cur').textContent=st.comments.length;
+  shb.querySelector('.eb-cur').textContent=st.shares;
+  st.comments.forEach(function(c){ addItem('तपाईं',c); });
+  // लाइक
+  like.addEventListener('change',function(){ st.liked=like.checked; document.getElementById('ebLikeCur').textContent=st.liked?0:1; document.getElementById('ebLikeNxt').textContent=st.liked?1:0; save(); });
+  // कमेन्ट
+  cb.addEventListener('click',function(){ box.hidden=!box.hidden; cb.setAttribute('aria-expanded',String(!box.hidden)); if(!box.hidden) document.getElementById('ebCommentText').focus(); });
+  document.getElementById('ebCommentForm').addEventListener('submit',function(e){
+    e.preventDefault(); var i=document.getElementById('ebCommentText'), v=i.value.trim(); if(!v) return;
+    st.comments.push(v); addItem('तपाईं',v); roll(cb,st.comments.length); i.value=''; save(); say('कमेन्ट राखियो');
+  });
+  // सेयर
+  shb.addEventListener('click',function(){
+    st.shares+=1; roll(shb,st.shares); save();
+    var url=location.href.split('#')[0];
+    function ok(){ say('लिंक कपी भयो'); } function no(){ say('ठेगाना बारबाट लिंक कपी गर्नुहोस्'); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok,no); } else no();
+  });
 })();
 </script>
 </body>
