@@ -48,7 +48,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=20261007" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
@@ -767,6 +767,8 @@ document.addEventListener('click', function(e){
         function closeTags(stack) { return stack.slice().reverse().map(function (s) { return '</' + s.name + '>'; }).join(''); }
 
         blocks.forEach(function (block) {
+            // तर्कसङ्ग्रह शैली: शीर्षक (केवल <b>) पानाको अन्त्यमा एक्लै नपर्ने
+            if (window.__bookTarka && /^<p><b>[^<]*<\/b><\/p>$/i.test(block) && current && !fits(current + block + '<p>x<br>x<br>x</p>')) { pages.push(current); current = ''; }
             if (fits(current + block)) { current += block; return; }
             if (!/^<p>/i.test(block)) {            // फोटो आदि: टुक्र्याउन मिल्दैन
                 if (current) pages.push(current);
@@ -883,10 +885,12 @@ document.addEventListener('click', function(e){
         // अधिकतम १.५ सेकेन्ड मात्र पर्खने — सबै फन्ट (document.fonts.ready) को लागि होइन।
         Promise.resolve(fetch('data/book.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }))
             .then(function (data) {
+                window.__bookTarka = data.style === 'tarka';
+                var bw0 = document.getElementById('bookEmbedWrap'); if (bw0 && data.style) bw0.classList.add('bk-' + data.style);
                 var txt = String(data.text || '');
                 var sample = txt.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 300) || 'अ';
                 var fontP = (document.fonts && document.fonts.load)
-                    ? document.fonts.load('500 17px Akshar', sample).catch(function () {}) : Promise.resolve();
+                    ? document.fonts.load('500 17px ' + (data.style === 'tarka' ? 'Eczar' : 'Akshar'), sample).catch(function () {}) : Promise.resolve();
                 var srcs = []; txt.replace(/<img[^>]+src="([^"]+)"/g, function (m, s) { srcs.push(s); return m; });
                 var imgP = Promise.all(srcs.map(function (s) {
                     return new Promise(function (res) { var im = new Image(); im.onload = function () { (window.__bookImgDims = window.__bookImgDims || {})[s] = { w: im.naturalWidth, h: im.naturalHeight }; res(); }; im.onerror = res; im.src = s; });

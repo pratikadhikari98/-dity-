@@ -1224,7 +1224,8 @@ $('bookSaveBtn').addEventListener('click', async () => {
         text: bookEditor.getText(),
         color: $('bookColor').value,
         coverColor: $('bookCoverColor').value,
-        coverImage: $('bookCoverImage').value
+        coverImage: $('bookCoverImage').value,
+        style: window.__bookStyle || ''
       }, 'admin: update book.json'); }
     ], 'किताब GitHub मा पठाउँदै…', 'किताब Deploy भयो');
     setStatus($('bookStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
@@ -1737,6 +1738,7 @@ $('loadBtn').addEventListener('click', async () => {
     showcaseItems = showcase.json; renderShowcase();
     shlokaItems = (shloka.json || []).map(s => (s.font === 'preeti' ? s : { shloka: window.uniToPreetiPlain(s.shloka || ''), meaning: s.meaning || '', font: 'preeti' })); renderShloka();
     $('aboutTextArea').value = (about.json && about.json.text) ? (about.json.font === 'preeti' ? about.json.text : window.uniToPreetiPlain(about.json.text)) : '';
+    window.__bookStyle = (book.json && book.json.style) || '';
     $('bookTitle').value = (book.json && book.json.title) || '';
     $('bookColor').value = (book.json && book.json.color) || '#1a1a1a';
     bookEditor.setBaseColor($('bookColor').value);
