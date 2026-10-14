@@ -245,6 +245,8 @@
   .header-dropdown { min-width: 220px; }
   .menu-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
   .menu-nav-link { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: var(--text); font-size: 1rem; font-weight: 600; }
+  /* मेनुको 'समाचार' — हिन्दी/देवनागरी Eczar फन्ट */
+  .menu-nav-link.menu-nav-eczar { font-family: 'Eczar', 'Noto Serif Devanagari', serif; }
   .menu-nav-link:hover, .menu-nav-link:active { background: var(--sky-pale); }
   .menu-nav-link.active { background: var(--sky); color: var(--blue-dark); }
   .menu-sep { height: 1px; background: #f0ddd3; margin: 4px 0 8px; }
@@ -279,7 +281,7 @@
       <nav class="menu-nav" aria-label="मुख्य मेनु">
         <a class="menu-nav-link" href="#view=home" data-go="home">🏠 गृहपृष्ठ</a>
         <a class="menu-nav-link" href="#view=showcase" data-go="showcase">🖼 झलक</a>
-        <a class="menu-nav-link" href="#view=news" data-go="news">📰 समाचार</a>
+        <a class="menu-nav-link menu-nav-eczar" href="#view=news" data-go="news">📰 समाचार</a>
         <a class="menu-nav-link" href="#view=book" data-go="book">📖 किताब</a>
         <a class="menu-nav-link" href="#view=poems" data-go="poems">📜 प्रतीक साहित्य सङ्ग्रह</a>
         <a class="menu-nav-link" href="#view=about" data-go="about">ℹ️ बारेमा</a>
