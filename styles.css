@@ -1171,3 +1171,16 @@
 /* श्लोकार्थ (अर्थ र शीर्षक) — Akshar फन्ट */
 .hero-text #shlokaMeaning { font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif; font-weight: 500; font-size: 1.1rem; line-height: 1.6; }
 .hero-text .section-label { font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: 0; }
+
+/* झलक — फेक 3D (depth) canvas */
+.showcase-photo { position: relative; }
+.showcase-photo canvas.fx3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; }
+
+/* झलक पेज — 3D कार्ड (depth parallax) */
+.card3d-section { background: #fdf1ec; padding: 16px 5% 70px; }
+.card3d-card { max-width: 1080px; margin: 0 auto; background: var(--white); border-radius: 22px; padding: 10px; box-shadow: 0 12px 34px rgba(92,47,38,.18); border: 1px solid var(--sky); box-sizing: border-box; }
+.card3d-photo { position: relative; width: 100%; border-radius: 14px; overflow: hidden; background: var(--sky); aspect-ratio: 3 / 2; }
+.card3d-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.card3d-photo canvas.fx3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; }
+.card3d-text { margin: 12px 8px 4px; text-align: center; color: var(--blue-dark); font-family: 'Akshar','Noto Sans Devanagari',sans-serif; font-weight: 600; font-size: 1.1rem; line-height: 1.5; }
+@media (min-width: 769px) { .card3d-card { padding: 14px; border-radius: 28px; } .card3d-photo { border-radius: 18px; } }

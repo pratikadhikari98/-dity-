@@ -423,6 +423,30 @@ textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font
   <div class="status" id="shlokaStatus"></div>
 </div>
 
+<div class="acc-header" data-target="card3dCard">
+  <div class="sidebar-item_icon"><span class="material-symbols-rounded">view_in_ar</span></div>
+  <div class="sidebar-item_text">3D कार्ड (झलक पेज)</div>
+  <span class="acc-chevron material-symbols-rounded">expand_more</span>
+</div>
+<div class="card acc-panel" id="card3dCard" style="display:none;">
+  <h2>3D कार्ड (झलक पेजमा Showcase को तल)</h2>
+  <div class="hint">यो फोटोमा 3D (depth) effect चल्छ। नयाँ फोटो राख्दा तलको "नयाँ फोटो" छानेर Save गर्नुहोस्।</div>
+  <label>अहिलेको फोटो path</label>
+  <input type="text" id="card3dImage" autocomplete="off">
+  <img id="card3dPreview" style="max-width:160px;max-height:110px;border-radius:8px;margin-top:6px;display:none;">
+  <label>नयाँ फोटो अपलोड (optional)</label>
+  <input type="file" id="card3dFile" accept="image/*">
+  <label>3D Depth map (optional — कालोसेतो फोटो; सेतो = नजिक, कालो = टाढा)</label>
+  <input type="file" id="card3dDepthFile" accept="image/*">
+  <div class="hint" id="card3dDepthHint">नदिए फोटोबाटै अनुमानित 3D depth आफैँ बन्छ।</div>
+  <label>फोटोको तल लेख्ने (optional)</label>
+  <textarea id="card3dText" style="min-height:70px;"></textarea>
+  <div class="top-actions">
+    <button class="btn-primary" id="card3dSaveBtn">3D कार्ड Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="card3dStatus"></div>
+</div>
+
 <div class="acc-header" data-target="noticeCard">
   <div class="sidebar-item_icon"><span class="material-symbols-rounded">campaign</span></div>
   <div class="sidebar-item_text">सूचना पाटी</div>
@@ -868,6 +892,36 @@ $('shlokaSaveBtn').addEventListener('click', async () => {
     setStatus($('shlokaStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
   } catch (err) { setStatus($('shlokaStatus'), '✗ ' + err.message, 'err'); }
   finally { $('shlokaSaveBtn').disabled = false; }
+});
+
+// ═══════════════ 3D कार्ड ═══════════════
+let card3d = { image: '', depth: '', text: '' };
+function showCard3d() {
+  $('card3dImage').value = card3d.image || '';
+  $('card3dText').value = card3d.text || '';
+  const p = $('card3dPreview'); p.src = card3d.image || ''; p.style.display = card3d.image ? '' : 'none';
+  $('card3dDepthHint').textContent = card3d.depth ? 'अहिलेको depth map: ' + card3d.depth + ' (नयाँ फोटो राखे यो हट्छ)' : 'नदिए फोटोबाटै अनुमानित 3D depth आफैँ बन्छ।';
+}
+$('card3dImage').addEventListener('input', () => { card3d.image = $('card3dImage').value; });
+$('card3dText').addEventListener('input', () => { card3d.text = $('card3dText').value; });
+$('card3dSaveBtn').addEventListener('click', async () => {
+  setStatus($('card3dStatus'), 'Saving...', '');
+  $('card3dSaveBtn').disabled = true;
+  try {
+    const photo = $('card3dFile').files[0], depth = $('card3dDepthFile').files[0];
+    const steps = [];
+    if (photo) steps.push(async () => { card3d.image = await ghUploadImage(photo); if (!depth) card3d.depth = ''; });
+    if (depth) steps.push(async () => { card3d.depth = await ghUploadImage(depth); });
+    steps.push(async () => {
+      const out = { image: card3d.image || '', depth: card3d.depth || '', text: card3d.text || '' };
+      await ghPutFile('data/card3d.json', out, 'admin: update card3d.json');
+    });
+    await runGithubTask(steps, '3D कार्ड GitHub मा पठाउँदै…', '3D कार्ड Deploy भयो');
+    $('card3dFile').value = ''; $('card3dDepthFile').value = '';
+    showCard3d();
+    setStatus($('card3dStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+  } catch (err) { setStatus($('card3dStatus'), '✗ ' + err.message, 'err'); }
+  finally { $('card3dSaveBtn').disabled = false; }
 });
 
 // ═══════════════ सूचना पाटी ═══════════════
@@ -1685,8 +1739,8 @@ $('zipList').addEventListener('click', e => {
 
 
 // ═══════════════ ACCORDION (थिचेको ठाउँको ठ्याक्कै तल खुल्ने) + THEME ═══════════════
-const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','noticeCard','aboutCard','bookCard','newsCard','news2Card','adsCard'];
-const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','noticeSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','news2SaveBtn','adsSaveBtn'];
+const CARD_IDS = ['githubCard','zipCard','showcaseCard','card3dCard','shlokaCard','noticeCard','aboutCard','bookCard','newsCard','news2Card','adsCard'];
+const SAVE_BTN_IDS = ['showcaseSaveBtn','card3dSaveBtn','shlokaSaveBtn','noticeSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','news2SaveBtn','adsSaveBtn'];
 SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = true; }); // Load नगरी Save गर्दा खाली डेटाले ओभरराइट हुनबाट बचाउन
 
 (function () {
@@ -1747,6 +1801,11 @@ $('loadBtn').addEventListener('click', async () => {
     newsEditor1.setItems(news.json);
     newsEditor2.setItems(news2.json);
     adsItems = ads.json; renderAds();
+    try {
+      const c3 = await ghGetFile('data/card3d.json');
+      if (c3 && c3.json) { card3d = Object.assign({ image: '', depth: '', text: '' }, c3.json); }
+    } catch (e) { /* फाइल नभए खाली */ }
+    showCard3d();
     try {
       const nt = await ghGetFile('data/notice.json');
       const nj = nt && nt.json ? nt.json : {};
