@@ -1173,7 +1173,7 @@
 .hero-text .section-label { font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: 0; }
 
 /* ═══ किताब — तर्कसङ्ग्रह शैली (शीर्षक + कार्डजस्तो श्लोक/सूत्र) ═══ */
-#bookEmbedWrap.bk-tarka .book-page-text p { text-align: center; font-family: 'Eczar','Siddhanta','Noto Serif Devanagari',serif; font-weight: 500; line-height: 1.55; border: 1px solid rgba(147,84,71,.38); border-radius: 10px; padding: 7px 8px; margin: 0 0 8px; background: rgba(255,255,255,.4); word-break: break-word; hyphens: auto; }
+#bookEmbedWrap.bk-tarka .book-page-text p { text-align: center; font-family: 'Eczar','Siddhanta','Noto Serif Devanagari',serif; font-weight: 500; font-size: 0.95rem; line-height: 1.55; border: 1px solid rgba(147,84,71,.38); border-radius: 10px; padding: 7px 8px; margin: 0 0 8px; background: rgba(255,255,255,.4); word-break: break-word; hyphens: auto; }
 #bookEmbedWrap.bk-tarka .book-page-text p:has(> b:only-child) { border: 0; background: none; padding: 2px 0 0; margin: 10px 0 4px; }
 #bookEmbedWrap.bk-tarka .book-page-text p > b:only-child { display: block; font-family: 'Eczar','Siddhanta','Noto Serif Devanagari',serif; font-weight: 700; font-size: 1.2em; color: #5c2f26; }
 #bookEmbedWrap.bk-tarka .book-page-text p:has(> b:only-child)::after { content: ""; display: block; width: 44px; height: 2px; margin: 4px auto 0; background: #935447; opacity: .55; }
