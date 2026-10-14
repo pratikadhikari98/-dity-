@@ -109,6 +109,40 @@
   }
   #bookEmbedWrap input { display: none; }
 
+  /* ══ किताब नियन्त्रण पट्टी — Neumorphism शैली (सुरु / अघिल्लो / अर्को / अन्त्य / पाना जाने / बुकमार्क) ══ */
+  #bookEmbedWrap.bk-instant .page, #bookEmbedWrap.bk-instant .front_cover, #bookEmbedWrap.bk-instant #flip_book { transition: none !important; }
+  .bn-wrap { --bn-bg: var(--sky-pale); --bn-dark: rgba(92,47,38,.20); --bn-light: rgba(255,255,255,.95); --bn-accent: var(--blue-mid);
+    max-width: 420px; margin: 18px auto 6px; padding: 0 10px; display: flex; flex-direction: column; align-items: center; gap: 16px; -webkit-user-select: none; user-select: none; }
+  .bn-status { min-width: 190px; padding: 9px 20px; border-radius: 999px; background: var(--bn-bg); color: var(--blue-dark); font-weight: 700; font-size: .95rem; line-height: 1.3;
+    box-shadow: inset 3px 3px 7px rgba(92,47,38,.18), inset -3px -3px 7px rgba(255,255,255,.95); }
+  .bn-row { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .bn-btn { position: relative; width: 62px; height: 62px; padding: 0; margin: 0; border: 1px solid rgba(255,255,255,.55); border-radius: 18px; cursor: pointer;
+    display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: var(--blue-dark); font-family: inherit;
+    background: linear-gradient(135deg, var(--bn-bg), rgba(255,255,255,.35));
+    box-shadow: 1px 1px 2px rgba(92,47,38,.14), 3px 3px 7px -1px rgba(92,47,38,.16), 7px 7px 16px -4px var(--bn-dark), -3px -3px 8px var(--bn-light);
+    transition: all 200ms ease-out; -webkit-tap-highlight-color: transparent; outline: 0; }
+  .bn-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: all 200ms ease-out; }
+  .bn-btn span { font-size: .62rem; font-weight: 700; line-height: 1; }
+  .bn-btn:active { box-shadow: inset 2px 2px 5px rgba(92,47,38,.28), inset -2px -2px 5px rgba(255,255,255,.9); border-color: rgba(92,47,38,.12); transform: scale(.97); }
+  .bn-btn.is-on { background: var(--bn-accent); color: #fff; border-color: rgba(0,0,0,.12);
+    box-shadow: inset 0 0 14px rgba(0,0,0,.24), inset 0 6px 8px rgba(255,255,255,.16), -2px -2px 6px var(--bn-light); }
+  .bn-btn.is-on svg { animation: bnIconOn 400ms ease-out 40ms both; }
+  .bn-btn.is-on#bnMark svg { fill: currentColor; }
+  .bn-btn:disabled { opacity: .38; cursor: default; box-shadow: none; transform: none; }
+  @keyframes bnIconOn { 0% { opacity: 0; transform: translateX(14px); } 30% { opacity: 0; } 100% { opacity: 1; transform: translateX(0); } }
+  .bn-panel { width: 100%; padding: 14px 12px; border-radius: 18px; background: var(--bn-bg); color: var(--blue-dark);
+    box-shadow: inset 3px 3px 8px rgba(92,47,38,.16), inset -3px -3px 8px rgba(255,255,255,.95); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; }
+  .bn-panel[hidden] { display: none; }
+  .bn-panel label { font-size: .85rem; font-weight: 700; }
+  .bn-input { width: 96px; padding: 9px 12px; border: 0; border-radius: 12px; background: var(--bn-bg); color: var(--blue-dark); font-weight: 700; font-size: 1rem; font-family: inherit; text-align: center; outline: 0;
+    box-shadow: inset 2px 2px 5px rgba(92,47,38,.2), inset -2px -2px 5px rgba(255,255,255,.95); }
+  .bn-go, .bn-chip { border: 1px solid rgba(255,255,255,.55); border-radius: 12px; padding: 9px 16px; cursor: pointer; color: var(--blue-dark); font-weight: 700; font-size: .88rem; font-family: inherit;
+    background: linear-gradient(135deg, var(--bn-bg), rgba(255,255,255,.35)); box-shadow: 2px 2px 6px rgba(92,47,38,.2), -2px -2px 6px var(--bn-light); transition: all 160ms ease-out; -webkit-tap-highlight-color: transparent; }
+  .bn-go:active, .bn-chip:active { box-shadow: inset 2px 2px 5px rgba(92,47,38,.25), inset -2px -2px 5px rgba(255,255,255,.9); }
+  .bn-chipwrap { display: inline-flex; align-items: center; gap: 6px; }
+  .bn-del { width: 30px; height: 30px; padding: 0; border-radius: 50%; line-height: 1; }
+  .bn-empty { font-size: .85rem; opacity: .8; }
+
   /* swipe card+text र समाचार १ बीचको खाली ठाउँ घटाइएको; dots हटाइयो */
   .showcase-section { padding-bottom: 6px; }
   .showcase-dots { display: none; }
@@ -580,6 +614,22 @@ document.addEventListener('click', function(e){
         <div id="bookScaleWrap">
           <div id="flipBookContainer"><!-- JS ले यहाँ भर्छ --></div>
         </div>
+      </div>
+
+      <div id="bookNav" class="bn-wrap" role="group" aria-label="किताब नियन्त्रण">
+        <div class="bn-status" id="bnStatus" aria-live="polite">मुखपृष्ठ</div>
+        <div class="bn-row">
+          <button type="button" class="bn-btn" id="bnFirst" aria-label="सुरुमा फर्कने" title="सुरुमा फर्कने"><svg viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg><span>सुरु</span></button>
+          <button type="button" class="bn-btn" id="bnPrev" aria-label="अघिल्लो पाना" title="अघिल्लो पाना"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg><span>अघिल्लो</span></button>
+          <button type="button" class="bn-btn" id="bnNext" aria-label="अर्को पाना" title="अर्को पाना"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg><span>अर्को</span></button>
+          <button type="button" class="bn-btn" id="bnLast" aria-label="अन्त्यमा जाने" title="अन्त्यमा जाने"><svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg><span>अन्त्य</span></button>
+        </div>
+        <div class="bn-row">
+          <button type="button" class="bn-btn" id="bnJump" aria-label="पानामा जाने" title="पानामा जाने"><svg viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg><span>पाना</span></button>
+          <button type="button" class="bn-btn" id="bnMark" aria-label="बुकमार्क गर्ने" title="यो पाना बुकमार्क गर्ने"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>बुकमार्क</span></button>
+          <button type="button" class="bn-btn" id="bnList" aria-label="बुकमार्क सूची" title="बुकमार्क सूची"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span>सूची</span></button>
+        </div>
+        <div class="bn-panel" id="bnPanel" hidden></div>
       </div>
     </section>
 
@@ -1727,6 +1777,165 @@ if ('serviceWorker' in navigator) {
     function ok(){ say('लिंक कपी भयो'); } function no(){ say('ठेगाना बारबाट लिंक कपी गर्नुहोस्'); }
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok,no); } else no();
   });
+})();
+</script>
+
+<script>
+/* किताब नियन्त्रण पट्टी: सुरु / अघिल्लो / अर्को / अन्त्य / पाना जाने / बुकमार्क / सूची */
+(function () {
+  var cont = document.getElementById('flipBookContainer');
+  var wrap = document.getElementById('bookEmbedWrap');
+  var nav = document.getElementById('bookNav');
+  if (!cont || !nav) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var elStatus = $('bnStatus'), panel = $('bnPanel');
+  var btn = { first: $('bnFirst'), prev: $('bnPrev'), next: $('bnNext'), last: $('bnLast'), jump: $('bnJump'), mark: $('bnMark'), list: $('bnList') };
+  var KEY = 'tarkaBookmarks_v1', LAST = 'tarkaLastPage_v1';
+  var panelKind = '', timers = [], noteT = 0;
+
+  function np(n) { return String(n).replace(/\d/g, function (d) { return '०१२३४५६७८९'.charAt(d); }); }
+  function toNum(s) { return parseInt(String(s).replace(/[०-९]/g, function (d) { return '०१२३४५६७८९'.indexOf(d); }).replace(/\D/g, ''), 10); }
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) {} return null; }
+  function buzz() { try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {} }
+
+  var resumeP = parseInt(store(LAST), 10) || 0;   // यो पटक खुल्नुअघि पछिल्लो पटक पढेको ठाउँ
+
+  function sheets() { return cont.querySelectorAll('.page').length; }
+  function cbCover() { return $('cover_checkbox'); }
+  function cbPage(i) { return $('page' + i + '_checkbox'); }
+  function curF() { var n = sheets(), f = 0, i, c; for (i = 1; i <= n; i++) { c = cbPage(i); if (c && c.checked) f++; } return f; }
+  function isOpen() { var c = cbCover(); return !!(c && c.checked); }
+  function totalPages() {
+    var els = cont.querySelectorAll('.book-page-text'), last = 0, i;
+    for (i = 0; i < els.length; i++) if (els[i].textContent.trim() || els[i].querySelector('img')) last = i + 1;
+    return last;
+  }
+  function keyPage(f) { return f === 0 ? 1 : 2 * f; }
+  function spreadLabel(p, P) {
+    var f = Math.floor(p / 2), l = f >= 1 ? 2 * f : 0, r = 2 * f + 1, a = [];
+    if (l >= 1 && l <= P) a.push(l);
+    if (r <= P) a.push(r);
+    return a.length === 2 ? np(a[0]) + '–' + np(a[1]) : np(a[0] || p);
+  }
+  function getMarks() { try { var a = JSON.parse(store(KEY) || '[]'); return Array.isArray(a) ? a.filter(function (x) { return x > 0; }).sort(function (a, b) { return a - b; }) : []; } catch (e) { return []; } }
+  function setMarks(a) { store(KEY, JSON.stringify(a)); }
+
+  function fire(cb) { cb.dispatchEvent(new Event('change', { bubbles: true })); }
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+  /* लक्ष्य स्प्रेडमा जाने: नजिक भए पाना एक-एक गरी पल्टाउँदै, टाढा भए एकैचोटि */
+  function goTo(tf, open) {
+    var n = sheets(); if (!n) return;
+    clearTimers();
+    tf = Math.max(0, Math.min(Math.min(n, Math.floor(totalPages() / 2)), tf));
+    var cf = curF(), co = isOpen(), steps = [], i;
+    if (!open) tf = 0;
+    if (open && !co) steps.push([cbCover(), true]);
+    if (tf > cf) for (i = cf + 1; i <= tf; i++) steps.push([cbPage(i), true]);
+    else if (tf < cf) for (i = cf; i > tf; i--) steps.push([cbPage(i), false]);
+    if (!open && co) steps.push([cbCover(), false]);
+    steps = steps.filter(function (s) { return s[0]; });
+    if (!steps.length) { update(); return; }
+    if (Math.abs(tf - cf) > 8) {                       // टाढाको जम्प — एनिमेसन बिना
+      if (wrap) wrap.classList.add('bk-instant');
+      steps.forEach(function (s) { s[0].checked = s[1]; });
+      fire(steps[steps.length - 1][0]);
+      void cont.offsetHeight;
+      setTimeout(function () { if (wrap) wrap.classList.remove('bk-instant'); }, 60);
+      return;
+    }
+    var gap = steps.length > 1 ? Math.min(110, 700 / steps.length) : 0, t = 0;
+    steps.forEach(function (s, k) {
+      timers.push(setTimeout(function () { s[0].checked = s[1]; fire(s[0]); }, t));
+      t += (s[0] === cbCover() ? 280 : gap);
+    });
+  }
+  function goToPage(p) { var P = totalPages(); p = Math.max(1, Math.min(P, p)); goTo(Math.floor(p / 2), true); }
+
+  function note(msg) {
+    elStatus.textContent = msg; clearTimeout(noteT);
+    noteT = setTimeout(update, 2200);
+  }
+
+  function update() {
+    var n = sheets(), open = isOpen(), f = curF(), P = totalPages();
+    btn.first.disabled = !n || !open;
+    btn.prev.disabled = !n || !open;
+    var lastF = Math.min(n, Math.floor(P / 2));
+    btn.next.disabled = !n || (open && f >= lastF);
+    btn.last.disabled = !n || (open && f >= lastF) || P < 2;
+    btn.jump.disabled = !n; btn.list.disabled = !n;
+    btn.mark.disabled = !n || !open;
+    if (!n) { elStatus.textContent = '…'; return; }
+    if (!open) { elStatus.textContent = 'मुखपृष्ठ'; btn.mark.classList.remove('is-on'); }
+    else {
+      var kp = keyPage(f);
+      elStatus.textContent = 'पाना ' + spreadLabel(kp, P) + ' / ' + np(P);
+      store(LAST, String(kp));
+      var on = getMarks().indexOf(kp) >= 0;
+      btn.mark.classList.toggle('is-on', on);
+      btn.mark.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    btn.jump.classList.toggle('is-on', panelKind === 'jump');
+    btn.list.classList.toggle('is-on', panelKind === 'list');
+  }
+
+  function renderPanel() {
+    var P = totalPages();
+    if (!panelKind) { panel.hidden = true; panel.innerHTML = ''; update(); return; }
+    panel.hidden = false;
+    if (panelKind === 'jump') {
+      panel.innerHTML = '<label for="bnInput">पाना नम्बर</label><input class="bn-input" id="bnInput" type="text" inputmode="numeric" autocomplete="off" placeholder="१–' + np(P) + '"><button type="button" class="bn-go" id="bnGo">जाऊ</button>';
+      var inp = $('bnInput'); if (inp) setTimeout(function () { try { inp.focus(); } catch (e) {} }, 30);
+    } else {
+      var marks = getMarks(), html = '';
+      if (resumeP > 1 && resumeP <= P) html += '<span class="bn-chipwrap"><button type="button" class="bn-chip" data-go="' + resumeP + '">↺ पछिल्लो पटक पढेको: पाना ' + spreadLabel(resumeP, P) + '</button></span>';
+      marks.forEach(function (p) {
+        if (p > P) return;
+        html += '<span class="bn-chipwrap"><button type="button" class="bn-chip" data-go="' + p + '">🔖 पाना ' + spreadLabel(p, P) + '</button><button type="button" class="bn-chip bn-del" data-del="' + p + '" aria-label="बुकमार्क हटाउने">✕</button></span>';
+      });
+      if (!marks.length) html += '<span class="bn-empty">अहिलेसम्म कुनै बुकमार्क छैन — पाना खोलेर 🔖 थिच्नुहोस्।</span>';
+      panel.innerHTML = html;
+    }
+    update();
+  }
+  function togglePanel(kind) { panelKind = (panelKind === kind) ? '' : kind; renderPanel(); }
+
+  btn.first.addEventListener('click', function () { buzz(); goTo(0, false); });
+  btn.prev.addEventListener('click', function () { buzz(); var f = curF(); if (f > 0) goTo(f - 1, true); else goTo(0, false); });
+  btn.next.addEventListener('click', function () { buzz(); if (!isOpen()) goTo(0, true); else goTo(curF() + 1, true); });
+  btn.last.addEventListener('click', function () { buzz(); goToPage(totalPages()); });
+  btn.jump.addEventListener('click', function () { buzz(); togglePanel('jump'); });
+  btn.list.addEventListener('click', function () { buzz(); togglePanel('list'); });
+  btn.mark.addEventListener('click', function () {
+    if (!isOpen()) return;
+    buzz();
+    var kp = keyPage(curF()), P = totalPages(), a = getMarks(), at = a.indexOf(kp);
+    if (at >= 0) { a.splice(at, 1); note('बुकमार्क हटाइयो'); } else { a.push(kp); a.sort(function (x, y) { return x - y; }); note('पाना ' + spreadLabel(kp, P) + ' बुकमार्क भयो'); }
+    setMarks(a);
+    btn.mark.classList.toggle('is-on', at < 0);
+    if (panelKind === 'list') renderPanel();
+  });
+
+  function doJump() {
+    var inp = $('bnInput'), P = totalPages(), p = inp ? toNum(inp.value) : NaN;
+    if (!(p >= 1 && p <= P)) { note('१ देखि ' + np(P) + ' सम्म लेख्नुहोस्'); return; }
+    panelKind = ''; renderPanel(); goToPage(p);
+  }
+  panel.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.id === 'bnGo') { doJump(); return; }
+    var del = t.closest ? t.closest('[data-del]') : null;
+    if (del) { var d = parseInt(del.getAttribute('data-del'), 10); setMarks(getMarks().filter(function (x) { return x !== d; })); renderPanel(); return; }
+    var go = t.closest ? t.closest('[data-go]') : null;
+    if (go) { var p = parseInt(go.getAttribute('data-go'), 10); panelKind = ''; renderPanel(); goToPage(p); }
+  });
+  panel.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.id === 'bnInput') { e.preventDefault(); doJump(); } });
+
+  /* हातले पाना पल्टाउँदा पनि स्थिति अपडेट (change घटना माथितिर बबल हुन्छ); किताब पुनःनिर्माण हुँदा पनि */
+  cont.addEventListener('change', update);
+  new MutationObserver(function () { update(); }).observe(cont, { childList: true });
+  update();
 })();
 </script>
 </body>
