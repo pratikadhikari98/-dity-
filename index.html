@@ -1454,6 +1454,32 @@ document.addEventListener('click', function(e){
       var o=new Float32Array(w*h);
       for(y=0;y<h;y++) for(xx=0;xx<w;xx++){ s=0;n=0; for(k=-r;k<=r;k++){ var Y=y+k; if(Y>=0&&Y<h){ s+=b[Y*w+xx]; n++; } } o[y*w+xx]=s/n; }
       return o; }
+    // १) पृष्ठभूमि (किनाराबाट जोडिएको, किनाराको रङसँग मिल्ने) पत्ता लगाइ, बाँकी "वस्तु" लाई गोलो उभार दिने
+    var bgc=[0,0,0], bn=0, cnt, bgm=new Uint8Array(w*h), stack=[], p0, r0, g0, b0, idx, xx0, yy0;
+    for(i=0;i<w;i++){ [i, (h-1)*w+i].forEach(function(q){ bgc[0]+=px[q*4]; bgc[1]+=px[q*4+1]; bgc[2]+=px[q*4+2]; bn++; }); }
+    for(j=0;j<h;j++){ [j*w, j*w+w-1].forEach(function(q){ bgc[0]+=px[q*4]; bgc[1]+=px[q*4+1]; bgc[2]+=px[q*4+2]; bn++; }); }
+    bgc=[bgc[0]/bn,bgc[1]/bn,bgc[2]/bn];
+    function isbg(q){ return Math.abs(px[q*4]-bgc[0])+Math.abs(px[q*4+1]-bgc[1])+Math.abs(px[q*4+2]-bgc[2])<60; }
+    for(i=0;i<w;i++){ stack.push(i,(h-1)*w+i); } for(j=0;j<h;j++){ stack.push(j*w,j*w+w-1); }
+    while(stack.length){ idx=stack.pop(); if(bgm[idx]||!isbg(idx)) continue; bgm[idx]=1; xx0=idx%w; yy0=(idx/w)|0;
+      if(xx0>0) stack.push(idx-1); if(xx0<w-1) stack.push(idx+1); if(yy0>0) stack.push(idx-w); if(yy0<h-1) stack.push(idx+w); }
+    cnt=0; for(i=0;i<w*h;i++) cnt+=bgm[i];
+    var frac=cnt/(w*h);
+    if(frac>0.15&&frac<0.82){
+      var D=new Float32Array(w*h), INF=1e6, yb, xb, vv;
+      for(i=0;i<w*h;i++) D[i]=bgm[i]?0:INF;
+      for(yb=0;yb<h;yb++) for(xb=0;xb<w;xb++){ i=yb*w+xb; vv=D[i]; if(!vv) continue;
+        if(xb>0) vv=Math.min(vv,D[i-1]+1); if(yb>0){ vv=Math.min(vv,D[i-w]+1); if(xb>0) vv=Math.min(vv,D[i-w-1]+1.4); if(xb<w-1) vv=Math.min(vv,D[i-w+1]+1.4); } D[i]=vv; }
+      for(yb=h-1;yb>=0;yb--) for(xb=w-1;xb>=0;xb--){ i=yb*w+xb; vv=D[i]; if(!vv) continue;
+        if(xb<w-1) vv=Math.min(vv,D[i+1]+1); if(yb<h-1){ vv=Math.min(vv,D[i+w]+1); if(xb<w-1) vv=Math.min(vv,D[i+w+1]+1.4); if(xb>0) vv=Math.min(vv,D[i+w-1]+1.4); } D[i]=vv; }
+      var dm=0; for(i=0;i<w*h;i++) if(D[i]<INF&&D[i]>dm) dm=D[i];
+      var S=new Float32Array(w*h);
+      for(i=0;i<w*h;i++){ S[i]=bgm[i]?0:(0.22+0.78*Math.pow(Math.min(1,D[i]/(dm||1)),0.55)); }
+      S=blur(blur(S,3),3);
+      for(i=0;i<w*h;i++){ var gg=Math.round(Math.max(0,Math.min(1,S[i]))*255); px[i*4]=gg; px[i*4+1]=gg; px[i*4+2]=gg; px[i*4+3]=255; }
+      x.putImageData(d,0,0); return c;
+    }
+    // २) स्पष्ट पृष्ठभूमि नभए: बीच/चम्किलो भागलाई नजिक मान्ने अनुमान
     var B=blur(blur(blur(L,5),5),5), out=new Float32Array(w*h), mn=1e9, mx=-1e9, y2, x2, nx, ny, cen, v;
     for(y2=0;y2<h;y2++) for(x2=0;x2<w;x2++){
       nx=(x2/(w-1)-.5)*1.5; ny=(y2/(h-1)-.5)*1.5; cen=Math.max(0,1-Math.sqrt(nx*nx+ny*ny));
@@ -1530,7 +1556,7 @@ document.addEventListener('click', function(e){
   if(!img||!box) return;
   fetch('data/card3d.json',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
     if(!d||!d.image) return;
-    img.onload=function(){ box.style.aspectRatio=img.naturalWidth+' / '+img.naturalHeight; };
+    img.onload=function(){ box.style.aspectRatio=img.naturalWidth+' / '+img.naturalHeight; var cd=box.parentNode; if(cd) cd.style.setProperty('--ar',(img.naturalWidth/img.naturalHeight).toFixed(4)); };
     if(d.depth) box.setAttribute('data-depth',d.depth); else box.removeAttribute('data-depth');
     img.src=d.image;
     if(d.text){ tx.textContent=d.text; tx.style.display=''; } else { tx.style.display='none'; }

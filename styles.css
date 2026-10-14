@@ -1184,3 +1184,6 @@
 .card3d-photo canvas.fx3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; }
 .card3d-text { margin: 12px 8px 4px; text-align: center; color: var(--blue-dark); font-family: 'Akshar','Noto Sans Devanagari',sans-serif; font-weight: 600; font-size: 1.1rem; line-height: 1.5; }
 @media (min-width: 769px) { .card3d-card { padding: 14px; border-radius: 28px; } .card3d-photo { border-radius: 18px; } }
+
+/* ठाडो (portrait) फोटो पनि स्क्रिनभन्दा अग्लो नहुने: चौडाइ = उचाइ(७८vh) × अनुपात */
+.card3d-card { --ar: 1.5; max-width: min(1080px, calc(78vh * var(--ar) + 28px)); }
