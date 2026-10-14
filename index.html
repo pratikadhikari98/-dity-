@@ -78,11 +78,11 @@
 
   #bookEmbedWrap .page {
     width: 288px; height: 400px; position: absolute; top: 10px; left: 1px; border-radius: 0 5px 5px 0;
-    background-color: white; transform-origin: left; transform-style: preserve-3d; transform: rotateY(0deg); transition-duration: 0.5s;
+    background-color: white; transform-origin: left; transform-style: preserve-3d; transform: rotateY(0deg); transition: transform 0.5s, z-index 0s 0.5s;
   }
-  #bookEmbedWrap .front_page { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; }
+  #bookEmbedWrap .front_page { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
   #bookEmbedWrap .front_page label { width: 100%; height: 100%; position: absolute; cursor: pointer; z-index: 100; }
-  #bookEmbedWrap .back_page { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; transform: rotateY(180deg); z-index: 100; }
+  #bookEmbedWrap .back_page { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg); z-index: 100; }
   #bookEmbedWrap .back_page label { width: 100%; height: 100%; position: absolute; cursor: pointer; z-index: 100; }
   #bookEmbedWrap .edge_shading { width: 288px; height: 400px; position: absolute; top: 0; left: 0; z-index: 98; }
 
@@ -855,7 +855,7 @@ document.addEventListener('click', function(e){
         var rules = '';
         for (var i = 1; i <= totalSheets; i++) {
             rules += '#bookPage' + i + '{z-index:' + (totalSheets - i + 1) + ';}';
-            rules += '#page' + i + '_checkbox:checked~#flip_book #bookPage' + i + '{transform:rotateY(-180deg);z-index:' + (totalSheets + i) + ';}';
+            rules += '#page' + i + '_checkbox:checked~#flip_book #bookPage' + i + '{transform:rotateY(-180deg);z-index:' + (totalSheets + i) + ';transition:transform .5s,z-index 0s;}';
         }
         var styleTag = document.createElement('style');
         styleTag.id = 'dynamicBookPageStyles';
@@ -905,7 +905,21 @@ document.addEventListener('click', function(e){
             function syncSheets() {
                 var els = container.querySelectorAll('.page'), n = els.length, f = 0, i;
                 for (i = 1; i <= n; i++) { var cb = document.getElementById('page' + i + '_checkbox'); if (cb && cb.checked) f++; }
-                for (i = 1; i <= n; i++) els[i - 1].style.display = (i >= f - 2 && i <= f + 4) ? '' : 'none';
+                var hideList = [];
+                for (i = 1; i <= n; i++) {
+                    if (i >= f - 3 && i <= f + 5) els[i - 1].style.display = '';
+                    else hideList.push(els[i - 1]);
+                }
+                // पाना पल्टिरहेकै बेला display:none गर्दा झट्का/हराउने हुन्थ्यो — एनिमेसन सकिएपछि मात्र लुकाउने
+                clearTimeout(syncSheets._t);
+                syncSheets._t = setTimeout(function () {
+                    var g = 0, k;
+                    for (k = 1; k <= n; k++) { var c = document.getElementById('page' + k + '_checkbox'); if (c && c.checked) g++; }
+                    hideList.forEach(function (el, idx) {
+                        var num = Array.prototype.indexOf.call(els, el) + 1;
+                        if (!(num >= g - 3 && num <= g + 5)) el.style.display = 'none';
+                    });
+                }, 700);
             }
             function build() {
                 var old = document.getElementById('dynamicBookPageStyles'); if (old) old.remove();

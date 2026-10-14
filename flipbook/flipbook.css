@@ -81,7 +81,7 @@ input {
     transform-origin: left;
     transform-style: preserve-3d;
     transform: rotateY(0deg);
-    transition-duration: 0.5s;
+    transition: transform 0.5s, z-index 0s 0.5s;
 }
 
 .front_page {
