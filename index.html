@@ -1425,7 +1425,7 @@ document.addEventListener('click', function(e){
 (function(){
   var VS='attribute vec2 p; varying vec2 uv; void main(){ uv=vec2(p.x*.5+.5, .5-p.y*.5); gl_Position=vec4(p,0.,1.); }';
   var FS='precision mediump float; uniform sampler2D img; uniform sampler2D dep; uniform vec2 off; uniform vec2 sc; varying vec2 uv;'+
-         'void main(){ vec2 c=(uv-.5)*sc/1.06+.5; float d=texture2D(dep,c).r; vec2 q=c+off*(d-.5)*2.; gl_FragColor=texture2D(img,q); }';
+         'void main(){ vec2 c=(uv-.5)*sc/1.1+.5; float d=texture2D(dep,c).r; vec2 q=c+off*(d-.5)*2.; gl_FragColor=texture2D(img,q); }';
   var active=[], raf=0, T0=performance.now();
   var reduce=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var gyro={x:0,y:0,on:false,t:0};
@@ -1525,15 +1525,15 @@ document.addEventListener('click', function(e){
       var b=fx.box, w=b.clientWidth, h=b.clientHeight; if(!w||!h) return;
       var dpr=Math.min(window.devicePixelRatio||1,2), W=Math.round(w*dpr), H=Math.round(h*dpr);
       if(fx.cv.width!==W||fx.cv.height!==H){ fx.cv.width=W; fx.cv.height=H; fx.gl.viewport(0,0,W,H); }
-      var t=(now-T0)/1000, idle=now-fx.last>1600, tx, ty;
-      if(!idle){ tx=fx.tgt[0]; ty=fx.tgt[1]; }
-      else if(gyro.on && now-gyro.t<1500){ tx=gyro.x; ty=gyro.y; }
-      else if(reduce){ tx=0; ty=0; }
-      else { tx=Math.sin(t*.7)*.75; ty=Math.cos(t*.5)*.5; }
+      var t=(now-T0)/1000, idle=now-fx.last>1600, mx=0, my=0;
+      if(!idle){ mx=fx.tgt[0]; my=fx.tgt[1]; }
+      else if(gyro.on && now-gyro.t<1500){ mx=gyro.x; my=gyro.y; }
+      // केही नगर्दा पनि आफैँ बिस्तारै हल्लिरहने (औँला/माउस/फोन-झुकावको असर यसमाथि जोडिन्छ)
+      var tx=mx*.9+Math.sin(t*.9)*.85, ty=my*.9+Math.cos(t*.65)*.6;
       fx.cur[0]+=(tx-fx.cur[0])*.07; fx.cur[1]+=(ty-fx.cur[1])*.07;
       var ca=w/h, ia=fx.iw/fx.ih, sx=1, sy=1; if(ca>ia) sy=ia/ca; else sx=ca/ia;
       fx.gl.uniform2f(fx.uSc,sx,sy);
-      fx.gl.uniform2f(fx.uOff,-fx.cur[0]*.02,-fx.cur[1]*.02);
+      fx.gl.uniform2f(fx.uOff,-fx.cur[0]*.026,-fx.cur[1]*.026);
       fx.gl.drawArrays(fx.gl.TRIANGLES,0,6);
     });
     raf=requestAnimationFrame(loop);
@@ -1556,6 +1556,7 @@ document.addEventListener('click', function(e){
   if(!img||!box) return;
   fetch('data/card3d.json',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
     if(!d||!d.image) return;
+    img.onerror=function(){ var cd=box.parentNode; if(cd) cd.style.display='none'; };   // फोटो नभेटिए टुटेको आइकन होइन, कार्ड नै लुकाउने
     img.onload=function(){ box.style.aspectRatio=img.naturalWidth+' / '+img.naturalHeight; var cd=box.parentNode; if(cd) cd.style.setProperty('--ar',(img.naturalWidth/img.naturalHeight).toFixed(4)); };
     if(d.depth) box.setAttribute('data-depth',d.depth); else box.removeAttribute('data-depth');
     img.src=d.image;
