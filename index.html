@@ -1870,7 +1870,7 @@ if ('serviceWorker' in navigator) {
   var btn = { prev: $('bnPrev'), next: $('bnNext'), mark: $('bnMark') };
   var zip = $('bnZip'), pull = $('bnZipPull'), fill = $('bnZipFill'), dragging = false, dragK = -1;
   var KEY = 'tarkaBookmarks_v1', LAST = 'tarkaLastPage_v1';
-  var timers = [], badT = 0;
+  var run = null, tgt = null, hold = 0, unlockT = 0, badT = 0;   // run=पाना पल्टाउने लुप, tgt=लक्ष्य {tf, open}
 
   function np(n) { return String(n).replace(/\d/g, function (d) { return '०१२३४५६७८९'.charAt(d); }); }
   function toNum(s) { return parseInt(String(s).replace(/[०-९]/g, function (d) { return '०१२३४५६७८९'.indexOf(d); }).replace(/\D/g, ''), 10); }
@@ -1900,38 +1900,47 @@ if ('serviceWorker' in navigator) {
   function setMarks(a) { store(KEY, JSON.stringify(a)); }
 
   function fire(cb) { cb.dispatchEvent(new Event('change', { bubbles: true })); }
-  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
-
-  /* लक्ष्य स्प्रेडमा जाने: नजिक भए पाना एक-एक गरी पल्टाउँदै, टाढा भए एकैचोटि */
-  function goTo(tf, open) {
-    var n = sheets(); if (!n) return;
-    clearTimers();
-    tf = Math.max(0, Math.min(Math.min(n, Math.floor(totalPages() / 2)), tf));
-    var cf = curF(), co = isOpen(), steps = [], i;
-    if (!open) tf = 0;
-    if (open && !co) steps.push([cbCover(), true]);
-    if (tf > cf) for (i = cf + 1; i <= tf; i++) steps.push([cbPage(i), true]);
-    else if (tf < cf) for (i = cf; i > tf; i--) steps.push([cbPage(i), false]);
-    if (!open && co) steps.push([cbCover(), false]);
-    steps = steps.filter(function (s) { return s[0]; });
-    if (!steps.length) { update(); return; }
-    if (Math.abs(tf - cf) > 8) {                       // टाढाको जम्प — एनिमेसन बिना
-      if (wrap) wrap.classList.add('bk-instant');
-      var coverTouched = false;
-      steps.forEach(function (s) { s[0].checked = s[1]; if (s[0] === cbCover()) coverTouched = true; });
-      if (coverTouched) fire(cbCover());                // कभर खुल्ने/बन्द हुने भए जुम (applyScale) पनि मिलाउने
-      fire(steps[steps.length - 1][0]);
-      void cont.offsetHeight;
-      clearTimeout(goTo._inst);                         // अघिल्लो timer ले बीचमै bk-instant नहटाओस्
-      goTo._inst = setTimeout(function () { if (wrap) wrap.classList.remove('bk-instant'); }, 60);
+  /* लक्ष्य-पछ्याउने लुप: तान्दा/थिच्दा लक्ष्य मात्र बदलिन्छ, पाना एक-एक गरी (टाढा भए २–३ वटा एकैचोटि) पल्टिन्छन्।
+     अघिल्लो क्रम रद्द नहुने भएकाले छिटो तान्दा पनि झट्का हुँदैन, र टाढाको जम्पमा पनि एनिमेसन रहन्छ। */
+  function stepCount(d) { return Math.max(1, Math.min(3, Math.ceil(d / 6))); }
+  function flip(cb, on) { cb.checked = on; fire(cb); }
+  function stopRun() { clearInterval(run); run = null; tgt = null; hold = 0; syncZip(); scheduleUnlock(); }
+  function tick() {
+    var n = sheets();
+    if (!n || !tgt) { stopRun(); return; }
+    if (hold > 0) { hold--; return; }               // कभर खुल्दै गर्दा पाना पल्टाउन अलि पर्खने
+    var open = isOpen(), f = curF(), cvr = cbCover(), c, i;
+    if (!tgt.open) {                                  // बन्द गर्ने: पाना फर्काउँदै, अन्तमा कभर
+      if (f > 0) { c = stepCount(f); for (i = 0; i < c && f > 0; i++, f--) flip(cbPage(f), false); }
+      else if (open && cvr) flip(cvr, false);
+      else stopRun();
       return;
     }
-    var gap = steps.length > 1 ? Math.min(110, 700 / steps.length) : 0, t = 0;
-    steps.forEach(function (s) {
-      timers.push(setTimeout(function () { s[0].checked = s[1]; fire(s[0]); }, t));
-      t += (s[0] === cbCover() ? 280 : gap);
-    });
+    if (!open) { if (cvr) { flip(cvr, true); hold = 4; } else stopRun(); return; }
+    if (f < tgt.tf) { c = stepCount(tgt.tf - f); for (i = 0; i < c && f < tgt.tf; i++) { f++; flip(cbPage(f), true); } }
+    else if (f > tgt.tf) { c = stepCount(f - tgt.tf); for (i = 0; i < c && f > tgt.tf; i++, f--) flip(cbPage(f), false); }
+    else stopRun();
   }
+  function goTo(tf, open) {
+    var n = sheets(); if (!n) return;
+    tf = Math.max(0, Math.min(Math.min(n, Math.floor(totalPages() / 2)), tf));
+    tgt = { tf: open ? tf : 0, open: !!open };
+    lockHeight();
+    syncZip();
+    if (!run) { run = setInterval(tick, 55); tick(); }
+  }
+  /* लक्ष्य अनुसारको स्थिति — छिटो-छिटो थिच्दा पल्टिरहेको बेलाको स्थिति होइन, लक्ष्यबाट गणना */
+  function effF() { return tgt ? (tgt.open ? tgt.tf : -1) : (isOpen() ? curF() : -1); }   // -1 = बन्द
+  function effK() { return effF() + 1; }
+
+  /* किताब खुल्दा/बन्द हुँदा पृष्ठको उचाइ फेरिने भएकाले नियन्त्रण पट्टी औंला मुनिबाट सर्थ्यो।
+     त्यसैले चलिरहँदा उचाइ थामिन्छ, र निष्क्रिय भएपछि मात्र सहज रूपमा खुकुलो हुन्छ। */
+  function lockHeight() {
+    if (wrap) { if (!wrap.style.minHeight) wrap.style.minHeight = wrap.offsetHeight + 'px'; }
+    clearTimeout(unlockT); unlockT = setTimeout(maybeUnlock, 1400);
+  }
+  function maybeUnlock() { if (dragging || run) { unlockT = setTimeout(maybeUnlock, 600); return; } if (wrap) wrap.style.minHeight = ''; }
+  function scheduleUnlock() { clearTimeout(unlockT); unlockT = setTimeout(maybeUnlock, 1400); }
   function goToPage(p) { var P = totalPages(); p = Math.max(1, Math.min(P, p)); goTo(Math.floor(p / 2), true); }
 
   /* सधैं खुला रहने बुकमार्क सूची */
@@ -1954,7 +1963,7 @@ if ('serviceWorker' in navigator) {
     fill.style.width = 'calc((100% - 40px) * ' + fr + ' + 20px)';
   }
   function syncZip() {
-    var K = maxK(), k = curK(), P = totalPages();
+    var K = maxK(), k = effK(), P = totalPages();
     if (dragging) return;
     setPos(K > 0 ? Math.min(1, k / K) : 0);
     zip.setAttribute('aria-valuemax', K); zip.setAttribute('aria-valuenow', k);
@@ -1971,17 +1980,17 @@ if ('serviceWorker' in navigator) {
   }
   zip.addEventListener('pointerdown', function (e) {
     if (!maxK()) return;
-    dragging = true; dragK = -1; zip.classList.add('is-drag');
+    dragging = true; dragK = -1; zip.classList.add('is-drag'); lockHeight();
     try { zip.setPointerCapture(e.pointerId); } catch (_) {}
     zipMove(e); e.preventDefault();
   });
-  zip.addEventListener('pointermove', function (e) { if (dragging) zipMove(e); });
-  function zipEnd() { if (!dragging) return; dragging = false; dragK = -1; zip.classList.remove('is-drag'); syncZip(); }
+  zip.addEventListener('pointermove', function (e) { if (dragging) { lockHeight(); zipMove(e); } });
+  function zipEnd() { if (!dragging) return; dragging = false; dragK = -1; zip.classList.remove('is-drag'); syncZip(); scheduleUnlock(); }
   zip.addEventListener('pointerup', zipEnd);
   zip.addEventListener('pointercancel', zipEnd);
   zip.addEventListener('lostpointercapture', zipEnd);
   zip.addEventListener('keydown', function (e) {
-    var K = maxK(), k = curK(), nk = k;
+    var K = maxK(), k = effK(), nk = k;
     if (!K) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowUp') nk = k + 1;
     else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') nk = k - 1;
@@ -2005,8 +2014,8 @@ if ('serviceWorker' in navigator) {
     btn.mark.setAttribute('aria-pressed', on ? 'true' : 'false');
   }
 
-  btn.prev.addEventListener('click', function () { buzz(); var f = curF(); if (f > 0) goTo(f - 1, true); else goTo(0, false); });
-  btn.next.addEventListener('click', function () { buzz(); if (!isOpen()) goTo(0, true); else goTo(curF() + 1, true); });
+  btn.prev.addEventListener('click', function () { buzz(); var f = effF(); if (f > 0) goTo(f - 1, true); else goTo(0, false); });
+  btn.next.addEventListener('click', function () { buzz(); var f = effF(); if (f < 0) goTo(0, true); else goTo(f + 1, true); });
   btn.mark.addEventListener('click', function () {
     buzz();
     if (!isOpen()) goTo(0, true);                      // मुखपृष्ठमा हुँदा किताब खोलेर पहिलो पाना बुकमार्क गर्ने
