@@ -246,9 +246,9 @@
   }
   html:not([data-vs="home"]) #desktopTopWrap, html:not([data-vs="home"]) #purpose, html:not([data-vs="home"]) #noticeBoard, html:not([data-vs="home"]) #poemCarousel { display: none !important; }
   html[data-vs="home"] .news-page-inner { padding-top: 0; }
-  .header-dropdown { min-width: 220px; }
-  .menu-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
-  .menu-nav-link { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: var(--text); font-size: 1rem; font-weight: 600; }
+  .header-dropdown { min-width: 232px; }
+  .menu-nav { display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 2px; flex-wrap: nowrap; margin-bottom: 8px; }
+  .menu-nav-link { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0; flex: 0 0 auto; border-radius: 10px; text-decoration: none; color: var(--text); font-size: 1rem; font-weight: 600; }
   /* मेनुको 'समाचार' — हिन्दी/देवनागरी Eczar फन्ट */
   .menu-nav-link.menu-nav-eczar { font-family: 'Eczar', 'Noto Serif Devanagari', serif; }
   .menu-nav-link:hover, .menu-nav-link:active { background: var(--sky-pale); }
@@ -283,11 +283,11 @@
     <button class="menu-dots-btn" id="menuDotsBtn" onclick="toggleHeaderMenu()" aria-label="मेनु" aria-haspopup="true" aria-expanded="false"><span class="hm-title">मेनु</span><svg id="hbIcon" class="hb-icon" width="32" height="32" viewBox="0 0 100 100" aria-hidden="true"><path class="hb-p1"><animate class="hb-a1" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path><path class="hb-p2"><animate class="hb-a2" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path><path class="hb-p3"><animate class="hb-a3" attributeName="d" dur="0.35s" repeatCount="1" fill="freeze"/></path></svg></button>
     <div class="header-dropdown" id="headerDropdown">
       <nav class="menu-nav" aria-label="मुख्य मेनु">
-        <a class="menu-nav-link" href="#view=home" data-go="home">🏠 गृहपृष्ठ</a>
-        <a class="menu-nav-link" href="#view=showcase" data-go="showcase">🖼 झलक</a>
-        <a class="menu-nav-link menu-nav-eczar" lang="hi" href="#view=news" data-go="news">📰 समाचार</a>
-        <a class="menu-nav-link" href="#view=book" data-go="book">📖 किताब</a>
-        <a class="menu-nav-link" href="#view=about" data-go="about">ℹ️ बारेमा</a>
+        <a class="menu-nav-link" href="#view=home" data-go="home" aria-label="गृहपृष्ठ" title="गृहपृष्ठ"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-6h4v6"/></svg></a>
+        <a class="menu-nav-link" href="#view=showcase" data-go="showcase" aria-label="झलक" title="झलक"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-9 9"/></svg></a>
+        <a class="menu-nav-link menu-nav-eczar" lang="hi" href="#view=news" data-go="news" aria-label="समाचार" title="समाचार"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 12h5M8 15h5"/></svg></a>
+        <a class="menu-nav-link" href="#view=book" data-go="book" aria-label="किताब" title="किताब"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2z"/><path d="M12 6v14"/></svg></a>
+        <a class="menu-nav-link" href="#view=about" data-go="about" aria-label="बारेमा" title="बारेमा"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.8" r=".6" fill="currentColor"/></svg></a>
       </nav>
       <div class="menu-sep"></div>
       <div class="theme-picker">
