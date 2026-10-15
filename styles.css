@@ -1181,3 +1181,5 @@
 /* समाचार १ मुनिको लाइक/कमेन्ट/सेयर — समूह */
 .eb-group { padding: 0 12px 6px; box-sizing: border-box; }
 .eb-group .eb-bar { margin-top: 6px; }
+/* कमेन्ट अहिलेका लागि बन्द — खोल्न HTML मा .comments-off हटाउनुहोस् */
+.eb-group.comments-off .eb-item-comment, .eb-group.comments-off .eb-cbox { display: none !important; }
