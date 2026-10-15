@@ -995,7 +995,9 @@ function reInline(node, base) {
   if (/underline/.test(td)) und = true;
   if (/line-through/.test(td)) strike = true;
   if (color && base && color === reHex(base)) color = '';
-  if (color || bg) inner = '<span style="' + (color ? 'color:' + color + ';' : '') + (bg ? 'background-color:' + bg + ';' : '') + '">' + inner + '</span>';
+  let fs = '';
+  if (st.fontSize && /^[\d.]+em$/.test(st.fontSize)) { const v = parseFloat(st.fontSize); if (v > 0.2 && v < 6 && Math.abs(v - 1) > 0.001) fs = +v.toFixed(3) + 'em'; }
+  if (color || bg || fs) inner = '<span style="' + (color ? 'color:' + color + ';' : '') + (bg ? 'background-color:' + bg + ';' : '') + (fs ? 'font-size:' + fs + ';' : '') + '">' + inner + '</span>';
   if (strike) inner = '<s>' + inner + '</s>';
   if (und) inner = '<u>' + inner + '</u>';
   if (ital) inner = '<i>' + inner + '</i>';
@@ -1089,6 +1091,8 @@ function makeRichEditor(opts) {
       '<span class="re-sep"></span>' +
       '<button type="button" data-c="color">🎨 अक्षर रङ</button>' +
       '<button type="button" data-c="hilite">🖍 हाइलाइट</button>' +
+      (opts.size ? '<button type="button" data-c="sizeDown" title="चयन गरेको अक्षर सानो बनाउनुहोस्">A−</button>' +
+        '<button type="button" data-c="sizeUp" title="चयन गरेको अक्षर ठूलो बनाउनुहोस्">A+</button>' : '') +
       (opts.align ? '<span class="re-sep"></span>' +
         '<button type="button" data-c="justifyLeft">⬅ बायाँ</button>' +
         '<button type="button" data-c="justifyCenter">↔ बीचमा</button>' +
@@ -1125,6 +1129,70 @@ function makeRichEditor(opts) {
     restore(); css(true);
     if (kind === 'color') document.execCommand('foreColor', false, col || baseHex());
     else if (!document.execCommand('hiliteColor', false, col || 'transparent')) document.execCommand('backColor', false, col || 'transparent');
+    changed();
+  }
+  // चयन गरेको पाठको साइज घटाउने/बढाउने — सापेक्ष (em) मा सेभ हुन्छ, त्यसैले साइटको अक्षर-नापसँगै मिल्छ।
+  // चयन अनुच्छेद-अनुच्छेदमा छुट्याएर लगाइन्छ। (Ctrl+Z ले यो फर्काउँदैन — उल्टो बटन थिच्नुहोस्)
+  const FS_STEPS = [0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3];
+  function effScale(node) {                       // node (समेत) देखि editor सम्मका सबै em साइजको गुणन
+    let v = 1;
+    for (let n = node && (node.nodeType === 3 ? node.parentElement : node); n && n !== ed; n = n.parentElement) {
+      const f = n.style && n.style.fontSize;
+      if (f && /^[\d.]+em$/.test(f)) v *= parseFloat(f);
+    }
+    return v;
+  }
+  function flashSizeBtn(dir) {
+    const b = root.querySelector('.re-toolbar [data-c=' + (dir > 0 ? 'sizeUp' : 'sizeDown') + ']');
+    if (b && !b._flash) { const old = b.textContent; b._flash = true; b.textContent = 'पाठ छान्नुहोस्'; setTimeout(() => { b.textContent = old; b._flash = false; }, 1300); }
+  }
+  function resize(dir) {
+    restore();
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed || !ed.contains(sel.anchorNode)) { flashSizeBtn(dir); return; }
+    const r = sel.getRangeAt(0);
+    // चयन छुने अनुच्छेदहरू, प्रत्येकको आफ्नै उप-range
+    const parts = [];
+    Array.from(ed.children).forEach(blk => {
+      if (blk.classList.contains('ed-img') || !r.intersectsNode(blk)) return;
+      const sr = document.createRange();
+      sr.selectNodeContents(blk);
+      if (blk.contains(r.startContainer)) sr.setStart(r.startContainer, r.startOffset);
+      if (blk.contains(r.endContainer)) sr.setEnd(r.endContainer, r.endOffset);
+      if (!sr.toString()) return;
+      parts.push({ blk, sr });
+    });
+    if (!parts.length) { flashSizeBtn(dir); return; }
+    // हालको साइज = चयनको पहिलो अक्षरको साइज; त्यसपछिको/अघिको चरण लक्ष्य
+    const first = parts[0].sr;
+    const walker = document.createTreeWalker(parts[0].blk, NodeFilter.SHOW_TEXT);
+    let tn, cur = 1;
+    while ((tn = walker.nextNode())) { if (tn.nodeValue && first.intersectsNode(tn)) { cur = effScale(tn); break; } }
+    let target = cur;
+    if (dir > 0) { const nx = FS_STEPS.find(x => x > cur + 0.001); if (nx) target = nx; }
+    else { for (let i = FS_STEPS.length - 1; i >= 0; i--) if (FS_STEPS[i] < cur - 0.001) { target = FS_STEPS[i]; break; } }
+    if (Math.abs(target - cur) < 0.001) return;   // सीमामा पुगिसक्यो
+    ed.querySelectorAll('.re-fsn').forEach(e => e.classList.remove('re-fsn'));
+    parts.forEach(({ sr }) => {
+      const base = effScale(sr.startContainer);   // सम्मिलित हुने ठाउँको वरपरको साइज
+      const rel = +(target / base).toFixed(3);
+      const frag = sr.extractContents();          // वरपरको Bold/रङ जस्ता ढाँचा जस्ताको तस्तै रहन्छन्
+      frag.querySelectorAll('*').forEach(el => { if (el.style) el.style.removeProperty('font-size'); if (el.getAttribute('style') === '') el.removeAttribute('style'); });
+      frag.querySelectorAll('span:not([style]):not([class])').forEach(el => { while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el); el.remove(); });
+      const span = document.createElement('span');
+      span.className = 're-fsn';
+      if (Math.abs(rel - 1) > 0.001) span.style.fontSize = rel + 'em';
+      span.appendChild(frag);
+      sr.insertNode(span);
+    });
+    ed.normalize();
+    // चयन कायमै राख्ने — ताकि A+ / A− फेरि फेरि थिच्न मिलोस्
+    const made = ed.querySelectorAll('.re-fsn');
+    if (made.length) {
+      const nr = document.createRange();
+      nr.setStartBefore(made[0]); nr.setEndAfter(made[made.length - 1]);
+      sel.removeAllRanges(); sel.addRange(nr);
+    }
     changed();
   }
   function closePal() { palKind = ''; pal.hidden = true; root.querySelectorAll('.re-toolbar [data-c=color],.re-toolbar [data-c=hilite]').forEach(b => b.classList.remove('on')); }
@@ -1176,6 +1244,7 @@ function makeRichEditor(opts) {
     if (!b) return;
     const c = b.dataset.c;
     if (c === 'color' || c === 'hilite') { openPal(c); return; }
+    if (c === 'sizeUp' || c === 'sizeDown') { resize(c === 'sizeUp' ? 1 : -1); return; }
     if (c === 'photo') { fileInput.click(); return; }
     if (c === 'clear') { exec('removeFormat'); return; }
     if (c === 'undo' || c === 'redo') { exec(c); return; }
@@ -1298,7 +1367,7 @@ function makeNewsEditor(cfg) {
           <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
         </div>`;
       list.appendChild(div);
-      const ed = makeRichEditor({ html: item.text || '', baseColor: item.color || '#1a2a3a', align: true, upload: reUploadImage, onChange: t => { items[i].text = t; } });
+      const ed = makeRichEditor({ html: item.text || '', baseColor: item.color || '#1a2a3a', align: true, size: true, upload: reUploadImage, onChange: t => { items[i].text = t; } });
       div.querySelector('.re-mount').appendChild(ed.root);
       editors[i] = ed;
     });
