@@ -16,9 +16,13 @@
 <meta property="og:title" content="प्रतीक अध्यात्म सञ्जाल (Pratik Adhyatma Sanjal) – संस्कृत ज्ञान-परम्परा र शिक्षा">
 <meta property="og:description" content="प्रतीक अध्यात्म सञ्जाल (Pratik Adhyatma Sanjal) — संस्कृत वाङ्मय र शास्त्र-परम्पराको प्राचीन ज्ञान-विज्ञानलाई आधुनिक पुस्तासम्म रोचक ढङ्गले पुर्‍याउने नेपाली संस्कृत ज्ञान अभियान। श्लोक, लेख, समाचार र किताब।">
 <meta property="og:url" content="https://pratikadhikari.pratikadhikari98.com.np/">
-<meta property="og:image" content="https://pratikadhikari.pratikadhikari98.com.np/icon-512.png">
+<meta property="og:image" content="https://pratikadhikari.pratikadhikari98.com.np/share-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="प्रतीक अध्यात्म सञ्जाल — संस्कृत ज्ञान-परम्परा र शिक्षा">
 <meta property="og:locale" content="ne_NP">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pratikadhikari.pratikadhikari98.com.np/share-card.jpg">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -523,7 +527,7 @@ document.addEventListener('click', function(e){
 <section class="why-section" id="purpose">
   <div class="about-inner">
     <div class="about-photo">
-      <img src="photos/about-krishna.png" alt="प्रतीक अध्यात्म सञ्जाल">
+      <img src="photos/about-krishna.webp" alt="प्रतीक अध्यात्म सञ्जाल">
     </div>
     <div class="about-textcard">
       <p class="about-text" id="aboutText" data-source="data/about.json"></p>
@@ -537,7 +541,7 @@ document.addEventListener('click', function(e){
   <h2 class="nb-title preeti-title" aria-label="सूचना पाटी">;&quot;rgf kf6L</h2>
   <div class="bb-outer">
     <div class="bb-wrap">
-      <img class="bb-bg" src="photos/blackboard.png" alt="" draggable="false">
+      <img class="bb-bg" src="photos/blackboard.webp" alt="" draggable="false">
       <div class="bb-viewport">
         <div class="nb-text" id="nbText">
           <div class="nb-heading" id="nbHeading"></div>
@@ -613,7 +617,7 @@ document.addEventListener('click', function(e){
           <li><a href="#" data-ag="email" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg><span>Email</span></a><span class="ag-glow"></span></li>
         </ul>
         <div class="ag-profile">
-          <div class="ag-avatar"><img src="photos/aditya-logo.png" alt="ADITYA"></div>
+          <div class="ag-avatar"><img src="photos/aditya-logo.webp" alt="ADITYA"></div>
           <div class="ag-info"><h3>ADITYA</h3><p>युवा अध्यात्म सञ्जाल</p></div>
         </div>
       </aside>
@@ -1594,12 +1598,10 @@ document.addEventListener('click', function(e){
 })();
 </script>
 
-<!-- PWA SERVICE WORKER -->
+<!-- sw.js रिपोमा छैन — नभएको फाइल दर्ता गर्न खोज्दा हरेक पटक अनुरोध असफल हुन्थ्यो। पुरानो कुनै service worker दर्ता भएको रहेछ भने हटाउँछ (पुरानो सामग्री अड्किन नदिन)। -->
 <script>
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
-  });
+  navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); }).catch(function () {});
 }
 </script>
 
