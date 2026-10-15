@@ -281,7 +281,7 @@
       <nav class="menu-nav" aria-label="मुख्य मेनु">
         <a class="menu-nav-link" href="#view=home" data-go="home">🏠 गृहपृष्ठ</a>
         <a class="menu-nav-link" href="#view=showcase" data-go="showcase">🖼 झलक</a>
-        <a class="menu-nav-link menu-nav-eczar" href="#view=news" data-go="news">📰 समाचार</a>
+        <a class="menu-nav-link menu-nav-eczar" lang="hi" href="#view=news" data-go="news">📰 समाचार</a>
         <a class="menu-nav-link" href="#view=book" data-go="book">📖 किताब</a>
         <a class="menu-nav-link" href="#view=poems" data-go="poems">📜 प्रतीक साहित्य सङ्ग्रह</a>
         <a class="menu-nav-link" href="#view=about" data-go="about">ℹ️ बारेमा</a>
@@ -780,7 +780,7 @@ document.addEventListener('click', function(e){
           var title = item.title ? '<h3 class="preeti-title" aria-label="' + esc(item.title) + '">' + toPreeti(item.title) + '</h3>' : '';
           var color = item.color ? 'color:' + esc(item.color) + ';' : '';
           return '<div class="news-feed-card">' + img +
-                 '<div class="nf-body">' + title + '<div class="' + columnsClass + '" style="' + color + '">' + toParagraphHtml(item.text) + '</div></div></div>';
+                 '<div class="nf-body">' + title + '<div class="' + columnsClass + '" lang="hi" style="' + color + '">' + toParagraphHtml(item.text) + '</div></div></div>';
         }).join('');
       })
       .catch(function(){ el.innerHTML = '<div class="news-feed-empty">समाचार लोड गर्न सकिएन।</div>'; });
