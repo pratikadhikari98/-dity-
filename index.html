@@ -65,7 +65,7 @@
   #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 0; overflow: visible; text-align: left; transition: height 1s ease; }
   #bookEmbedWrap #bookScaleWrap { transform-origin: top center; transition: transform 1s ease; }
 
-  #bookEmbedWrap #flip_book { width: 298px; height: 420px; position: relative; transition-duration: 1s; perspective: 2000px; }
+  #bookEmbedWrap #flip_book { width: 298px; height: 420px; position: relative; transition-duration: .8s; perspective: 2000px; }
 
   #bookEmbedWrap .front_cover,
   #bookEmbedWrap .back_cover {
@@ -94,7 +94,7 @@
 
   #bookEmbedWrap #cover_checkbox:checked~#flip_book { transform: translateX(144px); }
   #bookEmbedWrap #cover_checkbox:checked~#flip_book .front_cover {
-    transform: rotateY(-180deg); transition: transform 1.5s, z-index 0.5s 0.5s; z-index: 1;
+    transform: rotateY(-180deg); transition: transform .8s, z-index .2s .4s; z-index: 1;
   }
   #bookEmbedWrap #cover_checkbox:checked~#flip_book #cover { width: 80%; height: 80%; position: absolute; }
 
@@ -1911,12 +1911,12 @@ if ('serviceWorker' in navigator) {
     if (hold > 0) { hold--; return; }               // कभर खुल्दै गर्दा पाना पल्टाउन अलि पर्खने
     var open = isOpen(), f = curF(), cvr = cbCover(), c, i;
     if (!tgt.open) {                                  // बन्द गर्ने: पाना फर्काउँदै, अन्तमा कभर
-      if (f > 0) { c = stepCount(f); for (i = 0; i < c && f > 0; i++, f--) flip(cbPage(f), false); }
+      if (f > 0) { c = stepCount(f); for (i = 0; i < c && f > 0; i++, f--) flip(cbPage(f), false); if (f === 0) hold = 10; }   // अन्तिम पाना फर्किसकेपछि मात्र कभर बन्द
       else if (open && cvr) flip(cvr, false);
       else stopRun();
       return;
     }
-    if (!open) { if (cvr) { flip(cvr, true); hold = 4; } else stopRun(); return; }
+    if (!open) { if (cvr) { flip(cvr, true); hold = 15; } else stopRun(); return; }   // कभर खुलिसकेपछि मात्र पाना पल्टाउने
     if (f < tgt.tf) { c = stepCount(tgt.tf - f); for (i = 0; i < c && f < tgt.tf; i++) { f++; flip(cbPage(f), true); } }
     else if (f > tgt.tf) { c = stepCount(f - tgt.tf); for (i = 0; i < c && f > tgt.tf; i++, f--) flip(cbPage(f), false); }
     else stopRun();
