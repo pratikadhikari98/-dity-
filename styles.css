@@ -1183,3 +1183,9 @@
 .eb-group .eb-bar { margin-top: 6px; }
 /* कमेन्ट अहिलेका लागि बन्द — खोल्न HTML मा .comments-off हटाउनुहोस् */
 .eb-group.comments-off .eb-item-comment, .eb-group.comments-off .eb-cbox { display: none !important; }
+
+/* बारेमा: बाहिरी दुई तह (धमिलो पृष्ठभूमि + ग्लास कार्ड) हटाइयो */
+.ag-wrap { padding: 8px 0; overflow: visible; border-radius: 0; }
+.ag-wrap::before, .ag-wrap::after { display: none; }
+.ag-container { background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; box-shadow: none; border-radius: 0; overflow: visible; }
+.ag-sidebar { background: none; }
