@@ -441,6 +441,24 @@ textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font
   <div class="status" id="noticeStatus"></div>
 </div>
 
+<div class="acc-header" data-target="likesCard">
+  <div class="sidebar-item_icon"><span class="material-symbols-rounded">thumb_up</span></div>
+  <div class="sidebar-item_text">लाइक संख्या</div>
+  <span class="acc-chevron material-symbols-rounded">expand_more</span>
+</div>
+<div class="card acc-panel" id="likesCard" style="display:none;">
+  <h2>लाइक सुरु संख्या</h2>
+  <div class="hint">यहाँ राखेको संख्या वेबसाइटमा लाइक बटनमा देखिन्छ। आगन्तुकले लाइक थिचे यो संख्यामा १ थपिन्छ।</div>
+  <label>सूचना पाटी</label>
+  <input type="number" min="0" step="1" id="likesNotice" class="haha-input" value="0" style="font-family:inherit;">
+  <label>समाचार १</label>
+  <input type="number" min="0" step="1" id="likesNews1" class="haha-input" value="0" style="font-family:inherit;">
+  <div class="top-actions">
+    <button class="btn-primary" id="likesSaveBtn">लाइक संख्या Save गर्नुहोस्</button>
+  </div>
+  <div class="status" id="likesStatus"></div>
+</div>
+
 <div class="acc-header" data-target="aboutCard">
   <div class="sidebar-item_icon"><span class="material-symbols-rounded">info</span></div>
   <div class="sidebar-item_text">बारेमा</div>
@@ -886,6 +904,21 @@ $('noticeSaveBtn').addEventListener('click', async () => {
     setStatus($('noticeStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
   } catch (err) { setStatus($('noticeStatus'), '✗ ' + err.message, 'err'); }
   finally { $('noticeSaveBtn').disabled = false; }
+});
+
+// ═══════════════ लाइक संख्या ═══════════════
+$('likesSaveBtn').addEventListener('click', async () => {
+  setStatus($('likesStatus'), 'Saving...', '');
+  $('likesSaveBtn').disabled = true;
+  try {
+    const num = id => Math.max(0, parseInt($(id).value, 10) || 0);
+    const data = { noticeEngage: { likes: num('likesNotice') }, newsEngage1: { likes: num('likesNews1') } };
+    await runGithubTask([
+      async () => { await ghPutFile('data/engage.json', data, 'admin: update engage.json'); }
+    ], 'लाइक संख्या GitHub मा पठाउँदै…', 'लाइक संख्या Deploy भयो');
+    setStatus($('likesStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
+  } catch (err) { setStatus($('likesStatus'), '✗ ' + err.message, 'err'); }
+  finally { $('likesSaveBtn').disabled = false; }
 });
 
 // ═══════════════ RICH (WYSIWYG) EDITOR — कोड नदेखिने, real-time ═══════════════
@@ -1686,8 +1719,8 @@ $('zipList').addEventListener('click', e => {
 
 
 // ═══════════════ ACCORDION (थिचेको ठाउँको ठ्याक्कै तल खुल्ने) + THEME ═══════════════
-const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','noticeCard','aboutCard','bookCard','newsCard','news2Card','adsCard'];
-const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','noticeSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','news2SaveBtn','adsSaveBtn'];
+const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','noticeCard','likesCard','aboutCard','bookCard','newsCard','news2Card','adsCard'];
+const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','noticeSaveBtn','likesSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','news2SaveBtn','adsSaveBtn'];
 SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = true; }); // Load नगरी Save गर्दा खाली डेटाले ओभरराइट हुनबाट बचाउन
 
 (function () {
@@ -1756,6 +1789,12 @@ $('loadBtn').addEventListener('click', async () => {
       $('noticeHeading').value = P(nj.heading);
       $('noticeLines').value = (nj.lines || []).map(P).join('\n');
     } catch (e) { /* फाइल नभए खाली */ }
+    try {
+      const lk = await ghGetFile('data/engage.json');
+      const lj = lk && lk.json ? lk.json : {};
+      $('likesNotice').value = (lj.noticeEngage && lj.noticeEngage.likes) || 0;
+      $('likesNews1').value = (lj.newsEngage1 && lj.newsEngage1.likes) || 0;
+    } catch (e) { /* फाइल नभए ० */ }
     SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = false; });
     setStatus($('connStatus'), '✓ सबै Load भयो।', 'ok');
   } catch (err) {

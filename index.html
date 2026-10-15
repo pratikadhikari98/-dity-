@@ -1827,12 +1827,17 @@ if ('serviceWorker' in navigator) {
     }
     // सुरुवाती अवस्था
     like.checked=st.liked;
-    lcur.textContent=st.liked?1:0; lnxt.textContent=st.liked?0:1;
+    // लाइक संख्या = प्रशासकले data/engage.json मा राखेको सुरुको संख्या; आगन्तुकले थिचे १ थपिन्छ
+    function showLikes(base){ lcur.textContent=base; lnxt.textContent=base+1; }
+    showLikes(0);
+    fetch('data/engage.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():{};}).then(function(j){
+      var n=j&&j[root.id]&&parseInt(j[root.id].likes,10); if(n>0) showLikes(n);
+    }).catch(function(){});
     cb.querySelector('.eb-cur').textContent=st.comments.length;
     shb.querySelector('.eb-cur').textContent=st.shares;
     st.comments.forEach(function(c){ addItem('तपाईं',c); });
     // लाइक
-    like.addEventListener('change',function(){ st.liked=like.checked; lcur.textContent=st.liked?0:1; lnxt.textContent=st.liked?1:0; save(); });
+    like.addEventListener('change',function(){ st.liked=like.checked; save(); });
     // कमेन्ट
     cb.addEventListener('click',function(){ box.hidden=!box.hidden; cb.setAttribute('aria-expanded',String(!box.hidden)); if(!box.hidden) input.focus(); });
     form.addEventListener('submit',function(e){
