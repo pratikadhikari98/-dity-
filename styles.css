@@ -1190,5 +1190,5 @@
 .ag-container { background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; box-shadow: none; border-radius: 0; overflow: visible; }
 .ag-sidebar { background: none; }
 
-/* नाम र ठेगाना — आनन्द (Ananda Devanagari Round) बोल्ड */
-.ag-menu a[data-ag="name"] span, .ag-menu a[data-ag="address"] span { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-weight: normal; -webkit-text-stroke: .5px currentColor; font-size: 1.15rem; }
+/* नाम र ठेगाना — आनन्द (Preeti-शैली) बोल्ड */
+.ag-menu a .ag-pt { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-weight: normal; -webkit-text-stroke: .5px currentColor; font-size: 1.7rem; line-height: 1.2; }

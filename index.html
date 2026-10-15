@@ -53,7 +53,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261015g" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261015i" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -744,6 +744,7 @@ document.addEventListener('click', function(e){
   var PT_OTHER = {'।':'.','०':')','१':'!','२':'@','३':'#','४':'$','५':'%','६':'^','७':'&','८':'*','९':'('};
   function ptIsCons(ch){ return !!ch && ch >= 'क' && ch <= 'ह'; }
   function ptEsc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  window.toPreeti = toPreeti;
   function toPreeti(str){
     var s = String(str == null ? '' : str).replace(/[\u200c\u200d\u093c]/g, '');
     var out = '', i = 0, n = s.length;
@@ -1643,7 +1644,11 @@ if ('serviceWorker' in navigator) {
     var a=li.querySelector('a'), key=a.getAttribute('data-ag'), url=LINKS[key]||'';
     if(url){ a.setAttribute('href',url); if(url.indexOf('mailto:')===0||key==='name') a.removeAttribute('target'); }
     else { a.addEventListener('click',function(e){e.preventDefault();}); a.style.opacity='.6'; }
-    if(key==='name'){ var sp=a.querySelector('span'); a.style.opacity=''; a.addEventListener('click',function(e){ e.preventDefault(); sp.textContent = (sp.textContent==='नाम') ? 'प्रतीक अधिकारी' : 'नाम'; }); }
+    if(key==='name'||key==='address'){ var sp=a.querySelector('span'); a.style.opacity=''; sp.classList.add('ag-pt');
+      function put(t){ sp.setAttribute('aria-label',t); sp.innerHTML = window.toPreeti ? window.toPreeti(t) : t; }
+      var base = sp.textContent; put(base);
+      if(key==='name'){ a.addEventListener('click',function(e){ e.preventDefault(); put(sp.getAttribute('aria-label')==='नाम' ? 'प्रतीक अधिकारी' : 'नाम'); }); }
+    }
     function glow(e){var r=li.getBoundingClientRect();var p=e.touches?e.touches[0]:e;li.style.setProperty('--gx',(p.clientX-r.left)+'px');li.style.setProperty('--gy',(p.clientY-r.top)+'px');li.classList.add('glow');setTimeout(function(){li.classList.remove('glow');},500);}
     li.addEventListener('mouseenter',glow);li.addEventListener('touchstart',glow,{passive:true});
   });
