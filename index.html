@@ -1915,10 +1915,13 @@ if ('serviceWorker' in navigator) {
     if (!steps.length) { update(); return; }
     if (Math.abs(tf - cf) > 8) {                       // टाढाको जम्प — एनिमेसन बिना
       if (wrap) wrap.classList.add('bk-instant');
-      steps.forEach(function (s) { s[0].checked = s[1]; });
+      var coverTouched = false;
+      steps.forEach(function (s) { s[0].checked = s[1]; if (s[0] === cbCover()) coverTouched = true; });
+      if (coverTouched) fire(cbCover());                // कभर खुल्ने/बन्द हुने भए जुम (applyScale) पनि मिलाउने
       fire(steps[steps.length - 1][0]);
       void cont.offsetHeight;
-      setTimeout(function () { if (wrap) wrap.classList.remove('bk-instant'); }, 60);
+      clearTimeout(goTo._inst);                         // अघिल्लो timer ले बीचमै bk-instant नहटाओस्
+      goTo._inst = setTimeout(function () { if (wrap) wrap.classList.remove('bk-instant'); }, 60);
       return;
     }
     var gap = steps.length > 1 ? Math.min(110, 700 / steps.length) : 0, t = 0;
