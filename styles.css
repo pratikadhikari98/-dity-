@@ -1192,3 +1192,6 @@
 
 /* नाम र ठेगाना — आनन्द (Preeti-शैली) बोल्ड */
 .ag-menu a .ag-pt { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-weight: normal; -webkit-text-stroke: .5px currentColor; font-size: 1.7rem; line-height: 1.2; }
+
+/* कपीराइट — सबै पृष्ठको तल */
+footer.site-copy { text-align: center; padding: 18px 12px; font-family: 'Noto Serif Devanagari', serif; font-size: .9rem; color: #f0ddd3; }
