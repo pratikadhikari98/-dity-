@@ -62,10 +62,10 @@
   /* ══ FLIP BOOK (समाचार १ को तल, किताब पृष्ठबाट सारिएको) — स्कोप गरिएको स्टाइल ══ */
   /* .news-feed-section बाट text-align:center inherit हुँदा भित्री position:absolute img हरू
      (जस्तै edge_shading) बीचमा सर्ने bug आउँथ्यो — यहाँ त्यो inheritance रोकिएको छ। */
-  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 0; overflow: visible; text-align: left; transition: height 1s ease; }
-  #bookEmbedWrap #bookScaleWrap { transform-origin: top center; transition: transform 1s ease; }
+  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 0; overflow: visible; text-align: left; transition: height .8s ease; }
+  #bookEmbedWrap #bookScaleWrap { transform-origin: top center; transition: transform .8s ease; will-change: transform; }
 
-  #bookEmbedWrap #flip_book { width: 298px; height: 420px; position: relative; transition-duration: .8s; perspective: 2000px; }
+  #bookEmbedWrap #flip_book { width: 298px; height: 420px; position: relative; transition-duration: .8s; perspective: 2000px; will-change: transform; }
 
   #bookEmbedWrap .front_cover,
   #bookEmbedWrap .back_cover {
@@ -76,7 +76,7 @@
   }
   /* मूल creative_coding-flip_book रिपोको जस्तै: एउटै सिंगो प्लेन, कुनै blur/preserve-3d/backface split छैन। */
   #bookEmbedWrap .front_cover {
-    position: absolute; cursor: pointer; transform-origin: center left; transition: transform 0.5s; z-index: 99;
+    position: absolute; cursor: pointer; transform-origin: center left; transition: transform 0.7s; z-index: 99; will-change: transform;
   }
   #bookEmbedWrap .front_cover label { width: 100%; height: 100%; position: absolute; cursor: pointer; }
 
@@ -1902,7 +1902,8 @@ if ('serviceWorker' in navigator) {
   function fire(cb) { cb.dispatchEvent(new Event('change', { bubbles: true })); }
   /* लक्ष्य-पछ्याउने लुप: तान्दा/थिच्दा लक्ष्य मात्र बदलिन्छ, पाना एक-एक गरी (टाढा भए २–३ वटा एकैचोटि) पल्टिन्छन्।
      अघिल्लो क्रम रद्द नहुने भएकाले छिटो तान्दा पनि झट्का हुँदैन, र टाढाको जम्पमा पनि एनिमेसन रहन्छ। */
-  function stepCount(d) { return Math.max(1, Math.min(3, Math.ceil(d / 6))); }
+  var TICK = 40;                                   // ms; हरेक टिकमा १ पाना (धेरै टाढा भए २)
+  function stepCount(d) { return d > 14 ? 2 : 1; }
   function flip(cb, on) { cb.checked = on; fire(cb); }
   function stopRun() { clearInterval(run); run = null; tgt = null; hold = 0; syncZip(); scheduleUnlock(); }
   function tick() {
@@ -1911,12 +1912,12 @@ if ('serviceWorker' in navigator) {
     if (hold > 0) { hold--; return; }               // कभर खुल्दै गर्दा पाना पल्टाउन अलि पर्खने
     var open = isOpen(), f = curF(), cvr = cbCover(), c, i;
     if (!tgt.open) {                                  // बन्द गर्ने: पाना फर्काउँदै, अन्तमा कभर
-      if (f > 0) { c = stepCount(f); for (i = 0; i < c && f > 0; i++, f--) flip(cbPage(f), false); if (f === 0) hold = 10; }   // अन्तिम पाना फर्किसकेपछि मात्र कभर बन्द
+      if (f > 0) { c = stepCount(f); for (i = 0; i < c && f > 0; i++, f--) flip(cbPage(f), false); if (f === 0) hold = Math.round(560 / TICK); }   // अन्तिम पाना (०.५s) फर्किसकेपछि मात्र कभर बन्द
       else if (open && cvr) flip(cvr, false);
       else stopRun();
       return;
     }
-    if (!open) { if (cvr) { flip(cvr, true); hold = 15; } else stopRun(); return; }   // कभर खुलिसकेपछि मात्र पाना पल्टाउने
+    if (!open) { if (cvr) { flip(cvr, true); hold = Math.round(440 / TICK); } else stopRun(); return; }   // कभर ९०° नाघेपछि (बायाँ पट्टि पुगेपछि) पाना पल्टाउन थाल्ने
     if (f < tgt.tf) { c = stepCount(tgt.tf - f); for (i = 0; i < c && f < tgt.tf; i++) { f++; flip(cbPage(f), true); } }
     else if (f > tgt.tf) { c = stepCount(f - tgt.tf); for (i = 0; i < c && f > tgt.tf; i++, f--) flip(cbPage(f), false); }
     else stopRun();
@@ -1927,7 +1928,7 @@ if ('serviceWorker' in navigator) {
     tgt = { tf: open ? tf : 0, open: !!open };
     lockHeight();
     syncZip();
-    if (!run) { run = setInterval(tick, 55); tick(); }
+    if (!run) { run = setInterval(tick, TICK); tick(); }
   }
   /* लक्ष्य अनुसारको स्थिति — छिटो-छिटो थिच्दा पल्टिरहेको बेलाको स्थिति होइन, लक्ष्यबाट गणना */
   function effF() { return tgt ? (tgt.open ? tgt.tf : -1) : (isOpen() ? curF() : -1); }   // -1 = बन्द
