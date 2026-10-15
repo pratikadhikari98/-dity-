@@ -1633,7 +1633,7 @@ if ('serviceWorker' in navigator) {
 // Apple-style glass panel — लिंकहरू यहाँ मात्र सम्पादन गर्नुहोस् (खाली "" भए थिच्दा केही खुल्दैन)
 (function(){
   var LINKS = {
-    name:      "about.html",
+    name:      "",
     address:   "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("तिलोत्तमा नगरपालिका बुटवल नयामील"),
     facebook:  "https://www.facebook.com/share/1EozqQYJhY/",
     instagram: "https://www.facebook.com/share/1EozqQYJhY/",
@@ -1644,6 +1644,7 @@ if ('serviceWorker' in navigator) {
     var a=li.querySelector('a'), key=a.getAttribute('data-ag'), url=LINKS[key]||'';
     if(url){ a.setAttribute('href',url); if(url.indexOf('mailto:')===0||key==='name') a.removeAttribute('target'); }
     else { a.addEventListener('click',function(e){e.preventDefault();}); a.style.opacity='.6'; }
+    if(key==='name'){ var sp=a.querySelector('span'); a.style.opacity=''; a.addEventListener('click',function(e){ e.preventDefault(); sp.textContent = (sp.textContent==='नाम') ? 'प्रतीक अधिकारी' : 'नाम'; }); }
     function glow(e){var r=li.getBoundingClientRect();var p=e.touches?e.touches[0]:e;li.style.setProperty('--gx',(p.clientX-r.left)+'px');li.style.setProperty('--gy',(p.clientY-r.top)+'px');li.classList.add('glow');setTimeout(function(){li.classList.remove('glow');},500);}
     li.addEventListener('mouseenter',glow);li.addEventListener('touchstart',glow,{passive:true});
   });
