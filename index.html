@@ -49,7 +49,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261015b" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261015c" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -546,34 +546,36 @@ document.addEventListener('click', function(e){
       </div>
     </div>
   </div>
+  <div class="eb-group" id="noticeEngage" data-key="adityaEngage">
   <!-- लाइक · कमेन्ट · सेयर (split-counter शैली) -->
   <div class="eb-bar" id="engageBar">
     <div class="eb-item">
-      <input hidden id="ebLikeCheck" type="checkbox">
-      <label for="ebLikeCheck" class="eb-btn" id="ebLikeBtn" aria-label="लाइक">
+      <input hidden id="ebLikeCheck" class="eb-likechk" type="checkbox">
+      <label for="ebLikeCheck" class="eb-btn eb-like-btn" id="ebLikeBtn" aria-label="लाइक">
         <span class="eb-lp"><p class="eb-cur" id="ebLikeCur">0</p><p class="eb-nxt" id="ebLikeNxt">1</p></span>
         <span class="eb-rp"><svg class="eb-ico" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></span>
       </label>
     </div>
     <div class="eb-item">
-      <button type="button" class="eb-btn" id="ebCommentBtn" aria-label="कमेन्ट" aria-expanded="false" aria-controls="ebCommentBox">
+      <button type="button" class="eb-btn eb-comment-btn" id="ebCommentBtn" aria-label="कमेन्ट" aria-expanded="false" aria-controls="ebCommentBox">
         <span class="eb-lp"><p class="eb-cur">0</p><p class="eb-nxt"></p></span>
         <span class="eb-rp"><svg class="eb-ico" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
       </button>
     </div>
     <div class="eb-item">
-      <button type="button" class="eb-btn" id="ebShareBtn" aria-label="सेयर">
+      <button type="button" class="eb-btn eb-share-btn" id="ebShareBtn" aria-label="सेयर">
         <span class="eb-lp"><p class="eb-cur">0</p><p class="eb-nxt"></p></span>
         <span class="eb-rp"><svg class="eb-ico" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></span>
       </button>
     </div>
   </div>
-  <div id="ebCommentBox" hidden>
-    <ul id="ebComments"></ul>
-    <form id="ebCommentForm">
-      <input id="ebCommentText" type="text" placeholder="कमेन्ट लेख्नुहोस्…" autocomplete="off">
+  <div id="ebCommentBox" class="eb-cbox" hidden>
+    <ul id="ebComments" class="eb-clist"></ul>
+    <form id="ebCommentForm" class="eb-cform">
+      <input id="ebCommentText" class="eb-ctext" type="text" placeholder="कमेन्ट लेख्नुहोस्…" autocomplete="off">
       <button type="submit">पठाउनुहोस्</button>
     </form>
+  </div>
   </div>
   <div id="ebToast" role="status"></div>
 </section>
@@ -633,6 +635,37 @@ document.addEventListener('click', function(e){
   <div id="news">
     <section class="news-feed-section" data-view="news">
       <div class="news-feed-list" id="newsFeedList" data-source="data/news.json"></div>
+      <div class="eb-group" id="newsEngage1" data-key="newsEngage1" data-hash="#view=news">
+  <!-- समाचार १ — लाइक · कमेन्ट · सेयर -->
+  <div class="eb-bar" id="engageBar">
+    <div class="eb-item">
+      <input hidden id="ebLikeCheck2" class="eb-likechk" type="checkbox">
+      <label for="ebLikeCheck2" class="eb-btn eb-like-btn" aria-label="लाइक">
+        <span class="eb-lp"><p class="eb-cur">0</p><p class="eb-nxt">1</p></span>
+        <span class="eb-rp"><svg class="eb-ico" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></span>
+      </label>
+    </div>
+    <div class="eb-item">
+      <button type="button" class="eb-btn eb-comment-btn" aria-label="कमेन्ट" aria-expanded="false" aria-controls="ebCommentBox2">
+        <span class="eb-lp"><p class="eb-cur">0</p><p class="eb-nxt"></p></span>
+        <span class="eb-rp"><svg class="eb-ico" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+      </button>
+    </div>
+    <div class="eb-item">
+      <button type="button" class="eb-btn eb-share-btn" aria-label="सेयर">
+        <span class="eb-lp"><p class="eb-cur">0</p><p class="eb-nxt"></p></span>
+        <span class="eb-rp"><svg class="eb-ico" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></span>
+      </button>
+    </div>
+  </div>
+  <div id="ebCommentBox2" class="eb-cbox" hidden>
+    <ul class="eb-clist"></ul>
+    <form class="eb-cform">
+      <input class="eb-ctext" type="text" placeholder="कमेन्ट लेख्नुहोस्…" autocomplete="off">
+      <button type="submit">पठाउनुहोस्</button>
+    </form>
+  </div>
+      </div>
     </section>
 
     <!-- किताब (book.html बाट सारिएको फ्लिप बुक) — समाचार १ को तल -->
@@ -1769,46 +1802,52 @@ if ('serviceWorker' in navigator) {
 </script>
 <script>
 // लाइक / कमेन्ट / सेयर — split-counter बटन (गणना यही ब्राउजरमा मात्र सुरक्षित हुन्छ)
+// सूचना-पाटी र समाचार १ दुवैमा प्रयोग: प्रत्येक .eb-group को आफ्नै data-key
 (function(){
-  var KEY='adityaEngage';
-  var st={liked:false,comments:[],shares:0};
-  try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ st.liked=!!s.liked; st.comments=Array.isArray(s.comments)?s.comments:[]; st.shares=+s.shares||0; } }catch(e){}
-  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
-  var like=document.getElementById('ebLikeCheck'), cb=document.getElementById('ebCommentBtn'), shb=document.getElementById('ebShareBtn'),
-      box=document.getElementById('ebCommentBox'), list=document.getElementById('ebComments'), toast=document.getElementById('ebToast');
-  if(!like||!cb||!shb) return;
-  function say(m){ toast.textContent=m; toast.classList.add('show'); clearTimeout(say.t); say.t=setTimeout(function(){toast.classList.remove('show');},1800); }
-  function roll(btn,v){
-    var cur=btn.querySelector('.eb-cur'), nxt=btn.querySelector('.eb-nxt');
-    nxt.textContent=v; btn.classList.add('rolled');
-    setTimeout(function(){ cur.textContent=v; btn.classList.add('noanim'); btn.classList.remove('rolled'); void btn.offsetWidth; btn.classList.remove('noanim'); },260);
+  var toast=document.getElementById('ebToast');
+  function say(m){ if(!toast) return; toast.textContent=m; toast.classList.add('show'); clearTimeout(say.t); say.t=setTimeout(function(){toast.classList.remove('show');},1800); }
+  function setup(root){
+    var KEY=root.getAttribute('data-key')||'engage', hash=root.getAttribute('data-hash')||'';
+    var st={liked:false,comments:[],shares:0};
+    try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ st.liked=!!s.liked; st.comments=Array.isArray(s.comments)?s.comments:[]; st.shares=+s.shares||0; } }catch(e){}
+    function save(){ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+    var q=function(sel){ return root.querySelector(sel); };
+    var like=q('.eb-likechk'), cb=q('.eb-comment-btn'), shb=q('.eb-share-btn'),
+        box=q('.eb-cbox'), list=q('.eb-clist'), form=q('.eb-cform'), input=q('.eb-ctext'),
+        lcur=q('.eb-like-btn .eb-cur'), lnxt=q('.eb-like-btn .eb-nxt');
+    if(!like||!cb||!shb||!box||!list||!form||!input) return;
+    function roll(btn,v){
+      var cur=btn.querySelector('.eb-cur'), nxt=btn.querySelector('.eb-nxt');
+      nxt.textContent=v; btn.classList.add('rolled');
+      setTimeout(function(){ cur.textContent=v; btn.classList.add('noanim'); btn.classList.remove('rolled'); void btn.offsetWidth; btn.classList.remove('noanim'); },260);
+    }
+    function addItem(name,text){
+      var li=document.createElement('li'), s=document.createElement('strong');
+      s.textContent=name; li.appendChild(s); li.appendChild(document.createTextNode(text)); list.appendChild(li);
+    }
+    // सुरुवाती अवस्था
+    like.checked=st.liked;
+    lcur.textContent=st.liked?1:0; lnxt.textContent=st.liked?0:1;
+    cb.querySelector('.eb-cur').textContent=st.comments.length;
+    shb.querySelector('.eb-cur').textContent=st.shares;
+    st.comments.forEach(function(c){ addItem('तपाईं',c); });
+    // लाइक
+    like.addEventListener('change',function(){ st.liked=like.checked; lcur.textContent=st.liked?0:1; lnxt.textContent=st.liked?1:0; save(); });
+    // कमेन्ट
+    cb.addEventListener('click',function(){ box.hidden=!box.hidden; cb.setAttribute('aria-expanded',String(!box.hidden)); if(!box.hidden) input.focus(); });
+    form.addEventListener('submit',function(e){
+      e.preventDefault(); var v=input.value.trim(); if(!v) return;
+      st.comments.push(v); addItem('तपाईं',v); roll(cb,st.comments.length); input.value=''; save(); say('कमेन्ट राखियो');
+    });
+    // सेयर
+    shb.addEventListener('click',function(){
+      st.shares+=1; roll(shb,st.shares); save();
+      var url=location.href.split('#')[0]+hash;
+      function ok(){ say('लिंक कपी भयो'); } function no(){ say('ठेगाना बारबाट लिंक कपी गर्नुहोस्'); }
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok,no); } else no();
+    });
   }
-  function addItem(name,text){
-    var li=document.createElement('li'), s=document.createElement('strong');
-    s.textContent=name; li.appendChild(s); li.appendChild(document.createTextNode(text)); list.appendChild(li);
-  }
-  // सुरुवाती अवस्था
-  like.checked=st.liked;
-  document.getElementById('ebLikeCur').textContent=st.liked?1:0;
-  document.getElementById('ebLikeNxt').textContent=st.liked?0:1;
-  cb.querySelector('.eb-cur').textContent=st.comments.length;
-  shb.querySelector('.eb-cur').textContent=st.shares;
-  st.comments.forEach(function(c){ addItem('तपाईं',c); });
-  // लाइक
-  like.addEventListener('change',function(){ st.liked=like.checked; document.getElementById('ebLikeCur').textContent=st.liked?0:1; document.getElementById('ebLikeNxt').textContent=st.liked?1:0; save(); });
-  // कमेन्ट
-  cb.addEventListener('click',function(){ box.hidden=!box.hidden; cb.setAttribute('aria-expanded',String(!box.hidden)); if(!box.hidden) document.getElementById('ebCommentText').focus(); });
-  document.getElementById('ebCommentForm').addEventListener('submit',function(e){
-    e.preventDefault(); var i=document.getElementById('ebCommentText'), v=i.value.trim(); if(!v) return;
-    st.comments.push(v); addItem('तपाईं',v); roll(cb,st.comments.length); i.value=''; save(); say('कमेन्ट राखियो');
-  });
-  // सेयर
-  shb.addEventListener('click',function(){
-    st.shares+=1; roll(shb,st.shares); save();
-    var url=location.href.split('#')[0];
-    function ok(){ say('लिंक कपी भयो'); } function no(){ say('ठेगाना बारबाट लिंक कपी गर्नुहोस्'); }
-    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok,no); } else no();
-  });
+  Array.prototype.forEach.call(document.querySelectorAll('.eb-group'), setup);
 })();
 </script>
 
