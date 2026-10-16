@@ -1249,7 +1249,3 @@ html[data-vs="book"] .news-page-inner { min-height: 100vh; }
 /* पाना-जम्प: बाहिरी दोहोरो बक्स र # हटाइयो — इनपुट र जाने बटन मात्र */
 #bookNav .bn-row-zip .bn-jump { background: none; box-shadow: none; border: 0; padding: 0; gap: 6px; }
 #bookNav .bn-row-zip .bn-jump .bn-hash { display: none; }
-
-/* खेल दृश्य — साइटकै हेडर मुनि पूरा स्क्रिन */
-#gameView { background: #fff; }
-#gameFrame { display: block; width: 100%; height: calc(100vh - 56px); height: calc(100dvh - 56px); border: 0; background: #fff; }
