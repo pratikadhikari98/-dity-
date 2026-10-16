@@ -53,7 +53,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016u" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261016v" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -1978,7 +1978,6 @@ if ('serviceWorker' in navigator) {
   /* सधैं खुला रहने बुकमार्क सूची */
   function renderList() {
     var P = totalPages(), marks = getMarks(), html = '';
-    if (resumeP > 1 && resumeP <= P) html += '<span class="bn-chipwrap"><button type="button" class="bn-chip" data-go="' + resumeP + '">↺ पछिल्लो पटक पढेको: पाना ' + spreadLabel(resumeP, P) + '</button></span>';
     marks.forEach(function (p) {
       if (p > P) return;
       html += '<span class="bn-chipwrap"><button type="button" class="bn-chip" data-go="' + p + '">🔖 पाना ' + spreadLabel(p, P) + '</button><button type="button" class="bn-chip bn-del" data-del="' + p + '" aria-label="बुकमार्क हटाउने">✕</button></span>';
