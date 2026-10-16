@@ -1225,7 +1225,3 @@ footer.site-copy .nm-card { display: inline-block; max-width: 100%; padding: 16p
 @keyframes st-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .sc-story .st-ring, .sc-story .st-play { animation: none; } }
 #news > .sc-head + .news-feed-section { padding-top: 12px; }
-
-/* साहित्य कार्ड र सूचना पाटी बीचको खाली ठाउँ घटाइयो */
-#purpose .about-inner { margin-bottom: 0; }
-#purpose.why-section { padding-bottom: 6px; }
