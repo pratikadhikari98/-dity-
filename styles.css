@@ -1225,3 +1225,6 @@ footer.site-copy .nm-card { display: inline-block; max-width: 100%; padding: 16p
 @keyframes st-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .sc-story .st-ring, .sc-story .st-play { animation: none; } }
 #news > .sc-head + .news-feed-section { padding-top: 12px; }
+
+/* प्रतीक साहित्य सङ्ग्रह (कभर चक्र) र तलको समाचारबीचको खाली ठाउँ घटाइयो */
+.tc-section { padding-bottom: 8px; }
