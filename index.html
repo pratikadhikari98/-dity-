@@ -53,7 +53,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016n" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261016o" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -62,7 +62,7 @@
   /* ══ FLIP BOOK (समाचार १ को तल, किताब पृष्ठबाट सारिएको) — स्कोप गरिएको स्टाइल ══ */
   /* .news-feed-section बाट text-align:center inherit हुँदा भित्री position:absolute img हरू
      (जस्तै edge_shading) बीचमा सर्ने bug आउँथ्यो — यहाँ त्यो inheritance रोकिएको छ। */
-  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 0; overflow: visible; text-align: left; transition: height .8s ease; }
+  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 0; overflow: visible; text-align: left; transition: height .8s ease, min-height .8s ease; }
   #bookEmbedWrap #bookScaleWrap { transform-origin: top center; transition: transform .8s ease; will-change: transform; }
 
   #bookEmbedWrap #flip_book { width: 298px; height: 420px; position: relative; transition-duration: .8s; perspective: 2000px; will-change: transform; }
@@ -1947,7 +1947,6 @@ if ('serviceWorker' in navigator) {
     var n = sheets(); if (!n) return;
     tf = Math.max(0, Math.min(Math.min(n, Math.floor(totalPages() / 2)), tf));
     tgt = { tf: open ? tf : 0, open: !!open };
-    lockHeight();
     syncZip();
     if (!run) { run = setInterval(tick, TICK); tick(); }
   }
@@ -1957,12 +1956,12 @@ if ('serviceWorker' in navigator) {
 
   /* किताब खुल्दा/बन्द हुँदा पृष्ठको उचाइ फेरिने भएकाले नियन्त्रण पट्टी औंला मुनिबाट सर्थ्यो।
      त्यसैले चलिरहँदा उचाइ थामिन्छ, र निष्क्रिय भएपछि मात्र सहज रूपमा खुकुलो हुन्छ। */
-  function lockHeight() {
-    if (wrap) { if (!wrap.style.minHeight) wrap.style.minHeight = wrap.offsetHeight + 'px'; }
-    clearTimeout(unlockT); unlockT = setTimeout(maybeUnlock, 1400);
+  function lockHeight() {   // केवल औंला जिप्परमा रहँदा मात्र; छोडेपछि उचाइ किताबसँगै सहज रूपमा घट्छ/बढ्छ
+    if (wrap && !wrap.style.minHeight) wrap.style.minHeight = wrap.offsetHeight + 'px';
+    clearTimeout(unlockT);
   }
-  function maybeUnlock() { if (dragging || run) { unlockT = setTimeout(maybeUnlock, 600); return; } if (wrap) wrap.style.minHeight = ''; }
-  function scheduleUnlock() { clearTimeout(unlockT); unlockT = setTimeout(maybeUnlock, 1400); }
+  function maybeUnlock() { if (dragging) return; if (wrap) wrap.style.minHeight = ''; }
+  function scheduleUnlock() { clearTimeout(unlockT); unlockT = setTimeout(maybeUnlock, 30); }
   function goToPage(p) { var P = totalPages(); p = Math.max(1, Math.min(P, p)); goTo(Math.floor(p / 2), true); }
 
   /* सधैं खुला रहने बुकमार्क सूची */
