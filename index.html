@@ -53,7 +53,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016k" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261016l" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -308,7 +308,7 @@
     <div class="shloka-rotator" id="shlokaRotator" data-source="data/shlokas.json">
       <h2 class="hero-shloka" id="shlokaText"></h2>
       <div class="section-label" style="text-align:left;">श्लोकार्थ</div>
-      <p id="shlokaMeaning"></p>
+      <p id="shlokaMeaning" lang="hi"></p>
     </div>
   </div>
 
@@ -536,6 +536,7 @@ document.addEventListener('click', function(e){
 <section class="nb-section" id="noticeBoard">
   <h2 class="nb-title" aria-label="सूचना पाटी">
     <svg class="nb-ico" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="सूचना पाटी"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path class="nb-ln" d="M8 9h5"/><path class="nb-ln" d="M8 12h5"/><path class="nb-ln" d="M8 15h5"/></svg>
+    <span class="pt-haha" data-pt="सूचना पाटी" aria-hidden="true"></span>
   </h2>
   <div class="bb-outer">
     <div class="bb-wrap">
@@ -635,6 +636,7 @@ document.addEventListener('click', function(e){
         <circle class="st-ring" cx="16" cy="16" r="12.5" stroke-dasharray="5 3.2"/>
         <path class="st-play" d="M13 11.5v9l8-4.5z" fill="currentColor" stroke="none"/>
       </svg>
+      <span class="pt-haha" data-pt="लेख" aria-hidden="true"></span>
     </div>
     <section class="news-feed-section" data-view="news">
       <div class="news-feed-list" id="newsFeedList" data-source="data/news.json"></div>
@@ -681,6 +683,7 @@ document.addEventListener('click', function(e){
         <path class="sp-l3" d="M8 19.5h16.5"/>
         <path class="sp-l4" d="M8 23h10"/>
       </svg>
+      <span class="pt-haha" data-pt="पोस्ट" aria-hidden="true"></span>
     </div>
     </div>
     <section class="showcase-section" id="showcase" data-view="news">
@@ -1650,6 +1653,7 @@ if ('serviceWorker' in navigator) {
     instagram: "https://www.facebook.com/share/1EozqQYJhY/",
     email:     "mailto:apratik055@gmail.com"
   };
+  Array.prototype.forEach.call(document.querySelectorAll('[data-pt]'),function(el){ if(window.toPreeti) el.innerHTML=window.toPreeti(el.getAttribute('data-pt')); });
   var ct=document.getElementById('copyText'); if(ct&&window.toPreeti){ ct.innerHTML='<span style="font-family:Arial,sans-serif;-webkit-text-stroke:0">©</span> '+window.toPreeti('२०२६ प्रतीक अध्यात्म सञ्जाल')+' <span style="font-family:Arial,sans-serif;-webkit-text-stroke:0">·</span> '+window.toPreeti('सर्वाधिकार सुरक्षित'); }
   var items=document.querySelectorAll('#agPanel .ag-menu li');
   Array.prototype.forEach.call(items,function(li){

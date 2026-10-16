@@ -1164,7 +1164,7 @@
 
 
 /* श्लोकार्थ (अर्थ र शीर्षक) — Akshar फन्ट */
-.hero-text #shlokaMeaning { font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif; font-weight: 500; font-size: 1.1rem; line-height: 1.6; }
+.hero-text #shlokaMeaning { font-family: 'Eczar', 'Noto Serif Devanagari', serif; font-weight: 500; font-size: 1.1rem; line-height: 1.6; }
 .hero-text .section-label { font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: 0; }
 
 /* ═══ किताब — तर्कसङ्ग्रह शैली (शीर्षक + कार्डजस्तो श्लोक/सूत्र) ═══ */
@@ -1223,3 +1223,6 @@ footer.site-copy .nm-card { display: inline-block; max-width: 100%; padding: 16p
 
 /* प्रतीक साहित्य सङ्ग्रह (कभर चक्र) र तलको समाचारबीचको खाली ठाउँ घटाइयो */
 .tc-section { padding-bottom: 8px; }
+
+/* पट्टीका नाम — Haha फन्ट (Preeti कोड) */
+.pt-haha { font-family: 'Haha', 'Noto Sans Devanagari', sans-serif; font-weight: normal; font-size: 1.35rem; line-height: 1.2; color: var(--blue-dark); letter-spacing: 0; -webkit-text-stroke: 0; }
