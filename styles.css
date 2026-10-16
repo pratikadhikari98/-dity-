@@ -1230,3 +1230,6 @@ footer.site-copy .nm-card { display: inline-block; max-width: 100%; padding: 16p
 /* लेख पट्टी र समाचार १ बीचको ग्याप थोरै मात्र */
 #news > .sc-head + .news-feed-section { padding-top: 0; }
 #news > .sc-head + .news-feed-section .news-feed-card > div { padding-top: 6px !important; }
+
+/* किताब दृश्यमा पृष्ठ अचानक छोटो भई स्क्रोल नछुट्न */
+html[data-vs="book"] .news-page-inner { min-height: 100vh; }

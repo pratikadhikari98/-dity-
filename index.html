@@ -53,7 +53,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016o" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261016p" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -62,7 +62,7 @@
   /* ══ FLIP BOOK (समाचार १ को तल, किताब पृष्ठबाट सारिएको) — स्कोप गरिएको स्टाइल ══ */
   /* .news-feed-section बाट text-align:center inherit हुँदा भित्री position:absolute img हरू
      (जस्तै edge_shading) बीचमा सर्ने bug आउँथ्यो — यहाँ त्यो inheritance रोकिएको छ। */
-  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 0; overflow: visible; text-align: left; transition: height .8s ease, min-height .8s ease; }
+  #bookEmbedWrap { display: flex; justify-content: center; align-items: flex-start; width: 100%; padding: 0; overflow: visible; text-align: left; }
   #bookEmbedWrap #bookScaleWrap { transform-origin: top center; transition: transform .8s ease; will-change: transform; }
 
   #bookEmbedWrap #flip_book { width: 298px; height: 420px; position: relative; transition-duration: .8s; perspective: 2000px; will-change: transform; }
@@ -116,7 +116,7 @@
 
   /* ══ किताब नियन्त्रण पट्टी — Neumorphism शैली (सुरु / अघिल्लो / अर्को / अन्त्य / पाना जाने / बुकमार्क) ══ */
   #bookEmbedWrap.bk-instant .page, #bookEmbedWrap.bk-instant .front_cover, #bookEmbedWrap.bk-instant #flip_book { transition: none !important; }
-  .bn-wrap { --bn-bg: var(--sky-pale); --bn-dark: rgba(92,47,38,.20); --bn-light: rgba(255,255,255,.95); --bn-accent: var(--blue-mid);
+  .bn-wrap { will-change: transform; --bn-bg: var(--sky-pale); --bn-dark: rgba(92,47,38,.20); --bn-light: rgba(255,255,255,.95); --bn-accent: var(--blue-mid);
     max-width: 440px; margin: 18px auto 6px; padding: 0 10px; display: flex; flex-direction: column; align-items: center; gap: 16px; -webkit-user-select: none; user-select: none; }
   .bn-status { min-width: 190px; padding: 9px 20px; border-radius: 999px; background: var(--bn-bg); color: var(--blue-dark); font-weight: 700; font-size: .95rem; line-height: 1.3;
     box-shadow: inset 3px 3px 7px rgba(92,47,38,.18), inset -3px -3px 7px rgba(255,255,255,.95); }
@@ -144,9 +144,9 @@
   .bn-zip-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 20px; border-radius: 999px 0 0 999px;
     background-image: repeating-linear-gradient(90deg, var(--bn-accent) 0 2px, transparent 2px 6px), repeating-linear-gradient(90deg, transparent 0 3px, var(--bn-accent) 3px 5px, transparent 5px 6px);
     background-size: 100% 5px, 100% 5px; background-position: 0 5px, 0 14px; background-repeat: no-repeat; }
-  .bn-zip-pull { position: absolute; top: 50%; left: 0; width: 40px; height: 36px; margin-top: -18px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--blue-dark);
+  .bn-zip-pull { will-change: transform; position: absolute; top: 50%; left: 0; width: 40px; height: 36px; margin-top: -18px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--blue-dark);
     border: 1px solid rgba(255,255,255,.55); background: linear-gradient(135deg, var(--bn-bg), rgba(255,255,255,.35));
-    box-shadow: 1px 1px 2px rgba(92,47,38,.14), 3px 3px 7px -1px rgba(92,47,38,.2), 6px 6px 12px -4px var(--bn-dark), -3px -3px 7px var(--bn-light); transition: left 160ms ease-out, box-shadow 160ms ease-out; }
+    box-shadow: 1px 1px 2px rgba(92,47,38,.14), 3px 3px 7px -1px rgba(92,47,38,.2), 6px 6px 12px -4px var(--bn-dark), -3px -3px 7px var(--bn-light); transition: transform 160ms ease-out, box-shadow 160ms ease-out; }
   .bn-zip-pull svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .bn-zip.is-drag { cursor: grabbing; }
   .bn-zip.is-drag .bn-zip-pull { transition: none; box-shadow: inset 2px 2px 5px rgba(92,47,38,.28), inset -2px -2px 5px rgba(255,255,255,.9); color: var(--bn-accent); }
@@ -1026,7 +1026,7 @@ document.addEventListener('click', function(e){
         document.head.appendChild(styleTag);
     }
 
-    function applyScale() {
+    function applyScale(ev) {
         var host = document.getElementById('bookEmbedWrap');
         var wrap = document.getElementById('bookScaleWrap');
         var coverCheckbox = document.getElementById('cover_checkbox');
@@ -1039,9 +1039,22 @@ document.addEventListener('click', function(e){
         var scale = availW / TARGET_W;
         if (!isOpen) scale = Math.min(scale, 1.6); // कभर अवस्थामा अत्यधिक ठूलो नहोस्
         else scale = Math.min(scale, 1.3); // खुल्दा पनि डेस्कटपमा अक्षर अति ठूला नहोऊन्
+        var nav = document.getElementById('bookNav'), before = nav ? nav.getBoundingClientRect().top : 0;
         wrap.style.transform = 'scale(' + scale + ')';
         host.style.height = Math.round(420 * scale) + 'px';
+        // उचाइ एकैपटक बदलिन्छ (लेआउट एनिमेसन छैन); नियन्त्रण पट्टी चाहिँ पुरानो ठाउँबाट सहज (GPU) रूपमा आइपुग्छ
+        if (nav && ev && ev.type === 'change') { window.bookNavFlip(null, before); }
     }
+    window.bookNavFlip = function (change, before) {
+        var nav = document.getElementById('bookNav'); if (!nav) { if (change) change(); return; }
+        if (before == null) before = nav.getBoundingClientRect().top;
+        if (change) change();
+        var d = before - nav.getBoundingClientRect().top;
+        if (Math.abs(d) < 1) return;
+        nav.style.transition = 'none'; nav.style.transform = 'translateY(' + d + 'px)';
+        void nav.offsetHeight;
+        nav.style.transition = 'transform .8s ease'; nav.style.transform = '';
+    };
 
     var withTimeout = function (p, ms) { return Promise.race([p, new Promise(function (r) { setTimeout(r, ms); })]); };
         // book.json तुरुन्तै तान्ने; फन्ट (यही टेक्स्टको अक्षर मात्र) र भित्री फोटो समानान्तर लोड गरेर
@@ -1960,7 +1973,7 @@ if ('serviceWorker' in navigator) {
     if (wrap && !wrap.style.minHeight) wrap.style.minHeight = wrap.offsetHeight + 'px';
     clearTimeout(unlockT);
   }
-  function maybeUnlock() { if (dragging) return; if (wrap) wrap.style.minHeight = ''; }
+  function maybeUnlock() { if (dragging) return; if (wrap && wrap.style.minHeight) window.bookNavFlip(function () { wrap.style.minHeight = ''; }); }
   function scheduleUnlock() { clearTimeout(unlockT); unlockT = setTimeout(maybeUnlock, 30); }
   function goToPage(p) { var P = totalPages(); p = Math.max(1, Math.min(P, p)); goTo(Math.floor(p / 2), true); }
 
@@ -1980,9 +1993,11 @@ if ('serviceWorker' in navigator) {
   function maxK() { var n = sheets(); return n ? Math.min(n, Math.floor(totalPages() / 2)) + 1 : 0; }
   function curK() { return isOpen() ? curF() + 1 : 0; }
   function setPos(fr) {
-    pull.style.left = 'calc((100% - 40px) * ' + fr + ')';
-    fill.style.width = 'calc((100% - 40px) * ' + fr + ' + 20px)';
+    var zw = zip.clientWidth || zip.offsetWidth || 0, x = Math.max(0, (zw - 40) * fr);
+    pull.style.transform = 'translateX(' + x + 'px)';
+    fill.style.width = (x + 20) + 'px';
   }
+  window.addEventListener('resize', function () { setTimeout(function () { syncZip(); }, 60); });
   function syncZip() {
     var K = maxK(), k = effK(), P = totalPages();
     if (dragging) return;
