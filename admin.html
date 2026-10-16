@@ -453,6 +453,8 @@ textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font
   <input type="number" min="0" step="1" id="likesNotice" class="haha-input" value="0" style="font-family:inherit;">
   <label>समाचार १</label>
   <input type="number" min="0" step="1" id="likesNews1" class="haha-input" value="0" style="font-family:inherit;">
+  <label>झलक (Showcase)</label>
+  <input type="number" min="0" step="1" id="likesShowcase" class="haha-input" value="0" style="font-family:inherit;">
   <div class="top-actions">
     <button class="btn-primary" id="likesSaveBtn">लाइक संख्या Save गर्नुहोस्</button>
   </div>
@@ -516,21 +518,6 @@ textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font
     <button class="btn-primary" id="newsSaveBtn">समाचार 1 Save गर्नुहोस्</button>
   </div>
   <div class="status" id="newsStatus"></div>
-</div>
-
-<div class="acc-header" data-target="news2Card">
-  <div class="sidebar-item_icon"><span class="material-symbols-rounded">feed</span></div>
-  <div class="sidebar-item_text">समाचार 2</div>
-  <span class="acc-chevron material-symbols-rounded">expand_more</span>
-</div>
-<div class="card acc-panel" id="news2Card" style="display:none;">
-  <h2>6. समाचार 2 <span class="badge" id="news2Count">0</span></h2>
-  <div id="news2List"></div>
-  <div class="top-actions">
-    <button class="btn-outline" id="news2AddBtn">+ नयाँ समाचार थप्नुहोस्</button>
-    <button class="btn-primary" id="news2SaveBtn">समाचार 2 Save गर्नुहोस्</button>
-  </div>
-  <div class="status" id="news2Status"></div>
 </div>
 
 <div class="acc-header" data-target="adsCard">
@@ -912,7 +899,7 @@ $('likesSaveBtn').addEventListener('click', async () => {
   $('likesSaveBtn').disabled = true;
   try {
     const num = id => Math.max(0, parseInt($(id).value, 10) || 0);
-    const data = { noticeEngage: { likes: num('likesNotice') }, newsEngage1: { likes: num('likesNews1') } };
+    const data = { noticeEngage: { likes: num('likesNotice') }, newsEngage1: { likes: num('likesNews1') }, showcaseEngage: { likes: num('likesShowcase') } };
     await runGithubTask([
       async () => { await ghPutFile('data/engage.json', data, 'admin: update engage.json'); }
     ], 'लाइक संख्या GitHub मा पठाउँदै…', 'लाइक संख्या Deploy भयो');
@@ -1409,7 +1396,6 @@ function makeNewsEditor(cfg) {
   };
 }
 const newsEditor1 = makeNewsEditor({ listId:'newsList', countId:'newsCount', addBtnId:'newsAddBtn', saveBtnId:'newsSaveBtn', statusId:'newsStatus', jsonPath:'data/news.json', taPrefix:'newsTextArea', label:'समाचार 1' });
-const newsEditor2 = makeNewsEditor({ listId:'news2List', countId:'news2Count', addBtnId:'news2AddBtn', saveBtnId:'news2SaveBtn', statusId:'news2Status', jsonPath:'data/news2.json', taPrefix:'news2TextArea', label:'समाचार 2' });
 
 // ═══════════════ ADS (image-only list, auto-swipe loop) ═══════════════
 let adsItems = [];
@@ -1788,8 +1774,8 @@ $('zipList').addEventListener('click', e => {
 
 
 // ═══════════════ ACCORDION (थिचेको ठाउँको ठ्याक्कै तल खुल्ने) + THEME ═══════════════
-const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','noticeCard','likesCard','aboutCard','bookCard','newsCard','news2Card','adsCard'];
-const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','noticeSaveBtn','likesSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','news2SaveBtn','adsSaveBtn'];
+const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','noticeCard','likesCard','aboutCard','bookCard','newsCard','adsCard'];
+const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','noticeSaveBtn','likesSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','adsSaveBtn'];
 SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = true; }); // Load नगरी Save गर्दा खाली डेटाले ओभरराइट हुनबाट बचाउन
 
 (function () {
@@ -1825,15 +1811,14 @@ SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = true; }); // L
 $('loadBtn').addEventListener('click', async () => {
   setStatus($('connStatus'), 'Loading...', '');
   try {
-    deployProgress.start(7, 'GitHub बाट सबै फाइल तान्दै…');
+    deployProgress.start(6, 'GitHub बाट सबै फाइल तान्दै…');
     const withStep = p => p.then(r => { deployProgress.step(); return r; });
-    const [showcase, shloka, about, book, news, news2, ads] = await Promise.all([
+    const [showcase, shloka, about, book, news, ads] = await Promise.all([
       withStep(ghGetFile('data/showcase.json')),
       withStep(ghGetFile('data/shlokas.json')),
       withStep(ghGetFile('data/about.json')),
       withStep(ghGetFile('data/book.json')),
       withStep(ghGetFile('data/news.json')),
-      withStep(ghGetFile('data/news2.json')),
       withStep(ghGetFile('data/ads.json'))
     ]);
     deployProgress.done('सबै फाइल Load भयो');
@@ -1849,7 +1834,6 @@ $('loadBtn').addEventListener('click', async () => {
     $('bookCoverImage').value = (book.json && book.json.coverImage) || '';
     if ($('bookCoverImage').value) { $('bookCoverImagePreview').src = $('bookCoverImage').value; $('bookCoverImagePreview').style.display = ''; }
     newsEditor1.setItems(news.json);
-    newsEditor2.setItems(news2.json);
     adsItems = ads.json; renderAds();
     try {
       const nt = await ghGetFile('data/notice.json');
@@ -1863,6 +1847,7 @@ $('loadBtn').addEventListener('click', async () => {
       const lj = lk && lk.json ? lk.json : {};
       $('likesNotice').value = (lj.noticeEngage && lj.noticeEngage.likes) || 0;
       $('likesNews1').value = (lj.newsEngage1 && lj.newsEngage1.likes) || 0;
+      $('likesShowcase').value = (lj.showcaseEngage && lj.showcaseEngage.likes) || 0;
     } catch (e) { /* फाइल नभए ० */ }
     SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = false; });
     setStatus($('connStatus'), '✓ सबै Load भयो।', 'ok');
