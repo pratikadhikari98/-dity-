@@ -53,7 +53,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016j" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261016k" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -184,7 +184,6 @@
     #news > .news-feed-section:not(#bookEmbedSection) { padding-left: 0; padding-right: 0; }
     #news .news-feed-list { max-width: none; }
     #news .news-feed-card { border-radius: 0; }
-    #news .ad-carousel { margin-left: 5%; margin-right: 5%; }
   }
 
   /* Ananda Devanagari Round फन्ट — समाचार शीर्षकहरूका लागि */
@@ -196,7 +195,6 @@
   /* समाचार १ र २ का शीर्षक बीचमा */
   #news .news-feed-card h3 { text-align: center; font-family: 'Ananda Devanagari Round', 'Noto Serif Devanagari', serif; font-weight: normal; -webkit-text-stroke: 0.5px currentColor; /* फन्टमा Bold छैन — हल्का रेखा थपेर बोल्ड बनाइएको */ font-size: 1.9rem; line-height: 1.35; }
   /* फ्लिप किताब र समाचार २ बीचको ठाउँ अलि बढाइएको */
-  #news > .news2-section { padding-top: 30px; }
   .site-h1 { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
   /* ── प्रतीक साहित्य संग्रहबाट random कविता (कभर → छोएपछि कविता खुल्छ) ── */
   .poem-section { margin-top: 18px; }
@@ -747,12 +745,6 @@ document.addEventListener('click', function(e){
       </div>
     </section>
 
-    <section class="news-feed-section news2-section" data-view="news">
-      <div class="ad-carousel" id="adCarousel" data-source="data/ads.json">
-        <div class="ad-carousel-track" id="adCarouselTrack"></div>
-      </div>
-    </section>
-
     <!-- प्रतीक साहित्य संग्रह — random कविता (विज्ञापन पानलको तल) -->
     <section class="news-feed-section poem-section" id="poemFeedSection" data-view="poems" style="display:none;">
       <div class="pf-box">
@@ -1296,36 +1288,6 @@ document.addEventListener('click', function(e){
 })();
 </script>
 
-<!-- AD CAROUSEL — data/ads.json बाट, auto-only crossfade (no manual swipe, no dots) -->
-<script>
-(function(){
-  var wrap = document.getElementById('adCarousel');
-  if (!wrap) return;
-  var track = document.getElementById('adCarouselTrack');
-  var src = wrap.dataset.source;
-
-  fetch(src, { cache: 'no-store' })
-    .then(function(r){ return r.json(); })
-    .then(function(items){
-      if (!items || !items.length) { wrap.style.display = 'none'; return; }
-      track.innerHTML = items.map(function(item){
-        return '<div class="ad-slide"><img src="' + item.image + '" alt="विज्ञापन"></div>';
-      }).join('');
-      var slides = track.children;
-      if (slides.length) slides[0].classList.add('active');
-
-      if (slides.length > 1) {
-        var idx = 0;
-        setInterval(function(){
-          slides[idx].classList.remove('active');
-          idx = (idx + 1) % slides.length;
-          slides[idx].classList.add('active');
-        }, 3500);
-      }
-    })
-    .catch(function(){ wrap.style.display = 'none'; });
-})();
-</script>
 
 
 

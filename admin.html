@@ -520,22 +520,6 @@ textarea.preeti-input { font-family: 'Ananda Devanagari Round', sans-serif; font
   <div class="status" id="newsStatus"></div>
 </div>
 
-<div class="acc-header" data-target="adsCard">
-  <div class="sidebar-item_icon"><span class="material-symbols-rounded">campaign</span></div>
-  <div class="sidebar-item_text">विज्ञापन</div>
-  <span class="acc-chevron material-symbols-rounded">expand_more</span>
-</div>
-<div class="card acc-panel" id="adsCard" style="display:none;">
-  <h2>7. विज्ञापन तस्बिरहरू (समाचार 2 तल — auto-swipe loop) <span class="badge" id="adsCount">0</span></h2>
-  <div class="hint">जति पनि फोटो थप्न मिल्छ — तिनीहरू auto-swipe loop मा homepage मा देखिन्छन्।</div>
-  <div id="adsList"></div>
-  <div class="top-actions">
-    <button class="btn-outline" id="adsAddBtn">+ नयाँ फोटो थप्नुहोस्</button>
-    <button class="btn-primary" id="adsSaveBtn">विज्ञापन Save गर्नुहोस्</button>
-  </div>
-  <div class="status" id="adsStatus"></div>
-</div>
-
 <script>
 const $ = (id) => document.getElementById(id);
 
@@ -1397,58 +1381,6 @@ function makeNewsEditor(cfg) {
 }
 const newsEditor1 = makeNewsEditor({ listId:'newsList', countId:'newsCount', addBtnId:'newsAddBtn', saveBtnId:'newsSaveBtn', statusId:'newsStatus', jsonPath:'data/news.json', taPrefix:'newsTextArea', label:'समाचार 1' });
 
-// ═══════════════ ADS (image-only list, auto-swipe loop) ═══════════════
-let adsItems = [];
-function renderAds() {
-  $('adsCount').textContent = adsItems.length;
-  const list = $('adsList');
-  list.innerHTML = '';
-  adsItems.forEach((item, i) => {
-    const div = document.createElement('div');
-    div.className = 'slide-card';
-    div.innerHTML = `
-      <label>फोटो path</label>
-      <input type="text" data-idx="${i}" data-field="image" value="${escapeHtml(item.image || '')}">
-      ${item.image ? `<img src="${escapeHtml(item.image)}" onerror="this.style.display='none'">` : ''}
-      <label>नयाँ फोटो अपलोड</label>
-      <input type="file" accept="image/*" data-idx="${i}" data-field="file">
-      <div class="ratio-hint"><span class="material-symbols-rounded">aspect_ratio</span>अनुपात: 16:9 (फराकिलो/landscape), max-height 360px सम्म देखिन्छ</div>
-      <div class="slide-actions">
-        <span class="hint">फोटो #${i + 1}</span>
-        <button class="btn-danger" data-idx="${i}" data-action="delete">हटाउनुहोस्</button>
-      </div>`;
-    list.appendChild(div);
-  });
-  list.querySelectorAll('input[data-field="image"]').forEach(el => {
-    el.addEventListener('input', () => { adsItems[+el.dataset.idx].image = el.value; });
-  });
-  list.querySelectorAll('input[data-field="file"]').forEach(el => {
-    el.addEventListener('change', () => { if (el.files[0]) adsItems[+el.dataset.idx]._file = el.files[0]; });
-  });
-  list.querySelectorAll('button[data-action="delete"]').forEach(el => {
-    el.addEventListener('click', () => { adsItems.splice(+el.dataset.idx, 1); renderAds(); });
-  });
-}
-$('adsAddBtn').addEventListener('click', () => { adsItems.push({ image: '' }); renderAds(); });
-$('adsSaveBtn').addEventListener('click', async () => {
-  setStatus($('adsStatus'), 'Saving...', '');
-  $('adsSaveBtn').disabled = true;
-  try {
-    const steps = [];
-    adsItems.forEach(item => {
-      if (item._file) steps.push(async () => { item.image = await ghUploadImage(item._file); delete item._file; });
-    });
-    steps.push(async () => {
-      const clean = adsItems.map(a => ({ image: a.image || '' }));
-      await ghPutFile('data/ads.json', clean, 'admin: update ads.json');
-    });
-    await runGithubTask(steps, 'विज्ञापन GitHub मा पठाउँदै…', 'विज्ञापन Deploy भयो');
-    renderAds();
-    setStatus($('adsStatus'), '✓ Save भयो! केही मिनेटमा वेबसाइटमा देखिनेछ।', 'ok');
-  } catch (err) { setStatus($('adsStatus'), '✗ ' + err.message, 'err'); }
-  finally { $('adsSaveBtn').disabled = false; }
-});
-
 // ═══════════════ ZIP UPDATE — Commit अघि परिवर्तन हेर्ने ═══════════════
 const zipState = { zip: null, rows: [], headSha: null, filter: 'all' };
 const TEXT_EXT = ['html','htm','css','js','mjs','json','md','txt','svg','xml','webmanifest','yml','yaml','csv'];
@@ -1774,8 +1706,8 @@ $('zipList').addEventListener('click', e => {
 
 
 // ═══════════════ ACCORDION (थिचेको ठाउँको ठ्याक्कै तल खुल्ने) + THEME ═══════════════
-const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','noticeCard','likesCard','aboutCard','bookCard','newsCard','adsCard'];
-const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','noticeSaveBtn','likesSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn','adsSaveBtn'];
+const CARD_IDS = ['githubCard','zipCard','showcaseCard','shlokaCard','noticeCard','likesCard','aboutCard','bookCard','newsCard'];
+const SAVE_BTN_IDS = ['showcaseSaveBtn','shlokaSaveBtn','noticeSaveBtn','likesSaveBtn','aboutSaveBtn','bookSaveBtn','newsSaveBtn'];
 SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = true; }); // Load नगरी Save गर्दा खाली डेटाले ओभरराइट हुनबाट बचाउन
 
 (function () {
@@ -1811,15 +1743,14 @@ SAVE_BTN_IDS.forEach(id => { const b = $(id); if (b) b.disabled = true; }); // L
 $('loadBtn').addEventListener('click', async () => {
   setStatus($('connStatus'), 'Loading...', '');
   try {
-    deployProgress.start(6, 'GitHub बाट सबै फाइल तान्दै…');
+    deployProgress.start(5, 'GitHub बाट सबै फाइल तान्दै…');
     const withStep = p => p.then(r => { deployProgress.step(); return r; });
-    const [showcase, shloka, about, book, news, ads] = await Promise.all([
+    const [showcase, shloka, about, book, news] = await Promise.all([
       withStep(ghGetFile('data/showcase.json')),
       withStep(ghGetFile('data/shlokas.json')),
       withStep(ghGetFile('data/about.json')),
       withStep(ghGetFile('data/book.json')),
-      withStep(ghGetFile('data/news.json')),
-      withStep(ghGetFile('data/ads.json'))
+      withStep(ghGetFile('data/news.json'))
     ]);
     deployProgress.done('सबै फाइल Load भयो');
     showcaseItems = showcase.json; renderShowcase();
@@ -1834,7 +1765,6 @@ $('loadBtn').addEventListener('click', async () => {
     $('bookCoverImage').value = (book.json && book.json.coverImage) || '';
     if ($('bookCoverImage').value) { $('bookCoverImagePreview').src = $('bookCoverImage').value; $('bookCoverImagePreview').style.display = ''; }
     newsEditor1.setItems(news.json);
-    adsItems = ads.json; renderAds();
     try {
       const nt = await ghGetFile('data/notice.json');
       const nj = nt && nt.json ? nt.json : {};
