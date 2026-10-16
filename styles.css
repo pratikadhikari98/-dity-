@@ -1225,7 +1225,7 @@ footer.site-copy .nm-card { display: inline-block; max-width: 100%; padding: 16p
 .tc-section { padding-bottom: 8px; }
 
 /* पट्टीका नाम — Haha फन्ट (Preeti कोड) */
-.pt-haha { font-family: 'Haha', 'Noto Sans Devanagari', sans-serif; font-weight: normal; font-size: 1.35rem; line-height: 1.2; color: var(--blue-dark); letter-spacing: 0; -webkit-text-stroke: .6px currentColor; }
+.pt-haha { font-family: 'Haha', 'Noto Sans Devanagari', sans-serif; font-weight: normal; font-size: 1.35rem; line-height: 1.2; color: var(--blue-mid); letter-spacing: 0; -webkit-text-stroke: .6px currentColor; }
 
 /* लेख पट्टी र समाचार १ बीचको ग्याप थोरै मात्र */
 #news > .sc-head + .news-feed-section { padding-top: 0; }
