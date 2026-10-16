@@ -1233,3 +1233,15 @@ footer.site-copy .nm-card { display: inline-block; max-width: 100%; padding: 16p
 
 /* किताब दृश्यमा पृष्ठ अचानक छोटो भई स्क्रोल नछुट्न */
 html[data-vs="book"] .news-page-inner { min-height: 100vh; }
+
+/* किताब नियन्त्रण — जिप्परकै एउटै लाइनमा: अघिल्लो · जिप्पर · अर्को · बुकमार्क · पाना जम्प */
+#bookNav { max-width: 480px; }
+#bookNav .bn-row-zip { gap: 6px; }
+#bookNav .bn-row-zip .bn-btn { width: 38px; height: 38px; flex: 0 0 38px; border-radius: 12px; }
+#bookNav .bn-row-zip .bn-btn svg { width: 19px; height: 19px; }
+#bookNav .bn-row-zip .bn-zip { flex: 1 1 60px; min-width: 60px; }
+#bookNav .bn-row-zip .bn-jump { flex: 0 0 auto; gap: 3px; padding: 3px 4px; border-radius: 12px; }
+#bookNav .bn-row-zip .bn-jump .bn-hash { width: 14px; height: 14px; }
+#bookNav .bn-row-zip .bn-jump .bn-input { width: 46px; padding: 6px 2px; font-size: .9rem; border-radius: 9px; }
+#bookNav .bn-row-zip .bn-go-icon { width: 30px; height: 30px; flex: 0 0 30px; padding: 0; border-radius: 9px; }
+#bookNav .bn-row-zip .bn-go-icon svg { width: 16px; height: 16px; }
