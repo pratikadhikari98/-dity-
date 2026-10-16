@@ -1199,8 +1199,13 @@ footer.site-copy .nm-card { display: inline-block; max-width: 100%; padding: 16p
   font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-size: 1.35rem; line-height: 1.3; -webkit-text-stroke: .45px currentColor;
   box-shadow: 9px 9px 18px rgba(147,84,71,.22), -9px -9px 18px rgba(255,255,255,.95), inset 1px 1px 0 rgba(255,255,255,.6); }
 
-/* झलकको माथि — दुवै कुना छुने सेतो पट्टी + छेउमा लोगो */
-.sc-head { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; padding: 10px 16px; background: #fff; border-bottom: 1px solid #f0ddd3; }
-.sc-logo { width: 44px; height: 44px; flex: 0 0 44px; border-radius: 50%; object-fit: contain; background: #fff; border: 2px solid var(--blue-light); }
-.sc-name { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-size: 1.5rem; line-height: 1.2; color: var(--blue-dark); -webkit-text-stroke: .45px currentColor; }
-#news > .sc-head + .showcase-section { padding-top: 14px; }
+/* झलकको माथि — दुवै कुना छुने होचो सेतो पट्टी + छेउमा एनिमेटेड पोस्ट SVG */
+.sc-head { display: flex; align-items: center; gap: 10px; width: 100%; box-sizing: border-box; padding: 6px 16px; min-height: 38px; background: #fff; border-bottom: 1px solid #f0ddd3; }
+.sc-post { color: var(--blue-mid); flex: 0 0 auto; overflow: visible; }
+.sc-post .sp-dot { transform-box: fill-box; transform-origin: center; animation: sp-pulse 2.4s ease-in-out infinite; }
+.sc-post path { stroke-dasharray: 20; animation: sp-draw 3.2s ease-in-out infinite; }
+.sc-post .sp-l2 { animation-delay: .25s; } .sc-post .sp-l3 { animation-delay: .5s; } .sc-post .sp-l4 { animation-delay: .75s; }
+@keyframes sp-draw { 0% { stroke-dashoffset: 20; } 35%, 80% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -20; } }
+@keyframes sp-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.35); } }
+@media (prefers-reduced-motion: reduce) { .sc-post path, .sc-post .sp-dot { animation: none; stroke-dasharray: none; } }
+#news > .sc-head + .showcase-section { padding-top: 12px; }
