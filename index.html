@@ -53,7 +53,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016b" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261016c" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -667,6 +667,10 @@ document.addEventListener('click', function(e){
     </section>
 
     <!-- SHOWCASE PHOTO + TEXT — swipeable carousel (content loads from data/showcase.json) -->
+    <div class="sc-head" data-view="news">
+      <img class="sc-logo" src="photos/aditya-logo.webp" alt="ADITYA" width="44" height="44">
+      <div class="sc-name" id="scName" aria-label="प्रतीक अध्यात्म सञ्जाल">प्रतीक अध्यात्म सञ्जाल</div>
+    </div>
     <section class="showcase-section" id="showcase" data-view="news">
       <div class="showcase-slider" data-source="data/showcase.json">
         <div class="showcase-slides" id="showcaseSlides"></div>
@@ -1670,6 +1674,7 @@ if ('serviceWorker' in navigator) {
     instagram: "https://www.facebook.com/share/1EozqQYJhY/",
     email:     "mailto:apratik055@gmail.com"
   };
+  var sn=document.getElementById('scName'); if(sn&&window.toPreeti) sn.innerHTML=window.toPreeti('प्रतीक अध्यात्म सञ्जाल');
   var ct=document.getElementById('copyText'); if(ct&&window.toPreeti){ ct.innerHTML='<span style="font-family:Arial,sans-serif;-webkit-text-stroke:0">©</span> '+window.toPreeti('२०२६ प्रतीक अध्यात्म सञ्जाल')+' <span style="font-family:Arial,sans-serif;-webkit-text-stroke:0">·</span> '+window.toPreeti('सर्वाधिकार सुरक्षित'); }
   var items=document.querySelectorAll('#agPanel .ag-menu li');
   Array.prototype.forEach.call(items,function(li){
