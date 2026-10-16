@@ -53,7 +53,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016a" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261016b" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -623,7 +623,7 @@ document.addEventListener('click', function(e){
   </div>
 </section>
 
-<footer class="site-copy" lang="hi" data-view="about">© २०२६ प्रतीक अध्यात्म सञ्जाल · सर्वाधिकार सुरक्षित</footer>
+<footer class="site-copy" data-view="about"><div class="nm-card" id="copyText" aria-label="© २०२६ प्रतीक अध्यात्म सञ्जाल · सर्वाधिकार सुरक्षित">© २०२६ प्रतीक अध्यात्म सञ्जाल · सर्वाधिकार सुरक्षित</div></footer>
 
 
 <!-- समाचार + किताब + विज्ञापन (news.html बाट गृहपृष्ठमा सारिएको) -->
@@ -1670,6 +1670,7 @@ if ('serviceWorker' in navigator) {
     instagram: "https://www.facebook.com/share/1EozqQYJhY/",
     email:     "mailto:apratik055@gmail.com"
   };
+  var ct=document.getElementById('copyText'); if(ct&&window.toPreeti){ ct.innerHTML='<span style="font-family:Arial,sans-serif;-webkit-text-stroke:0">©</span> '+window.toPreeti('२०२६ प्रतीक अध्यात्म सञ्जाल')+' <span style="font-family:Arial,sans-serif;-webkit-text-stroke:0">·</span> '+window.toPreeti('सर्वाधिकार सुरक्षित'); }
   var items=document.querySelectorAll('#agPanel .ag-menu li');
   Array.prototype.forEach.call(items,function(li){
     var a=li.querySelector('a'), key=a.getAttribute('data-ag'), url=LINKS[key]||'';
