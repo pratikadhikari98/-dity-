@@ -53,7 +53,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Eczar:wght@400;500;600;700;800&family=Khand:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016g" id="themeStylesheet">
+<link rel="stylesheet" href="styles.css?v=20261016h" id="themeStylesheet">
 <style>
   .news-page-inner { max-width: 1080px; margin: 0 auto; padding-top: 14px; }
   .news-feed-section { padding-top: 10px; padding-bottom: 10px; }
@@ -235,7 +235,7 @@
   /* चक्रका ८ लेबल: Ananda Devanagari Round (Bold जस्तो) */
   #wheelSvg .wheel-label { font-family: 'Ananda Devanagari Round', 'Noto Sans Devanagari', sans-serif; font-weight: normal; font-size: 14.5px; stroke: #5c2f26; stroke-width: 0.4px; stroke-linejoin: round; }
   /* ── गृहपृष्ठमा हिरो + परिचय मात्र; बाँकी भाग ☰ मेनुबाट खुल्ने "view" हरू ── */
-  html[data-vs="home"] [data-view],
+  html[data-vs="home"] [data-view]:not([data-view="news"]),
   html[data-vs="showcase"] [data-view]:not([data-view="showcase"]),
   html[data-vs="news"] [data-view]:not([data-view="news"]),
   html[data-vs="book"] [data-view]:not([data-view="book"]),
@@ -255,7 +255,7 @@
   .menu-nav-link.active { background: var(--sky); color: var(--blue-dark); }
   .menu-sep { height: 1px; background: #f0ddd3; margin: 4px 0 8px; }
 </style>
-<script>(function(){var m=/view=(showcase|news|book|poems|about)/.exec(location.hash||"");document.documentElement.setAttribute("data-vs",m?(m[1]==="showcase"?"news":m[1]):"home");})();</script>
+<script>(function(){var m=/view=(showcase|news|book|poems|about)/.exec(location.hash||"");document.documentElement.setAttribute("data-vs",m?((m[1]==="showcase"||m[1]==="news")?"home":m[1]):"home");})();</script>
 </head>
 <body>
 
@@ -284,7 +284,6 @@
     <div class="header-dropdown" id="headerDropdown">
       <nav class="menu-nav" aria-label="मुख्य मेनु">
         <a class="menu-nav-link" href="#view=home" data-go="home" aria-label="गृहपृष्ठ" title="गृहपृष्ठ"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-6h4v6"/></svg></a>
-        <a class="menu-nav-link menu-nav-eczar" lang="hi" href="#view=news" data-go="news" aria-label="समाचार" title="समाचार"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 12h5M8 15h5"/></svg></a>
         <a class="menu-nav-link" href="#view=book" data-go="book" aria-label="किताब" title="किताब"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2z"/><path d="M12 6v14"/></svg></a>
         <a class="menu-nav-link" href="#view=about" data-go="about" aria-label="बारेमा" title="बारेमा"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.8" r=".6" fill="currentColor"/></svg></a>
       </nav>
@@ -490,7 +489,7 @@ function toggleHeaderMenu() {
 }
 // ── ☰ मेनुबाट भाग खोल्ने (गृहपृष्ठ / झलक / समाचार / किताब / प्रतीक साहित्य सङ्ग्रह) ──
 (function(){
-  function current(){ var m = /view=(showcase|news|book|poems|about)/.exec(location.hash || ''); return m ? (m[1] === 'showcase' ? 'news' : m[1]) : 'home'; }
+  function current(){ var m = /view=(showcase|news|book|poems|about)/.exec(location.hash || ''); return m ? ((m[1] === 'showcase' || m[1] === 'news') ? 'home' : m[1]) : 'home'; }
   function apply(){
     var v = current();
     document.documentElement.setAttribute('data-vs', v);
@@ -633,9 +632,15 @@ document.addEventListener('click', function(e){
 
   <!-- NEWS SECTION (Newspaper 1 + Newspaper 2) -->
   <div id="news">
+    <div class="sc-head" data-view="news">
+      <svg class="sc-story" viewBox="0 0 32 32" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="स्टोरी">
+        <circle class="st-ring" cx="16" cy="16" r="12.5" stroke-dasharray="5 3.2"/>
+        <path class="st-play" d="M13 11.5v9l8-4.5z" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
     <section class="news-feed-section" data-view="news">
       <div class="news-feed-list" id="newsFeedList" data-source="data/news.json"></div>
-      <div class="eb-group" id="newsEngage1" data-key="newsEngage1" data-hash="#view=news">
+      <div class="eb-group" id="newsEngage1" data-key="newsEngage1" data-hash="">
   <!-- समाचार १ — लाइक · कमेन्ट · सेयर -->
   <div class="eb-bar">
     <div class="eb-item">
@@ -684,7 +689,7 @@ document.addEventListener('click', function(e){
       <div class="showcase-slider" data-source="data/showcase.json">
         <div class="showcase-slides" id="showcaseSlides"></div>
       </div>
-            <div class="eb-group" id="showcaseEngage" data-key="showcaseEngage" data-hash="#view=news">
+            <div class="eb-group" id="showcaseEngage" data-key="showcaseEngage" data-hash="">
         <!-- झलक — लाइक · कमेन्ट · सेयर -->
         <div class="eb-bar">
           <div class="eb-item">

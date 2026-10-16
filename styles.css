@@ -1217,3 +1217,11 @@ footer.site-copy .nm-card { display: inline-block; max-width: 100%; padding: 16p
 .nb-ln:nth-of-type(4) { animation-delay: .25s; } .nb-ln:nth-of-type(5) { animation-delay: .5s; }
 @keyframes nb-draw { 0% { stroke-dashoffset: 6; } 35%, 80% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -6; } }
 @media (prefers-reduced-motion: reduce) { .nb-ln { animation: none; stroke-dasharray: none; } }
+
+/* स्टोरी आइकन — घुम्ने धर्सा घेरा + धड्किने प्ले चिह्न */
+.sc-story { color: var(--blue-mid); flex: 0 0 auto; overflow: visible; }
+.sc-story .st-ring { transform-box: fill-box; transform-origin: center; animation: st-spin 9s linear infinite; }
+.sc-story .st-play { transform-box: fill-box; transform-origin: center; animation: sp-pulse 2.4s ease-in-out infinite; }
+@keyframes st-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .sc-story .st-ring, .sc-story .st-play { animation: none; } }
+#news > .sc-head + .news-feed-section { padding-top: 12px; }
