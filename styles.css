@@ -1213,9 +1213,7 @@ footer.site-copy .nm-card { display: inline-block; max-width: 100%; padding: 16p
 /* सूचना पाटी शीर्षक — होचो सेतो पट्टी, बायाँ छेउमा समाचार आइकन + नाम */
 .nb-section h2.nb-title { display: flex; align-items: center; justify-content: flex-start; gap: 10px; box-sizing: border-box; min-height: 38px; margin: 0 -5.5556% 14px; padding: 6px 16px; text-align: left; font-size: 1rem; line-height: 1.2; -webkit-text-stroke: 0; }
 .nb-section h2.nb-title .nb-ico { color: var(--blue-mid); flex: 0 0 auto; }
-.nb-section h2.nb-title .nb-ttl { font-family: 'Ananda Devanagari Round','Noto Serif Devanagari',serif; font-weight: normal; font-size: 1.35rem; color: var(--blue-dark); -webkit-text-stroke: .45px currentColor; }
-.nb-ico { transform-origin: 50% 15%; animation: nb-ring 3.6s ease-in-out infinite; }
-@keyframes nb-ring { 0%, 70%, 100% { transform: rotate(0); } 76% { transform: rotate(14deg); } 82% { transform: rotate(-12deg); } 88% { transform: rotate(8deg); } 94% { transform: rotate(-4deg); } }
-@media (prefers-reduced-motion: reduce) { .nb-ico { animation: none; } }
-.nb-section h2.nb-title { gap: 4px; }
-.nb-section h2.nb-title .nb-ttl { letter-spacing: -.02em; word-spacing: -.12em; }
+.nb-ln { stroke-dasharray: 6; animation: nb-draw 3.2s ease-in-out infinite; }
+.nb-ln:nth-of-type(4) { animation-delay: .25s; } .nb-ln:nth-of-type(5) { animation-delay: .5s; }
+@keyframes nb-draw { 0% { stroke-dashoffset: 6; } 35%, 80% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -6; } }
+@media (prefers-reduced-motion: reduce) { .nb-ln { animation: none; stroke-dasharray: none; } }
