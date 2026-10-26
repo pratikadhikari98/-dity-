@@ -1,4 +1,4 @@
-# प्रतीक अध्यात्म सञ्जाल (Pratik Adhyatma Sanjal) वेबसाइट
+# प्रतीक अधिकारी (Pratik Adhikari) वेबसाइट
 
 Static HTML/CSS/JS वेबसाइट — कुनै build step चाहिँदैन।
 

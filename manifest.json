@@ -1,7 +1,7 @@
 {
-  "name": "प्रतीक अध्यात्म सञ्जाल (Pratik Adhyatma Sanjal)",
-  "short_name": "प्रतीक अध्यात्म सञ्जाल",
-  "description": "प्रतीक अध्यात्म सञ्जाल को आधिकारिक वेबसाइट",
+  "name": "प्रतीक अधिकारी (Pratik Adhikari)",
+  "short_name": "प्रतीक अधिकारी",
+  "description": "प्रतीक अधिकारीको व्यक्तिगत पोर्टफोलियो",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#eaf5fb",
